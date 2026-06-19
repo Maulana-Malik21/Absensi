@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Login</title>
+    <meta name="description" content="EduTrack QR Attendance System - Login portal">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        .edu-login-bg {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f4f0ff 0%, #ffffff 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        .edu-login-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 400px;
+        }
+        .edu-login-logo {
+            width: 56px;
+            height: 56px;
+            background-color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .edu-login-logo span {
+            color: white;
+            font-size: 32px;
+        }
+        .edu-login-title {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .edu-login-title h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+        .edu-login-title p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+        .edu-form-group {
+            margin-bottom: 20px;
+        }
+        .edu-input-icon {
+            position: relative;
+        }
+        .edu-input-icon span.icon-left {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+        .edu-input-icon span.icon-right {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .edu-input-icon input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .edu-input-icon input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="edu-login-bg">
+        <div class="edu-login-card">
+            <div class="edu-login-logo">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+            </div>
+            <div class="edu-login-title">
+                <h1>EduTrack</h1>
+                <p>Sistem Absensi QR</p>
+            </div>
+
+            <form id="unifiedLoginForm">
+                <div class="edu-form-group">
+                    <label class="edu-label">Email, NIS, NIP, atau Username</label>
+                    <div class="edu-input-icon">
+                        <span class="material-symbols-outlined icon-left">person</span>
+                        <input type="text" id="login_identifier" placeholder="Masukkan ID Login Anda" required>
+                    </div>
+                </div>
+                
+                <div class="edu-form-group">
+                    <label class="edu-label">Password</label>
+                    <div class="edu-input-icon">
+                        <span class="material-symbols-outlined icon-left">lock</span>
+                        <input type="password" id="login_password" placeholder="••••••••" required>
+                        <span class="material-symbols-outlined icon-right" onclick="togglePassword()">visibility</span>
+                    </div>
+                </div>
+
+                <button type="submit" id="login_submit" class="edu-btn edu-btn-primary" style="width: 100%; justify-content: center; padding: 12px; margin-top: 8px; font-size: 1rem;">
+                    Masuk ke Sistem <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+                </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 24px;">
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Portal Absensi QR EduTrack</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js?v=1781115035990"></script>
+    <script src="js/api.js?v=1781115035990"></script>
+    <script>
+        function togglePassword() {
+            const input = document.getElementById('login_password');
+            const icon = document.querySelector('.icon-right');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+
+        document.getElementById('unifiedLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const identifier = document.getElementById('login_identifier').value.trim();
+            const password = document.getElementById('login_password').value;
+            const btn = document.getElementById('login_submit');
+            const originalHtml = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined" style="animation:spin 1s linear infinite;">progress_activity</span> Mengautentikasi...';
+
+            try {
+                const response = await api.post('/auth/login', { identifier, password });
+                api.setToken(response.data.token);
+                localStorage.setItem('refreshToken', response.data.refreshToken || '');
+                localStorage.setItem('user', JSON.stringify(response.data.user));
+
+                if(window.utils && utils.showToast) {
+                    utils.showToast('Login berhasil! Mengalihkan...', 'success');
+                }
+                
+                setTimeout(() => {
+                    window.location.href = `/${response.data.user.role}/dashboard.html`;
+                }, 800);
+            } catch (err) {
+                if(window.utils && utils.showToast) {
+                    utils.showToast(err.message || 'Kredensial tidak valid', 'error');
+                }
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        });
+    </script>
+</body>
+</html>

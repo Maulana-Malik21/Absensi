@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Data Akademik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="max-w-7xl mx-auto pb-6">
+        <!-- Page Header -->
+        <div class="mb-6">
+            <h2 class="text-[13px] font-semibold text-text-primary uppercase tracking-wide mb-1">Data Master Akademik</h2>
+            <p class="text-[13px] text-text-muted">Kelola tahun ajaran, daftar kelas, dan mata pelajaran.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- TAHUN AJARAN -->
+            <div class="bg-bg-surface border border-border-default rounded-lg overflow-hidden flex flex-col h-[500px]">
+                <div class="p-4 border-b border-border-default flex items-center justify-between bg-bg-page">
+                    <h3 class="text-[14px] font-medium text-text-primary flex items-center gap-2">
+                        <i data-lucide="calendar" class="w-4 h-4 text-text-muted"></i> Tahun Ajaran
+                    </h3>
+                    <button onclick="ui.showModal('yearModal')" class="text-accent hover:text-accent-hover p-1" title="Tambah">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto" id="years-container">
+                    <div class="p-6 space-y-3"><div class="h-8 bg-bg-hover rounded animate-pulse"></div><div class="h-8 bg-bg-hover rounded animate-pulse opacity-70"></div></div>
+                </div>
+            </div>
+
+            <!-- KELAS -->
+            <div class="bg-bg-surface border border-border-default rounded-lg overflow-hidden flex flex-col h-[500px]">
+                <div class="p-4 border-b border-border-default flex items-center justify-between bg-bg-page">
+                    <h3 class="text-[14px] font-medium text-text-primary flex items-center gap-2">
+                        <i data-lucide="layout" class="w-4 h-4 text-text-muted"></i> Daftar Kelas
+                    </h3>
+                    <button onclick="ui.showModal('classModal')" class="text-accent hover:text-accent-hover p-1" title="Tambah">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto" id="classes-container">
+                    <div class="p-6 space-y-3"><div class="h-8 bg-bg-hover rounded animate-pulse"></div><div class="h-8 bg-bg-hover rounded animate-pulse opacity-70"></div></div>
+                </div>
+            </div>
+
+            <!-- MATA PELAJARAN -->
+            <div class="bg-bg-surface border border-border-default rounded-lg overflow-hidden flex flex-col h-[500px]">
+                <div class="p-4 border-b border-border-default flex items-center justify-between bg-bg-page">
+                    <h3 class="text-[14px] font-medium text-text-primary flex items-center gap-2">
+                        <i data-lucide="book" class="w-4 h-4 text-text-muted"></i> Mata Pelajaran
+                    </h3>
+                    <button onclick="ui.showModal('subjectModal')" class="text-accent hover:text-accent-hover p-1" title="Tambah">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto" id="subjects-container">
+                    <div class="p-6 space-y-3"><div class="h-8 bg-bg-hover rounded animate-pulse"></div><div class="h-8 bg-bg-hover rounded animate-pulse opacity-70"></div></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODALS (Using standard pattern) -->
+    <!-- Modal Tahun Ajaran -->
+    <div id="yearModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div class="bg-bg-surface w-full max-w-sm rounded-lg border border-border-default shadow-lg flex flex-col animate-fade-in-up">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-border-default">
+                <h3 id="yearModalTitle" class="text-[14px] font-semibold text-text-primary">Tambah Tahun Ajaran</h3>
+                <button onclick="ui.hideModal('yearModal')" class="p-1 text-text-placeholder hover:text-text-secondary rounded-md"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <form id="yearForm">
+                <div class="p-5 flex flex-col gap-4">
+                    <input type="hidden" id="year_id" name="id">
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Tahun Ajaran <span class="text-danger">*</span></label>
+                        <input type="text" name="name" id="year_name" required placeholder="Contoh: 2023/2024" class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                    </div>
+                    <div class="flex items-center gap-2 mt-2">
+                        <input type="checkbox" id="year_active" class="w-4 h-4 rounded border-border-default text-accent focus:ring-accent-subtle">
+                        <label for="year_active" class="text-[13px] text-text-secondary">Set sebagai Tahun Ajaran Aktif</label>
+                    </div>
+                </div>
+                <div class="px-5 py-3 border-t border-border-default flex justify-end gap-2 bg-bg-page rounded-b-lg">
+                    <button type="button" onclick="ui.hideModal('yearModal')" class="px-4 h-8 bg-bg-surface border border-border-default rounded-md text-[13px] font-medium text-text-secondary hover:bg-bg-hover">Batal</button>
+                    <button type="submit" id="submitYearBtn" class="px-4 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Kelas -->
+    <div id="classModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div class="bg-bg-surface w-full max-w-sm rounded-lg border border-border-default shadow-lg flex flex-col animate-fade-in-up">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-border-default">
+                <h3 id="classModalTitle" class="text-[14px] font-semibold text-text-primary">Tambah Kelas</h3>
+                <button onclick="ui.hideModal('classModal')" class="p-1 text-text-placeholder hover:text-text-secondary rounded-md"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <form id="classForm">
+                <div class="p-5 flex flex-col gap-4">
+                    <input type="hidden" id="class_id" name="id">
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Nama Kelas <span class="text-danger">*</span></label>
+                        <input type="text" name="name" id="class_name" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                    </div>
+                </div>
+                <div class="px-5 py-3 border-t border-border-default flex justify-end gap-2 bg-bg-page rounded-b-lg">
+                    <button type="button" onclick="ui.hideModal('classModal')" class="px-4 h-8 bg-bg-surface border border-border-default rounded-md text-[13px] font-medium text-text-secondary hover:bg-bg-hover">Batal</button>
+                    <button type="submit" id="submitClassBtn" class="px-4 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Mata Pelajaran -->
+    <div id="subjectModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div class="bg-bg-surface w-full max-w-sm rounded-lg border border-border-default shadow-lg flex flex-col animate-fade-in-up">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-border-default">
+                <h3 id="subjectModalTitle" class="text-[14px] font-semibold text-text-primary">Tambah Mata Pelajaran</h3>
+                <button onclick="ui.hideModal('subjectModal')" class="p-1 text-text-placeholder hover:text-text-secondary rounded-md"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <form id="subjectForm">
+                <div class="p-5 flex flex-col gap-4">
+                    <input type="hidden" id="subject_id" name="id">
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Kode Mata Pelajaran <span class="text-danger">*</span></label>
+                        <input type="text" name="code" id="subject_code" required placeholder="Contoh: MAT, IND, ING" class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                    </div>
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Nama Mata Pelajaran <span class="text-danger">*</span></label>
+                        <input type="text" name="name" id="subject_name" required placeholder="Contoh: Matematika" class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                    </div>
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Tingkat/Kelas <span class="text-danger">*</span></label>
+                        <input type="number" name="grade_level" id="subject_grade" required min="1" max="12" placeholder="Contoh: 10" class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                    </div>
+                </div>
+                <div class="px-5 py-3 border-t border-border-default flex justify-end gap-2 bg-bg-page rounded-b-lg">
+                    <button type="button" onclick="ui.hideModal('subjectModal')" class="px-4 h-8 bg-bg-surface border border-border-default rounded-md text-[13px] font-medium text-text-secondary hover:bg-bg-hover">Batal</button>
+                    <button type="submit" id="submitSubjectBtn" class="px-4 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/utils.js?v=3"></script>
+    <script src="../js/api.js?v=3"></script>
+    <script src="../components/ui.js?v=3"></script>
+    <script src="../components/layout.js?v=5"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            layout.init('admin', 'academic');
+            await loadAll();
+            if (window.ui && ui.hideGlobalLoader) ui.hideGlobalLoader();
+
+            // Forms setup
+            setupForm('yearForm', '/school/academic-years', 'yearModal', loadYears);
+            setupForm('classForm', '/school/classes', 'classModal', loadClasses);
+            setupForm('subjectForm', '/school/subjects', 'subjectModal', loadSubjects);
+        });
+
+        function setupForm(formId, endpoint, modalId, reloadFn) {
+            document.getElementById(formId).addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                const id = data.id; delete data.id;
+                if(data.is_active) data.is_active = document.getElementById('year_active').checked;
+
+                const btn = document.querySelector(`button[form="${formId}"]`) || e.target.querySelector('button[type="submit"]');
+                try {
+                    if (window.ui && ui.setButtonLoading) ui.setButtonLoading(btn, 'Menyimpan...');
+                    if (id) await api.put(`${endpoint}/${id}`, data);
+                    else await api.post(endpoint, data);
+                    ui.hideModal(modalId); await reloadFn();
+                    if (window.utils && utils.showToast) utils.showToast('Data berhasil disimpan', 'success');
+                } catch(err) { 
+                    if (window.utils && utils.showToast) utils.showToast(err.message || 'Gagal menyimpan data', 'error');
+                }
+                finally { if (window.ui && ui.resetButton) ui.resetButton(btn); }
+            });
+        }
+
+        async function loadAll() { await loadYears(); await loadClasses(); await loadSubjects(); }
+
+        function renderList(containerId, items, editFnName, deleteFnName) {
+            const container = document.getElementById(containerId);
+            if(!items || items.length === 0) {
+                container.innerHTML = '<div class="p-6 text-center text-text-muted text-[13px]">Tidak ada data.</div>';
+                return;
+            }
+            let html = '<ul class="divide-y divide-border-default">';
+            items.forEach(item => {
+                const name = item.name;
+                const activeBadge = item.is_active ? '<span class="ml-2 px-1.5 py-0.5 rounded border border-success-subtle bg-success-subtle text-[10px] font-medium text-success uppercase">Aktif</span>' : '';
+                html += `
+                    <li class="flex items-center justify-between p-4 hover:bg-bg-hover group transition-colors">
+                        <span class="text-[13px] font-medium text-text-primary flex items-center">${name} ${activeBadge}</span>
+                        <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onclick='${editFnName}(${JSON.stringify(item).replace(/'/g, "&#39;")})' class="p-1 text-text-muted hover:text-accent rounded" title="Edit"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
+                            <button onclick="${deleteFnName}(${item.id})" class="p-1 text-text-muted hover:text-danger rounded" title="Hapus"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                        </div>
+                    </li>
+                `;
+            });
+            html += '</ul>';
+            container.innerHTML = html;
+            if(window.lucide) lucide.createIcons();
+        }
+
+        async function loadYears() {
+            const c = document.getElementById('years-container');
+            if(c && window.ui && ui.getCardSkeleton) c.innerHTML = ui.getCardSkeleton();
+            try { const r = await api.get('/school/academic-years'); renderList('years-container', r.data, 'editYear', 'deleteYear'); } catch(e) { c.innerHTML='<div class="p-6 text-center text-danger text-[13px]">Gagal</div>'; }
+        }
+        async function loadClasses() {
+            const c = document.getElementById('classes-container');
+            if(c && window.ui && ui.getCardSkeleton) c.innerHTML = ui.getCardSkeleton();
+            try { const r = await api.get('/school/classes'); renderList('classes-container', r.data, 'editClass', 'deleteClass'); } catch(e) { c.innerHTML='<div class="p-6 text-center text-danger text-[13px]">Gagal</div>'; }
+        }
+        async function loadSubjects() {
+            const c = document.getElementById('subjects-container');
+            if(c && window.ui && ui.getCardSkeleton) c.innerHTML = ui.getCardSkeleton();
+            try { const r = await api.get('/school/subjects'); renderList('subjects-container', r.data, 'editSubject', 'deleteSubject'); } catch(e) { c.innerHTML='<div class="p-6 text-center text-danger text-[13px]">Gagal</div>'; }
+        }
+
+        // Edit triggers
+        window.editYear = function(y) {
+            document.getElementById('yearModalTitle').textContent = 'Edit Tahun Ajaran';
+            document.getElementById('yearForm').reset();
+            document.getElementById('year_id').value = y.id;
+            document.getElementById('year_name').value = y.name;
+            document.getElementById('year_active').checked = y.is_active;
+            ui.showModal('yearModal');
+        }
+        window.editClass = function(c) {
+            document.getElementById('classModalTitle').textContent = 'Edit Kelas';
+            document.getElementById('classForm').reset();
+            document.getElementById('class_id').value = c.id;
+            document.getElementById('class_name').value = c.name;
+            ui.showModal('classModal');
+        }
+        window.editSubject = function(s) {
+            document.getElementById('subjectModalTitle').textContent = 'Edit Mata Pelajaran';
+            document.getElementById('subjectForm').reset();
+            document.getElementById('subject_id').value = s.id;
+            document.getElementById('subject_code').value = s.code || '';
+            document.getElementById('subject_name').value = s.name || '';
+            document.getElementById('subject_grade').value = s.grade_level || '';
+            ui.showModal('subjectModal');
+        }
+
+        // Delete triggers
+        const del = async (endpoint, id, reloadFn) => {
+            if(!(await ui.confirm('Hapus item ini?'))) return;
+            try { await api.delete(`${endpoint}/${id}`); reloadFn(); } catch(err) { if(window.utils) utils.showToast(err.message, 'error'); }
+        }
+        window.deleteYear = id => del('/school/academic-years', id, loadYears);
+        window.deleteClass = id => del('/school/classes', id, loadClasses);
+        window.deleteSubject = id => del('/school/subjects', id, loadSubjects);
+
+    </script>
+</body>
+</html>

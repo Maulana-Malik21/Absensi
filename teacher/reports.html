@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Laporan Kelas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div id="sidebar-root"></div>
+    <div id="navbar-root"></div>
+
+    <main class="p-4 md:p-8 min-h-screen pb-20">
+        <div class="w-full max-w-7xl mx-auto">
+            <div class="mb-6 animate-fade-in-up">
+                <h2 class="text-2xl font-bold text-text-primary tracking-tight mb-1">Laporan Kehadiran Kelas</h2>
+                <p class="text-[14px] text-text-secondary">Export data kehadiran khusus untuk kelas yang Anda ajar.</p>
+            </div>
+
+            <div class="bg-bg-surface border border-border-default rounded-lg flex flex-col animate-fade-in-up stagger-1">
+                <div class="px-5 py-4 border-b border-border-default">
+                    <h3 class="text-[14px] font-semibold text-text-primary">Filter & Export</h3>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 mb-6">
+                        <div class="w-full" id="year-container">
+                            <label class="block text-[13px] font-semibold text-text-secondary mb-1.5">Tahun Ajaran</label>
+                            <div class="relative">
+                                <i data-lucide="calendar" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted"></i>
+                                <select id="year-select" class="w-full pl-9 pr-8 py-2 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle appearance-none transition-colors">
+                                    <option value="">Semua Tahun</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none"></i>
+                            </div>
+                        </div>
+                        <div class="w-full">
+                            <label class="block text-[13px] font-semibold text-text-secondary mb-1.5">Kelas</label>
+                            <div class="relative">
+                                <i data-lucide="users" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted"></i>
+                                <select id="class-select" class="w-full pl-9 pr-8 py-2 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle appearance-none transition-colors">
+                                    <option value="">Semua Kelas</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none"></i>
+                            </div>
+                        </div>
+                        <div class="w-full">
+                            <label class="block text-[13px] font-semibold text-text-secondary mb-1.5">Mata Pelajaran</label>
+                            <div class="relative">
+                                <i data-lucide="book-open" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted"></i>
+                                <select id="subject-select" class="w-full pl-9 pr-8 py-2 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle appearance-none transition-colors">
+                                    <option value="">Semua Mapel</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none"></i>
+                            </div>
+                        </div>
+                        <div class="w-full">
+                            <label class="block text-[13px] font-semibold text-text-secondary mb-1.5">Tanggal Mulai</label>
+                            <div class="relative">
+                                <i data-lucide="calendar-days" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted"></i>
+                                <input type="date" id="start-date" class="w-full pl-9 pr-3 py-2 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle transition-colors">
+                            </div>
+                        </div>
+                        <div class="w-full">
+                            <label class="block text-[13px] font-semibold text-text-secondary mb-1.5">Tanggal Akhir</label>
+                            <div class="relative">
+                                <i data-lucide="calendar-days" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted"></i>
+                                <input type="date" id="end-date" class="w-full pl-9 pr-3 py-2 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle transition-colors">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap items-center justify-end gap-3 pt-6 border-t border-border-default">
+                        <button onclick="downloadReport('csv', this)" class="h-9 px-4 bg-bg-surface border border-border-default hover:bg-bg-hover text-text-primary rounded-md text-[13px] font-medium flex items-center justify-center gap-2 transition-colors">
+                            <i data-lucide="file-text" class="w-4 h-4 text-text-muted"></i> Export CSV
+                        </button>
+                        <button onclick="downloadReport('excel', this)" class="h-9 px-4 bg-accent text-white hover:bg-accent-hover rounded-md text-[13px] font-medium flex items-center justify-center gap-2 transition-colors shadow-sm">
+                            <i data-lucide="table" class="w-4 h-4"></i> Export Excel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/utils.js?v=1781115035990"></script>
+    <script src="../js/api.js?v=1781115035990"></script>
+    <script src="../components/ui.js"></script>
+    <script src="../components/layout.js?v=1781115035990"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = utils.checkAuth('teacher');
+            if (!user) return;
+            layout.init('teacher', 'reports');
+            if(window.lucide) lucide.createIcons();
+            const today = new Date();
+            const lastMonth = new Date();
+            lastMonth.setMonth(today.getMonth() - 1);
+            document.getElementById('start-date').value = lastMonth.toISOString().split('T')[0];
+            document.getElementById('end-date').value = today.toISOString().split('T')[0];
+            await loadFilters();
+            if (window.ui && ui.hideGlobalLoader) ui.hideGlobalLoader();
+        });
+
+        async function loadFilters() {
+            try {
+                // Fetch the teacher's assignments
+                const res = await api.get('/teachers/me/assignments');
+                const data = res.data;
+                
+                const classSelect = document.getElementById('class-select');
+                data.classes.forEach(c => { classSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`; });
+                
+                const subjectSelect = document.getElementById('subject-select');
+                data.subjects.forEach(s => { subjectSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`; });
+                
+                // For teachers, we don't need to load all academic years, typically just the active one is used.
+                // But we can hide the year filter or leave it empty so the backend uses the default active year logic.
+                const yearContainer = document.getElementById('year-container');
+                yearContainer.style.display = 'none'; // Hide the year select for teachers to simplify
+                
+            } catch (error) { console.error("Gagal memuat filter", error); }
+        }
+
+        async function downloadReport(type, btn) {
+            const classId = document.getElementById('class-select').value;
+            const subjectId = document.getElementById('subject-select').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            let query = [];
+            if (classId) query.push(`class_id=${classId}`);
+            if (subjectId) query.push(`subject_id=${subjectId}`);
+            if (startDate) query.push(`start_date=${startDate}`);
+            if (endDate) query.push(`end_date=${endDate}`);
+            
+            const endpoint = `/reports/${type}?${query.join('&')}`;
+            const filename = `Laporan_Absensi.${type === 'excel' ? 'xlsx' : 'csv'}`;
+
+            if (window.ui && ui.setButtonLoading) ui.setButtonLoading(btn, 'Mengekspor...');
+            try {
+                await api.download(endpoint, filename);
+            } finally {
+                if (window.ui && ui.resetButton) ui.resetButton(btn);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Riwayat Absensi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div id="sidebar-root"></div>
+    <div id="navbar-root"></div>
+
+    <main class="p-4 md:p-8 min-h-screen pb-20">
+        <div class="w-full max-w-7xl mx-auto">
+            
+            <!-- Header section -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-2xl font-bold text-text-primary">Riwayat Absensi</h1>
+                    <p class="text-[13px] text-text-muted mt-1">Daftar riwayat kehadiran Anda pada seluruh sesi pelajaran.</p>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="bg-bg-surface border border-border-default rounded-lg overflow-hidden flex flex-col">
+                <div class="p-4 border-b border-border-default flex flex-col sm:flex-row gap-3 justify-between items-center bg-bg-surface/50">
+                    <div class="relative w-full sm:w-64">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted"></i>
+                        <input type="text" id="searchInput" placeholder="Cari mata pelajaran..." class="w-full h-9 pl-9 pr-4 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle transition-colors">
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-bg-surface border-b border-border-default">
+                                <th class="px-5 py-3 text-[12px] font-semibold text-text-secondary uppercase tracking-wider">Tanggal & Waktu</th>
+                                <th class="px-5 py-3 text-[12px] font-semibold text-text-secondary uppercase tracking-wider">Mata Pelajaran</th>
+                                <th class="px-5 py-3 text-[12px] font-semibold text-text-secondary uppercase tracking-wider text-center">Status</th>
+                                <th class="px-5 py-3 text-[12px] font-semibold text-text-secondary uppercase tracking-wider text-center">Tipe Scan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="divide-y divide-border-default">
+                            <tr>
+                                <td colspan="4" class="px-5 py-8 text-center text-[13px] text-text-muted">
+                                    <div class="flex justify-center p-4"><i data-lucide="loader-2" class="w-6 h-6 animate-spin text-accent"></i></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="px-5 py-3 border-t border-border-default bg-bg-surface/50 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <p class="text-[12px] text-text-muted" id="paginationInfo">Menampilkan riwayat</p>
+                    <div class="flex items-center gap-1">
+                        <button class="h-8 px-2 rounded border border-border-default bg-bg-surface text-text-secondary hover:bg-bg-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                        <button class="h-8 px-2 rounded border border-border-default bg-bg-surface text-text-secondary hover:bg-bg-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="../js/utils.js?v=4"></script>
+    <script src="../js/api.js?v=5"></script>
+    <script src="../components/ui.js"></script>
+    <script src="../components/layout.js?v=6"></script>
+    <script>
+        let allHistory = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = utils.checkAuth('student');
+            if (!user) return;
+            layout.init('student', 'history');
+            initPage();
+
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const q = e.target.value.toLowerCase();
+                if(!q) renderTable(allHistory);
+                else {
+                    const filtered = allHistory.filter(r => (r.subject_name || '').toLowerCase().includes(q));
+                    renderTable(filtered);
+                }
+            });
+        });
+
+        async function initPage() {
+            try {
+                if (window.ui && ui.getTableSkeleton) {
+                    const tbody = document.getElementById('tableBody');
+                    if (tbody) {
+                        tbody.innerHTML = window.ui.getTableSkeleton(4, 5);
+                        const firstTr = tbody.querySelector('tr');
+                        if (firstTr) {
+                            const skeletonHtml = firstTr.outerHTML;
+                            tbody.innerHTML = skeletonHtml.repeat(5);
+                        }
+                    }
+                }
+                const user = JSON.parse(localStorage.getItem('user'));
+                const response = await api.get('/attendance/student/' + user.id);
+                allHistory = response.data || [];
+                renderTable(allHistory);
+            } catch (err) {
+                console.error(err);
+                if (window.utils && utils.showToast) utils.showToast('Gagal memuat riwayat.', 'error');
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" class="px-5 py-8 text-center text-[13px] text-text-muted">Gagal memuat data.</td></tr>';
+            } finally {
+                if (window.ui && ui.hideGlobalLoader) ui.hideGlobalLoader();
+            }
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="px-5 py-8 text-center text-[13px] text-text-muted">Belum ada catatan absensi yang ditemukan.</td></tr>';
+                document.getElementById('paginationInfo').textContent = 'Tidak ada data';
+                return;
+            }
+
+            const STATUS_MAP = {
+                present:    { label: 'Hadir', cls: 'bg-success-subtle text-success border-success/20' },
+                absent:     { label: 'Alpha', cls: 'bg-danger-subtle text-danger border-danger/20' },
+                sick:       { label: 'Sakit', cls: 'bg-warning-subtle text-warning border-warning/20' },
+                permission: { label: 'Izin',  cls: 'bg-info-subtle text-info border-info/20' }
+            };
+
+            tbody.innerHTML = data.map((r, i) => {
+                const dateOnly = new Date(r.attendance_date || r.timestamp);
+                const timeFull = new Date(r.timestamp);
+                const st = STATUS_MAP[r.status] || STATUS_MAP.present;
+                
+                const dateStr = dateOnly.toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' });
+                const timeStr = timeFull.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+                return `
+                    <tr class="hover:bg-bg-hover transition-colors">
+                        <td class="px-5 py-3 whitespace-nowrap">
+                            <div class="flex flex-col">
+                                <span class="text-[13px] font-medium text-text-primary">${dateStr}</span>
+                                <span class="text-[12px] text-text-muted">${timeStr}</span>
+                            </div>
+                        </td>
+                        <td class="px-5 py-3 text-[13px] text-text-secondary whitespace-nowrap">${r.subject_name || '-'}</td>
+                        <td class="px-5 py-3 text-center whitespace-nowrap">
+                            <span class="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-medium border ${st.cls}">${st.label}</span>
+                        </td>
+                        <td class="px-5 py-3 text-center whitespace-nowrap">
+                            <span class="inline-flex items-center px-2 py-1 rounded border border-border-default bg-bg-surface text-text-muted text-[11px] font-medium">
+                                ${r.is_manual ? 'Manual' : 'QR Scan'}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('paginationInfo').textContent = `Menampilkan ${data.length} riwayat`;
+            if (window.lucide) lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

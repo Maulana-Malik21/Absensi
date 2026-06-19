@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Laporan Kehadiran</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="max-w-7xl mx-auto pb-6">
+        <!-- Page Header -->
+        <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h2 class="text-[13px] font-semibold text-text-primary uppercase tracking-wide mb-1">Laporan Kehadiran</h2>
+                <p class="text-[13px] text-text-muted">Rekap data kehadiran siswa berdasarkan kelas dan periode waktu.</p>
+            </div>
+            <button onclick="exportReport()" class="flex items-center justify-center gap-2 px-4 h-8 bg-bg-surface border border-border-default text-text-secondary rounded-md text-[13px] font-medium hover:bg-bg-hover transition-colors shadow-sm">
+                <i data-lucide="download" class="w-4 h-4"></i> Export CSV
+            </button>
+        </div>
+
+        <!-- Filter Card -->
+        <div class="bg-bg-surface border border-border-default rounded-lg p-5 mb-6">
+            <h3 class="text-[14px] font-medium text-text-primary mb-4 flex items-center gap-2">
+                <i data-lucide="filter" class="w-4 h-4 text-text-muted"></i> Parameter Laporan
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Kelas</label>
+                    <div class="relative">
+                        <select id="filterClass" class="w-full h-8 pl-3 pr-8 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-secondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle appearance-none cursor-pointer transition-colors">
+                            <option value="">Semua Kelas</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none"></i>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Dari Tanggal</label>
+                    <input type="date" id="filterFrom" class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle transition-colors">
+                </div>
+                <div>
+                    <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Sampai Tanggal</label>
+                    <input type="date" id="filterTo" class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle transition-colors">
+                </div>
+                <div class="flex items-end">
+                    <button id="btnLoadReport" onclick="loadReport()" class="w-full h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="search" class="w-4 h-4"></i> Buat Laporan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Stats (Flat KPI style) -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="summary-stats">
+            <dl class="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col relative overflow-hidden group">
+                <div class="absolute right-0 top-0 w-1 bg-success h-full opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                <dt class="text-[13px] font-medium text-text-muted mb-2">Total Hadir</dt>
+                <dd id="sum-hadir" class="text-[28px] font-semibold text-text-primary tabular leading-none">-</dd>
+            </dl>
+            <dl class="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col relative overflow-hidden group">
+                <div class="absolute right-0 top-0 w-1 bg-warning h-full opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                <dt class="text-[13px] font-medium text-text-muted mb-2">Total Izin</dt>
+                <dd id="sum-izin" class="text-[28px] font-semibold text-text-primary tabular leading-none">-</dd>
+            </dl>
+            <dl class="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col relative overflow-hidden group">
+                <div class="absolute right-0 top-0 w-1 bg-accent h-full opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                <dt class="text-[13px] font-medium text-text-muted mb-2">Total Sakit</dt>
+                <dd id="sum-sakit" class="text-[28px] font-semibold text-text-primary tabular leading-none">-</dd>
+            </dl>
+            <dl class="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col relative overflow-hidden group">
+                <div class="absolute right-0 top-0 w-1 bg-danger h-full opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                <dt class="text-[13px] font-medium text-text-muted mb-2">Total Alpa</dt>
+                <dd id="sum-alpa" class="text-[28px] font-semibold text-text-primary tabular leading-none">-</dd>
+            </dl>
+        </div>
+
+        <!-- Report Table -->
+        <div class="bg-bg-surface border border-border-default rounded-lg overflow-hidden">
+            <div id="report-container" class="min-h-[200px]">
+                <div class="flex flex-col items-center justify-center py-16 text-center">
+                    <div class="w-12 h-12 bg-bg-hover rounded-full flex items-center justify-center mb-3">
+                        <i data-lucide="bar-chart-2" class="w-5 h-5 text-text-placeholder"></i>
+                    </div>
+                    <h3 class="text-[14px] font-medium text-text-primary mb-1">Tampilkan Laporan</h3>
+                    <p class="text-[13px] text-text-muted">Atur filter di atas dan klik "Buat Laporan".</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/utils.js?v=3"></script>
+    <script src="../js/api.js?v=3"></script>
+    <script src="../components/ui.js?v=3"></script>
+    <script src="../components/layout.js?v=5"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            layout.init('admin', 'reports');
+            
+            const today = new Date();
+            const from = new Date(today); from.setDate(today.getDate() - 30);
+            document.getElementById('filterTo').value = today.toISOString().split('T')[0];
+            document.getElementById('filterFrom').value = from.toISOString().split('T')[0];
+            await loadClasses();
+            if (window.ui && ui.hideGlobalLoader) ui.hideGlobalLoader();
+        });
+
+        async function loadClasses() {
+            try {
+                const r = await api.get('/school/classes');
+                ui.populateClassDropdown(document.getElementById('filterClass'), r.data || []);
+            } catch(e) {}
+        }
+
+        async function loadReport() {
+            const btn = document.getElementById('btnLoadReport');
+            if (window.ui && ui.setButtonLoading) ui.setButtonLoading(btn, 'Memuat...');
+            const container = document.getElementById('report-container');
+            container.innerHTML = window.ui && ui.getTableSkeleton ? ui.getTableSkeleton(8, 6) : `<div class="p-6 space-y-3"><div class="h-8 bg-bg-hover rounded animate-pulse"></div></div>`;
+
+            try {
+                const classId = document.getElementById('filterClass').value;
+                const from = document.getElementById('filterFrom').value;
+                const to = document.getElementById('filterTo').value;
+                let query = '?limit=200';
+                if(classId) query += `&class_id=${classId}`;
+                if(from) query += `&from=${from}`;
+                if(to) query += `&to=${to}`;
+
+                const r = await api.get(`/attendance/report${query}`);
+                const data = r.data;
+                const records = Array.isArray(data) ? data : (data.records || data.attendance || []);
+
+                if (!records.length) {
+                    container.innerHTML = `<div class="flex flex-col items-center justify-center py-16 text-center">
+                        <div class="w-12 h-12 bg-bg-hover rounded-full flex items-center justify-center mb-3"><i data-lucide="inbox" class="w-5 h-5 text-text-placeholder"></i></div>
+                        <h3 class="text-[14px] font-medium text-text-primary mb-1">Tidak Ada Data</h3>
+                        <p class="text-[13px] text-text-muted">Coba ubah rentang tanggal atau kelas.</p>
+                    </div>`;
+                    if(window.lucide) lucide.createIcons();
+                    document.getElementById('sum-hadir').textContent = '0';
+                    document.getElementById('sum-izin').textContent = '0';
+                    document.getElementById('sum-sakit').textContent = '0';
+                    document.getElementById('sum-alpa').textContent = '0';
+                    if (window.ui && ui.resetButton) ui.resetButton(btn);
+                    return;
+                }
+
+                // Calculate summary - status can be either Indonesian or English
+                let hadir=0, izin=0, sakit=0, alpa=0;
+                records.forEach(rec => {
+                    const status = (rec.status || '').toLowerCase();
+                    if(status==='hadir'||status==='present') hadir++;
+                    else if(status==='izin'||status==='permission') izin++;
+                    else if(status==='sakit'||status==='sick') sakit++;
+                    else if(status==='alpha'||status==='alpa'||status==='absent') alpa++;
+                });
+                document.getElementById('sum-hadir').textContent = hadir.toLocaleString();
+                document.getElementById('sum-izin').textContent = izin.toLocaleString();
+                document.getElementById('sum-sakit').textContent = sakit.toLocaleString();
+                document.getElementById('sum-alpa').textContent = alpa.toLocaleString();
+
+                const STATUS_STYLE = {
+                    hadir: 'text-success border-[#A7F3D0] bg-success-subtle',
+                    present: 'text-success border-[#A7F3D0] bg-success-subtle',
+                    izin: 'text-warning border-[#FDE68A] bg-warning-subtle',
+                    permission: 'text-warning border-[#FDE68A] bg-warning-subtle',
+                    sakit: 'text-accent border-accent-border bg-accent-subtle',
+                    sick: 'text-accent border-accent-border bg-accent-subtle',
+                    alpha: 'text-danger border-[#FECACA] bg-danger-subtle',
+                    alpa: 'text-danger border-[#FECACA] bg-danger-subtle',
+                    absent: 'text-danger border-[#FECACA] bg-danger-subtle',
+                };
+
+                const STATUS_LABEL = {
+                    present: 'Hadir', absent: 'Alpa', sick: 'Sakit', permission: 'Izin',
+                    hadir: 'Hadir', alpa: 'Alpa', sakit: 'Sakit', izin: 'Izin', alpha: 'Alpa'
+                };
+
+                let html = `<div class="overflow-x-auto"><table class="w-full text-left border-collapse">
+                    <thead><tr class="border-b border-border-default">
+                        <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">Tanggal</th>
+                        <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">NIS</th>
+                        <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">Siswa</th>
+                        <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">Kelas</th>
+                        <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">Mata Pelajaran</th>
+                        <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">Status</th>
+                    </tr></thead><tbody class="divide-y divide-border-default">`;
+
+                records.forEach(rec => {
+                    const st = (rec.status||'').toLowerCase();
+                    const statusCls = STATUS_STYLE[st] || 'text-text-secondary border-border-default bg-bg-page';
+                    const statusLabel = STATUS_LABEL[st] || rec.status || '-';
+                    html += `<tr class="hover:bg-bg-hover transition-colors">
+                        <td class="px-5 py-3.5 text-[13px] text-text-secondary tabular font-mono">${rec.date ? new Date(rec.date).toLocaleDateString('id-ID') : '-'}</td>
+                        <td class="px-5 py-3.5 text-[13px] text-text-muted tabular">${rec.nis||'-'}</td>
+                        <td class="px-5 py-3.5 text-[13px] font-medium text-text-primary">${rec.student_name||rec.siswa_name||'-'}</td>
+                        <td class="px-5 py-3.5"><span class="px-2 py-0.5 rounded border border-border-default text-[12px] text-text-secondary bg-bg-page">${rec.class_name||rec.kelas_name||'-'}</span></td>
+                        <td class="px-5 py-3.5 text-[13px] text-text-muted">${rec.subject_name||'-'}</td>
+                        <td class="px-5 py-3.5"><span class="px-2 py-0.5 rounded border text-[11px] font-semibold uppercase tracking-wider ${statusCls}">${statusLabel}</span></td>
+                    </tr>`;
+                });
+                
+                html += `</tbody></table></div>`;
+                container.innerHTML = html;
+                if(window.lucide) lucide.createIcons();
+            } catch(err) {
+                container.innerHTML = `<div class="p-8 text-center text-danger text-[13px]">Gagal memuat laporan. <button onclick="loadReport()" class="underline font-medium">Coba lagi</button></div>`;
+                console.error('loadReport error:', err);
+            } finally {
+                if (window.ui && ui.resetButton) ui.resetButton(btn);
+            }
+        }
+
+        function exportReport() {
+            const classId = document.getElementById('filterClass').value;
+            const from = document.getElementById('filterFrom').value;
+            const to = document.getElementById('filterTo').value;
+            
+            // Build query params properly
+            const params = new URLSearchParams();
+            if (classId) params.append('class_id', classId);
+            if (from) params.append('start_date', from);
+            if (to) params.append('end_date', to);
+            
+            const query = params.toString() ? `?${params.toString()}` : '';
+            
+            // Use the secure download method from api.js which passes the Authorization header
+            api.download(`/reports/excel${query}`, `Laporan_Kehadiran_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - QR Attendance Scanner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div id="sidebar-root"></div>
+    <div id="navbar-root"></div>
+
+    <main class="p-4 md:p-8 min-h-screen pb-20 flex items-center justify-center">
+        <div class="w-full max-w-md bg-bg-surface border border-border-default rounded-xl shadow-sm overflow-hidden flex flex-col">
+            <div class="p-6 text-center border-b border-border-default bg-bg-surface/50">
+                <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-3">
+                    <i data-lucide="scan" class="w-6 h-6 text-accent"></i>
+                </div>
+                <h2 class="text-xl font-bold text-text-primary mb-1">Scan QR Absensi</h2>
+                <p class="text-[13px] text-text-muted">Arahkan kamera ke QR Code yang ditampilkan guru. Pastikan GPS Anda aktif.</p>
+            </div>
+
+            <div class="p-6 flex flex-col items-center">
+                <div id="reader-container" class="relative w-full aspect-square bg-bg-page rounded-xl overflow-hidden border-2 border-dashed border-border-default mb-6">
+                    <div id="reader" class="w-full h-full"></div>
+                    
+                    <div id="scanner-overlay" class="hidden absolute inset-0 bg-bg-surface/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center text-center p-6">
+                        <i id="overlay-icon" data-lucide="loader-2" class="w-10 h-10 text-accent animate-spin mb-4"></i>
+                        <p id="overlay-text" class="text-[14px] font-semibold text-text-primary">Memproses...</p>
+                    </div>
+                </div>
+
+                <div class="w-full flex flex-col gap-3">
+                    <button id="startBtn" class="w-full h-10 bg-accent text-white hover:bg-accent-hover rounded-md text-[13px] font-medium flex items-center justify-center gap-2 transition-colors">
+                        <i data-lucide="play" class="w-4 h-4"></i> Mulai Scanner
+                    </button>
+                    <button id="switchBtn" class="hidden w-full h-10 bg-bg-hover text-text-secondary hover:bg-border-default rounded-md text-[13px] font-medium flex items-center justify-center gap-2 transition-colors">
+                        <i data-lucide="camera" class="w-4 h-4"></i> Ganti Kamera
+                    </button>
+                    
+                    <div class="relative flex items-center py-2">
+                        <div class="flex-grow border-t border-border-default"></div>
+                        <span class="flex-shrink-0 mx-4 text-text-muted text-[11px] font-medium uppercase">ATAU</span>
+                        <div class="flex-grow border-t border-border-default"></div>
+                    </div>
+
+                    <input type="file" id="qr-upload" accept="image/*" class="hidden">
+                    <button id="uploadBtn" class="w-full h-10 bg-bg-surface border border-border-default text-text-secondary hover:bg-bg-hover rounded-md text-[13px] font-medium flex items-center justify-center gap-2 transition-colors">
+                        <i data-lucide="image" class="w-4 h-4"></i> Scan dari Galeri
+                    </button>
+                </div>
+
+                <div id="location-status" class="mt-6 inline-flex items-center gap-2 bg-bg-page border border-border-default px-4 py-2 rounded-full text-[12px] font-medium text-text-secondary">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-text-muted"></i>
+                    Status GPS: <span class="text-warning font-semibold">Memeriksa...</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/utils.js?v=4"></script>
+    <script src="../js/api.js?v=5"></script>
+    <script src="../components/ui.js"></script>
+    <script src="../components/layout.js?v=6"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = utils.checkAuth('student');
+            if (!user) return;
+            layout.init('student', 'scanner');
+            initPage();
+            if (window.ui && ui.hideGlobalLoader) ui.hideGlobalLoader();
+            if (window.lucide) lucide.createIcons();
+        });
+
+        let html5QrCode;
+        let isScanning = false;
+        let currentCameraIndex = 0;
+        let cameras = [];
+        let locationCache = null;
+
+        async function initPage() {
+            html5QrCode = new Html5Qrcode("reader");
+            requestGPS();
+            
+            document.getElementById('startBtn').addEventListener('click', () => {
+                if (!locationCache) requestGPS();
+                startScanner();
+            });
+            document.getElementById('switchBtn').addEventListener('click', switchCamera);
+            
+            const uploadBtn = document.getElementById('uploadBtn');
+            const fileInput = document.getElementById('qr-upload');
+            
+            uploadBtn.addEventListener('click', () => {
+                if (!locationCache) requestGPS();
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', async (e) => {
+                if (e.target.files.length == 0) return;
+                const file = e.target.files[0];
+                try {
+                    const decodedText = await html5QrCode.scanFileV2(file, true);
+                    onScanSuccess(decodedText.decodedText, null);
+                } catch (err) {
+                    if(window.utils) utils.showToast("Tidak ada QR Code yang ditemukan di gambar ini.", "error");
+                }
+                fileInput.value = ''; // Reset input
+            });
+        }
+
+        function requestGPS() {
+            const locStatus = document.getElementById('location-status');
+            locStatus.innerHTML = '<i data-lucide="map-pin" class="w-4 h-4 text-text-muted"></i> Status GPS: <span class="text-warning font-semibold">Memeriksa...</span>';
+            if (window.lucide) lucide.createIcons({root: locStatus});
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        locationCache = pos.coords;
+                        locStatus.innerHTML = '<i data-lucide="map-pin" class="w-4 h-4 text-success"></i> Status GPS: <span class="text-success font-semibold">Aktif</span>';
+                        if (window.lucide) lucide.createIcons({root: locStatus});
+                        
+                        navigator.geolocation.watchPosition(
+                            (p) => { locationCache = p.coords; },
+                            (e) => { console.warn("Watch position error:", e); },
+                            { enableHighAccuracy: true, maximumAge: 10000, timeout: 30000 }
+                        );
+                    },
+                    (err) => {
+                        console.error("GPS Error:", err);
+                        locStatus.innerHTML = '<i data-lucide="map-pin-off" class="w-4 h-4 text-danger"></i> Status GPS: <span class="text-danger font-semibold">Ditolak/Time Out</span> <button onclick="requestGPS()" class="ml-2 text-accent font-semibold hover:underline">Coba Lagi</button>';
+                        if (window.lucide) lucide.createIcons({root: locStatus});
+                    },
+                    { enableHighAccuracy: true, maximumAge: 0, timeout: 30000 }
+                );
+            } else {
+                locStatus.innerHTML = '<i data-lucide="map-pin-off" class="w-4 h-4 text-danger"></i> Status GPS: <span class="text-danger font-semibold">Tidak Didukung</span>';
+                if (window.lucide) lucide.createIcons({root: locStatus});
+            }
+        }
+
+        async function startScanner() {
+            if (isScanning) return;
+            try {
+                cameras = await Html5Qrcode.getCameras();
+                if (cameras && cameras.length > 0) {
+                    currentCameraIndex = cameras.length > 1 ? cameras.length - 1 : 0;
+                    document.getElementById('startBtn').classList.add('hidden');
+                    if (cameras.length > 1) document.getElementById('switchBtn').classList.remove('hidden');
+                    await startCurrentCamera();
+                } else { if(window.utils) utils.showToast("Kamera tidak ditemukan.", "error"); }
+            } catch (err) { if(window.utils) utils.showToast("Izin kamera ditolak.", "error"); }
+        }
+
+        async function startCurrentCamera() {
+            try {
+                await html5QrCode.start(cameras[currentCameraIndex].id, { fps: 10, qrbox: { width: 250, height: 250 } }, onScanSuccess, () => {});
+                isScanning = true;
+                document.getElementById('reader-container').classList.remove('border-dashed', 'border-border-default');
+                document.getElementById('reader-container').classList.add('border-solid', 'border-accent');
+            } catch (err) { console.error(err); if(window.utils) utils.showToast("Gagal memulai kamera.", "error"); }
+        }
+
+        async function switchCamera() {
+            if (!isScanning) return;
+            await html5QrCode.stop(); isScanning = false;
+            currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
+            await startCurrentCamera();
+        }
+
+        function setOverlay(iconName, colorClass, text, spin = false) {
+            const overlay = document.getElementById('scanner-overlay');
+            const overlayIcon = document.getElementById('overlay-icon');
+            const overlayText = document.getElementById('overlay-text');
+            
+            overlay.classList.remove('hidden');
+            overlayIcon.setAttribute('data-lucide', iconName);
+            overlayIcon.className = `w-10 h-10 mb-4 ${colorClass} ${spin ? 'animate-spin' : ''}`;
+            overlayText.innerText = text;
+            
+            if (window.lucide) lucide.createIcons({root: overlay});
+        }
+
+        async function onScanSuccess(decodedText, decodedResult) {
+            try { if (isScanning) { await html5QrCode.stop(); } } catch(e) { console.warn(e); }
+            isScanning = false;
+            
+            document.getElementById('reader-container').classList.add('border-dashed', 'border-border-default');
+            document.getElementById('reader-container').classList.remove('border-solid', 'border-accent');
+            document.getElementById('switchBtn').classList.add('hidden');
+            
+            const startBtn = document.getElementById('startBtn');
+            startBtn.classList.remove('hidden');
+            startBtn.innerHTML = '<i data-lucide="refresh-cw" class="w-4 h-4"></i> Scan Ulang';
+            if (window.lucide) lucide.createIcons({root: startBtn});
+
+            setOverlay('loader-2', 'text-accent', 'Memvalidasi lokasi...', true);
+
+            if (!locationCache) {
+                setOverlay('alert-triangle', 'text-danger', 'GPS harus aktif!');
+                setTimeout(() => document.getElementById('scanner-overlay').classList.add('hidden'), 3000); 
+                return;
+            }
+
+            try {
+                setOverlay('loader-2', 'text-accent', 'Menyimpan absensi...', true);
+                let tokenStr = decodedText;
+                try { const parsed = JSON.parse(decodedText); if(parsed.token) tokenStr = parsed.token; } catch(e) {}
+                
+                await api.post('/attendance/scan', { token: tokenStr, latitude: locationCache.latitude, longitude: locationCache.longitude });
+                
+                setOverlay('check-circle', 'text-success', 'Absensi Berhasil!');
+            } catch (err) {
+                setOverlay('x-circle', 'text-danger', err.message || 'QR tidak valid atau di luar radius.');
+            }
+            setTimeout(() => { document.getElementById('scanner-overlay').classList.add('hidden'); }, 4000);
+        }
+    </script>
+</body>
+</html>

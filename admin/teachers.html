@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Kelola Guru</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="max-w-7xl mx-auto pb-6">
+        <!-- Page Header & Actions -->
+        <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h2 class="text-[13px] font-semibold text-text-primary uppercase tracking-wide mb-1">Tenaga Pendidik</h2>
+                <p class="text-[13px] text-text-muted">Kelola data profil guru dan detail kontak.</p>
+            </div>
+            <div class="flex flex-wrap shrink-0 items-center gap-2 w-full md:w-auto">
+                <button onclick="downloadTemplate('teachers')" class="flex-1 md:flex-none flex justify-center items-center gap-1.5 h-8 rounded-md border border-border-default bg-bg-surface px-3 text-[13px] font-medium text-text-secondary hover:bg-bg-hover hover:border-border-strong transition-colors">
+                    <i data-lucide="file-down" class="w-4 h-4"></i> <span class="hidden sm:inline">Template</span>
+                </button>
+                <button onclick="ui.showModal('importModal')" class="flex-1 md:flex-none flex justify-center items-center gap-1.5 h-8 rounded-md border border-border-default bg-bg-surface px-3 text-[13px] font-medium text-text-secondary hover:bg-bg-hover hover:border-border-strong transition-colors">
+                    <i data-lucide="upload" class="w-4 h-4"></i> <span class="hidden sm:inline">Import Data</span>
+                </button>
+                <button onclick="ui.showModal('addTeacherModal')" class="flex-1 md:flex-none flex items-center justify-center gap-1.5 px-3 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Tambah Guru
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div class="bg-bg-surface border border-border-default rounded-lg p-3 mb-4">
+            <div class="relative w-full max-w-md">
+                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-placeholder"></i>
+                <input type="text" id="searchInput" placeholder="Cari NIP atau Nama Guru..." 
+                    class="w-full h-8 pl-9 pr-3 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle placeholder:text-text-placeholder transition-colors">
+            </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="bg-bg-surface border border-border-default rounded-lg overflow-hidden">
+            <div id="table-container" class="min-h-[300px]">
+                <div class="p-6 space-y-3">
+                    <div class="h-8 bg-bg-hover rounded animate-pulse"></div>
+                    <div class="h-12 bg-bg-hover rounded animate-pulse opacity-70"></div>
+                    <div class="h-12 bg-bg-hover rounded animate-pulse opacity-50"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD/EDIT MODAL -->
+    <div id="addTeacherModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div class="bg-bg-surface w-full max-w-md rounded-lg border border-border-default shadow-lg flex flex-col max-h-[90vh] animate-fade-in-up">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-border-default">
+                <h3 id="modalTitle" class="text-[14px] font-semibold text-text-primary">Tambah Guru Baru</h3>
+                <button onclick="ui.hideModal('addTeacherModal')" class="p-1 text-text-placeholder hover:text-text-secondary hover:bg-bg-hover rounded-md transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <form id="teacherForm">
+                <div class="overflow-y-auto p-5 flex flex-col gap-4">
+                    <input type="hidden" id="teacher_id" name="id">
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">NIP</label>
+                        <input type="text" name="nip" id="nip" class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                        <p class="text-[11px] text-text-muted mt-1">Nomor Induk Pegawai (opsional)</p>
+                    </div>
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Nama Lengkap <span class="text-danger">*</span></label>
+                        <input type="text" name="full_name" id="full_name" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                    </div>
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Gender <span class="text-danger">*</span></label>
+                        <select name="gender" id="gender" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                            <option value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Email</label>
+                        <input type="email" name="email" id="email" class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                    </div>
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Telepon</label>
+                        <input type="text" name="phone" id="phone" class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                    </div>
+                </div>
+                <div class="px-5 py-3 border-t border-border-default flex justify-end gap-2 bg-bg-page rounded-b-lg">
+                    <button type="button" onclick="ui.hideModal('addTeacherModal')" class="px-4 h-8 bg-bg-surface border border-border-default rounded-md text-[13px] font-medium text-text-secondary hover:bg-bg-hover transition-colors">Batal</button>
+                    <button type="submit" id="submitBtn" class="px-4 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors">Simpan Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- IMPORT MODAL -->
+    <div id="importModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true">
+        <div class="w-full max-w-md rounded-xl border border-border-default bg-bg-surface shadow-lg flex flex-col">
+            <div class="flex items-center justify-between border-b border-border-default px-6 py-4">
+                <h3 class="text-[14px] font-semibold text-text-primary">Import Data Guru</h3>
+                <button onclick="ui.hideModal('importModal')" class="p-1 text-text-placeholder hover:text-text-secondary hover:bg-bg-hover rounded-md transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <form id="importForm">
+                <div class="px-6 py-5 flex flex-col gap-4">
+                    <div class="bg-bg-hover p-4 rounded-lg border border-border-default border-dashed text-center">
+                        <i data-lucide="upload-cloud" class="w-8 h-8 text-text-muted mx-auto mb-2"></i>
+                        <p class="text-sm font-medium text-text-primary mb-1">Unggah file Excel (.xlsx)</p>
+                        <p class="text-[13px] text-text-muted mb-4">Pastikan format sesuai dengan Template</p>
+                        <input type="file" id="importFile" name="file" accept=".xlsx, .xls" required class="block w-full text-sm text-text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-accent-subtle file:text-accent hover:file:bg-accent-border">
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-3 border-t border-border-default bg-bg-page px-6 py-4 rounded-b-xl">
+                    <button type="button" onclick="ui.hideModal('importModal')" class="px-4 h-8 bg-bg-surface border border-border-default rounded-md text-[13px] font-medium text-text-secondary hover:bg-bg-hover transition-colors">Batal</button>
+                    <button type="submit" id="btnImport" class="px-4 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors">Mulai Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- UBAH PASSWORD MODAL -->
+    <div id="changePasswordModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true">
+        <div class="w-full max-w-sm rounded-xl border border-border-default bg-bg-surface shadow-lg flex flex-col animate-fade-in-up">
+            <div class="flex items-center justify-between border-b border-border-default px-6 py-4">
+                <h3 class="text-[14px] font-semibold text-text-primary">Ubah Password <span id="cp-user-name" class="font-normal text-text-muted"></span></h3>
+                <button onclick="ui.hideModal('changePasswordModal')" class="p-1 text-text-placeholder hover:text-text-secondary hover:bg-bg-hover rounded-md transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <form id="changePasswordForm">
+                <input type="hidden" id="cp_user_id">
+                <div class="px-6 py-5 flex flex-col gap-4">
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Password Baru <span class="text-danger">*</span></label>
+                        <input type="password" id="cp_new_password" required minlength="8" placeholder="Masukkan password baru" class="w-full h-9 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                        <p class="text-[11px] text-text-muted mt-1">Minimal 8 karakter.</p>
+                    </div>
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Konfirmasi Password <span class="text-danger">*</span></label>
+                        <input type="password" id="cp_confirm_password" required minlength="8" placeholder="Ulangi password baru" class="w-full h-9 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-3 border-t border-border-default bg-bg-page px-6 py-4 rounded-b-xl">
+                    <button type="button" onclick="ui.hideModal('changePasswordModal')" class="px-4 h-8 bg-bg-surface border border-border-default rounded-md text-[13px] font-medium text-text-secondary hover:bg-bg-hover transition-colors">Batal</button>
+                    <button type="submit" id="btnSubmitChangePassword" class="px-4 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors">Ubah Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/utils.js?v=3"></script>
+    <script src="../js/api.js?v=3"></script>
+    <script src="../components/ui.js?v=3"></script>
+    <script src="../components/layout.js?v=5"></script>
+    <script>
+        let currentPage = 1;
+        const limit = 15;
+        let searchTimeout;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            layout.init('admin', 'teachers');
+            fetchTeachers();
+
+            document.getElementById('searchInput').addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => { currentPage = 1; fetchTeachers(); }, 500);
+            });
+
+            document.getElementById('teacherForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const data = Object.fromEntries(new FormData(e.target).entries());
+                const id = data.id; delete data.id;
+
+                const btn = document.getElementById('submitBtn');
+                try {
+                    if (window.ui && ui.setButtonLoading) ui.setButtonLoading(btn, 'Menyimpan...');
+                    if (id) await api.put(`/teachers/${id}`, data);
+                    else await api.post('/teachers', data);
+                    ui.hideModal('addTeacherModal');
+                    fetchTeachers();
+                    if(window.utils) utils.showToast('Data guru berhasil disimpan', 'success');
+                } catch(err) { if(window.utils) utils.showToast(err.message, 'error'); }
+                finally { if (window.ui && ui.resetButton) ui.resetButton(btn); }
+            });
+
+            // Import Form Submit Handler
+            document.getElementById('importForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const fileInput = document.getElementById('importFile');
+                if (!fileInput.files.length) return;
+
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+                
+                const btn = document.getElementById('btnImport');
+                try {
+                    if (window.ui && ui.setButtonLoading) ui.setButtonLoading(btn, 'Memproses...');
+                    const res = await api.post('/imports/teachers', formData);
+                    ui.hideModal('importModal');
+                    if(window.utils && utils.showToast) utils.showToast(res.message || 'Import berhasil', 'success');
+                    
+                    e.target.reset();
+                    currentPage = 1;
+                    fetchTeachers();
+                } catch(err) {
+                    if (err.data && err.data.errors && err.data.errors.length > 0) {
+                        const errorList = err.data.errors.map(e => `<li class="mb-1">${e}</li>`).join('');
+                        if (window.ui && ui.alert) {
+                            ui.alert(`<div class="max-h-60 overflow-y-auto text-sm text-left text-danger bg-danger-subtle p-3 rounded border border-danger/30"><ul class="list-disc pl-4">${errorList}</ul></div>`, 'Gagal Import Data');
+                        } else if(window.utils && utils.showToast) {
+                            utils.showToast(err.message || 'Gagal import data', 'error');
+                        }
+                    } else {
+                        if(window.utils && utils.showToast) utils.showToast(err.message || 'Gagal import data', 'error');
+                    }
+                } finally {
+                    if (window.ui && ui.resetButton) ui.resetButton(btn);
+                }
+            });
+
+            // Change Password Form Submit Handler
+            document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const id = document.getElementById('cp_user_id').value;
+                const newPass = document.getElementById('cp_new_password').value;
+                const confirmPass = document.getElementById('cp_confirm_password').value;
+                
+                if (newPass.length < 8) {
+                    if(window.utils) utils.showToast('Password minimal 8 karakter', 'warning');
+                    return;
+                }
+                if (newPass !== confirmPass) {
+                    if(window.utils) utils.showToast('Konfirmasi password tidak cocok', 'warning');
+                    return;
+                }
+
+                const btn = document.getElementById('btnSubmitChangePassword');
+                try {
+                    if (window.ui && ui.setButtonLoading) ui.setButtonLoading(btn, 'Menyimpan...');
+                    await api.post(`/teachers/${id}/reset-password`, { password: newPass });
+                    ui.hideModal('changePasswordModal');
+                    if(window.utils) utils.showToast('Password berhasil diubah', 'success');
+                } catch(err) {
+                    if(window.utils) utils.showToast(err.message || 'Gagal mengubah password', 'error');
+                } finally {
+                    if (window.ui && ui.resetButton) ui.resetButton(btn);
+                }
+            });
+        });
+
+        // Trigger Template Download
+        function downloadTemplate(type) {
+            api.download(`/imports/template/${type}`, `Template_${type}.xlsx`);
+        }
+
+        async function fetchTeachers() {
+            const container = document.getElementById('table-container');
+            if(!container) return;
+            container.innerHTML = window.ui && ui.getTableSkeleton ? ui.getTableSkeleton(8, 5) : `<div class="p-6">Loading...</div>`;
+            
+            try {
+                const search = document.getElementById('searchInput').value;
+                let url = `/teachers?page=${currentPage}&limit=${limit}`;
+                if(search) url += `&search=${encodeURIComponent(search)}`;
+
+                const r = await api.get(url);
+                const { teachers, pagination } = r.data;
+
+                if (!teachers || teachers.length === 0) {
+                    container.innerHTML = `
+                        <div class="flex flex-col items-center justify-center py-16 text-center">
+                            <div class="w-12 h-12 bg-bg-hover rounded-full flex items-center justify-center mb-3">
+                                <i data-lucide="user" class="w-5 h-5 text-text-placeholder"></i>
+                            </div>
+                            <h3 class="text-[14px] font-medium text-text-primary mb-1">Data Tidak Ditemukan</h3>
+                            <p class="text-[13px] text-text-muted">Coba ubah kata kunci pencarian Anda.</p>
+                        </div>
+                    `;
+                    if(window.lucide) lucide.createIcons(); return;
+                }
+
+                let html = `<div class="overflow-x-auto"><table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-border-default">
+                            <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">NIP</th>
+                            <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">Nama Guru</th>
+                            <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">Gender</th>
+                            <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">Kontak</th>
+                            <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-border-default">`;
+
+                teachers.forEach(t => {
+                    html += `
+                        <tr class="hover:bg-bg-hover group transition-colors">
+                            <td class="px-5 py-3.5 text-[13px] text-text-secondary tabular">${t.nip||'-'}</td>
+                            <td class="px-5 py-3.5 text-[13px] font-medium text-text-primary">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded-full bg-accent-subtle text-accent flex items-center justify-center text-[10px] font-bold border border-accent-border">
+                                        ${(t.full_name || t.email || 'U').charAt(0).toUpperCase()}
+                                    </div>
+                                    ${t.full_name || t.email || 'Unknown User'}
+                                </div>
+                            </td>
+                            <td class="px-5 py-3.5 text-[13px] text-text-muted">${t.gender==='L'?'Laki-laki':t.gender==='P'?'Perempuan':'-'}</td>
+                            <td class="px-5 py-3.5 text-[12px] text-text-secondary">
+                                ${t.email ? `<div class="flex items-center gap-1"><i data-lucide="mail" class="w-3 h-3 text-text-placeholder"></i> ${t.email}</div>` : ''}
+                                ${t.phone ? `<div class="flex items-center gap-1 mt-1"><i data-lucide="phone" class="w-3 h-3 text-text-placeholder"></i> ${t.phone}</div>` : ''}
+                                ${!t.email && !t.phone ? '-' : ''}
+                            </td>
+                            <td class="px-5 py-3.5 text-right">
+                                <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button onclick="changePassword(${t.id}, '${t.full_name || t.email || 'Guru'}')" class="p-1.5 text-text-muted hover:text-accent hover:bg-accent-subtle rounded-md transition-colors" title="Ubah Password">
+                                        <i data-lucide="key" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick="resetPassword(${t.id}, '${t.full_name || t.email || 'Guru'}')" class="p-1.5 text-text-muted hover:text-warning hover:bg-warning-subtle rounded-md transition-colors" title="Reset Password">
+                                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick='editTeacher(${JSON.stringify(t).replace(/'/g, "&#39;")})' class="p-1.5 text-text-muted hover:text-accent hover:bg-accent-subtle rounded-md transition-colors" title="Edit">
+                                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick="deleteTeacher(${t.id})" class="p-1.5 text-text-muted hover:text-danger hover:bg-danger-subtle rounded-md transition-colors" title="Hapus">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += `</tbody></table></div>`;
+
+                if(pagination && pagination.totalPages > 1) {
+                    html += `
+                        <div class="flex items-center justify-between px-5 py-3 border-t border-border-default bg-bg-page">
+                            <span class="text-[12px] text-text-muted">Halaman <b class="text-text-primary">${pagination.page}</b> dari ${pagination.totalPages}</span>
+                            <div class="flex gap-2">
+                                <button onclick="changePage(${pagination.page-1})" ${pagination.page===1?'disabled':''} class="px-3 h-7 bg-bg-surface border border-border-default rounded text-[12px] font-medium text-text-secondary disabled:opacity-50 hover:bg-bg-hover transition-colors">Prev</button>
+                                <button onclick="changePage(${pagination.page+1})" ${pagination.page===pagination.totalPages?'disabled':''} class="px-3 h-7 bg-bg-surface border border-border-default rounded text-[12px] font-medium text-text-secondary disabled:opacity-50 hover:bg-bg-hover transition-colors">Next</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML = html;
+                if(window.lucide) lucide.createIcons();
+            } catch(e) {
+                container.innerHTML = `<div class="p-8 text-center text-danger text-[13px]">Gagal memuat data. <button onclick="fetchTeachers()" class="underline font-medium">Coba lagi</button></div>`;
+            } finally {
+                if (window.ui && ui.hideGlobalLoader) ui.hideGlobalLoader();
+            }
+        }
+
+        function changePage(p) { currentPage = p; fetchTeachers(); }
+
+        window.editTeacher = function(t) {
+            document.getElementById('modalTitle').textContent = 'Edit Data Guru';
+            document.getElementById('teacherForm').reset();
+            document.getElementById('teacher_id').value = t.id;
+            document.getElementById('nip').value = t.nip||'';
+            document.getElementById('full_name').value = t.full_name||'';
+            document.getElementById('gender').value = t.gender||'';
+            document.getElementById('email').value = t.email||'';
+            document.getElementById('phone').value = t.phone||'';
+            ui.showModal('addTeacherModal');
+        }
+
+        window.deleteTeacher = async function(id) {
+            if(!(await ui.confirm('Hapus guru ini? Tindakan ini tidak dapat dibatalkan.'))) return;
+            try { await api.delete(`/teachers/${id}`); fetchTeachers(); if(window.utils) utils.showToast('Data guru berhasil dihapus', 'success'); } 
+            catch(err) { if(window.utils) utils.showToast(err.message, 'error'); }
+        }
+
+        window.resetPassword = async function(id, name) {
+            const confirmed = await ui.confirm(`Apakah Anda yakin ingin mereset password untuk guru <b>${name}</b> menjadi default sistem?`, 'Reset Password');
+            if (!confirmed) return;
+            try {
+                await api.post(`/teachers/${id}/reset-password`);
+                if(window.utils) utils.showToast('Password berhasil direset ke default', 'success');
+            } catch(e) {
+                if(window.utils) utils.showToast(e.message || 'Gagal reset password', 'error');
+            }
+        }
+
+        window.changePassword = function(id, name) {
+            document.getElementById('changePasswordForm').reset();
+            document.getElementById('cp_user_id').value = id;
+            document.getElementById('cp-user-name').textContent = `- ${name}`;
+            ui.showModal('changePasswordModal');
+        }
+    </script>
+</body>
+</html>

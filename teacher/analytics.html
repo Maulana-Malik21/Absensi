@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Analitik Kehadiran</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div id="sidebar-root"></div>
+    <div id="navbar-root"></div>
+
+    <main class="p-4 md:p-8 min-h-screen pb-20">
+        <div class="w-full max-w-7xl mx-auto">
+            <div class="mb-6 animate-fade-in-up">
+                <h2 class="text-2xl font-bold text-text-primary tracking-tight mb-1">Analitik Kehadiran</h2>
+                <p class="text-[14px] text-text-secondary">Kelola dan analisis data kehadiran kelas Anda.</p>
+            </div>
+            
+            <div class="bg-bg-surface border border-border-default rounded-lg animate-fade-in-up stagger-1">
+                <div class="px-5 py-4 border-b border-border-default flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <h3 class="text-[15px] font-semibold text-text-primary">Ringkasan Data</h3>
+                    <div class="relative w-full sm:w-48">
+                        <select id="filter-type" class="w-full pl-3 pr-8 py-1.5 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle appearance-none transition-colors" onchange="loadAnalytics()">
+                            <option value="today">Hari Ini</option>
+                            <option value="weekly">Minggu Ini</option>
+                            <option value="monthly">Bulan Ini</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none"></i>
+                    </div>
+                </div>
+                <div class="p-6" id="app-content">
+                    <div class="flex items-center justify-center p-8">
+                        <i data-lucide="loader-2" class="w-5 h-5 text-accent animate-spin mr-2"></i>
+                        <span class="text-[13px] text-text-secondary font-medium">Memuat analitik...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/utils.js?v=1781115035990"></script>
+    <script src="../js/api.js?v=1781115035990"></script>
+    <script src="../components/layout.js?v=1781115035990"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = utils.checkAuth('teacher');
+            if (!user) return;
+            layout.init('teacher', 'analytics');
+            if (window.lucide) lucide.createIcons();
+            initPage();
+        });
+
+        async function initPage() {
+            await loadAnalytics();
+            if (window.ui && ui.hideGlobalLoader) ui.hideGlobalLoader();
+        }
+
+        async function loadAnalytics() {
+            const filterType = document.getElementById('filter-type').value;
+            const content = document.getElementById('app-content');
+            
+            content.innerHTML = `
+                <div class="flex items-center justify-center p-8">
+                    <i data-lucide="loader-2" class="w-5 h-5 text-accent animate-spin mr-2"></i>
+                    <span class="text-[13px] text-text-secondary font-medium">Memuat data...</span>
+                </div>
+            `;
+            if (window.lucide) lucide.createIcons({root: content});
+            
+            try {
+                const query = filterType === 'today' ? '' : `?filter_type=${filterType}`;
+                const res = await api.get(`/analytics/teacher${query}`);
+                
+                const data = res.data;
+                const stats = data.stats || { present: 0, sick: 0, permission: 0, absent: 0 };
+                const total = data.total || 0;
+                
+                const presentPct = total ? ((stats.present / total) * 100).toFixed(1) : 0;
+                const sickPct = total ? ((stats.sick / total) * 100).toFixed(1) : 0;
+                const permissionPct = total ? ((stats.permission / total) * 100).toFixed(1) : 0;
+                const absentPct = total ? ((stats.absent / total) * 100).toFixed(1) : 0;
+
+                content.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-accent-subtle border border-accent/20 rounded-lg p-6 relative overflow-hidden group">
+                            <div class="absolute -right-6 -bottom-6 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                                <i data-lucide="trending-up" class="w-32 h-32 text-accent"></i>
+                            </div>
+                            <div class="relative z-10">
+                                <div class="text-[13px] font-semibold text-accent mb-1 uppercase tracking-wide">Rata-rata Kehadiran</div>
+                                <div class="text-4xl font-bold text-accent tabular leading-none">${data.percentage || '0%'}</div>
+                            </div>
+                        </div>
+                        <div class="bg-bg-surface border border-border-default rounded-lg p-6 relative overflow-hidden group">
+                            <div class="absolute -right-6 -bottom-6 opacity-5 group-hover:scale-110 transition-transform duration-500">
+                                <i data-lucide="database" class="w-32 h-32 text-text-primary"></i>
+                            </div>
+                            <div class="relative z-10">
+                                <div class="text-[13px] font-semibold text-text-secondary mb-1 uppercase tracking-wide">Total Data Tercatat</div>
+                                <div class="text-4xl font-bold text-text-primary tabular leading-none">${total}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4 class="text-[14px] font-semibold text-text-primary mb-3">Distribusi Status</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div class="p-4 bg-bg-surface border border-border-default rounded-lg border-l-4 border-l-success hover:-translate-y-1 transition-transform">
+                            <div class="text-[12px] font-medium text-text-secondary mb-1 uppercase tracking-wider">Hadir</div>
+                            <div class="text-2xl font-bold text-text-primary tabular">${stats.present}</div>
+                        </div>
+                        <div class="p-4 bg-bg-surface border border-border-default rounded-lg border-l-4 border-l-info hover:-translate-y-1 transition-transform">
+                            <div class="text-[12px] font-medium text-text-secondary mb-1 uppercase tracking-wider">Izin</div>
+                            <div class="text-2xl font-bold text-text-primary tabular">${stats.permission}</div>
+                        </div>
+                        <div class="p-4 bg-bg-surface border border-border-default rounded-lg border-l-4 border-l-warning hover:-translate-y-1 transition-transform">
+                            <div class="text-[12px] font-medium text-text-secondary mb-1 uppercase tracking-wider">Sakit</div>
+                            <div class="text-2xl font-bold text-text-primary tabular">${stats.sick}</div>
+                        </div>
+                        <div class="p-4 bg-bg-surface border border-border-default rounded-lg border-l-4 border-l-danger hover:-translate-y-1 transition-transform">
+                            <div class="text-[12px] font-medium text-text-secondary mb-1 uppercase tracking-wider">Alpa</div>
+                            <div class="text-2xl font-bold text-text-primary tabular">${stats.absent}</div>
+                        </div>
+                    </div>
+                    
+                    <h4 class="text-[14px] font-semibold text-text-primary mb-3">Visualisasi</h4>
+                    <div class="bg-bg-surface border border-border-default rounded-lg p-6">
+                        <div class="h-4 rounded-full flex overflow-hidden mb-5 bg-bg-hover shadow-inner">
+                            <div style="width:${presentPct}%;" class="bg-success transition-all duration-1000" title="Hadir: ${presentPct}%"></div>
+                            <div style="width:${permissionPct}%;" class="bg-info transition-all duration-1000" title="Izin: ${permissionPct}%"></div>
+                            <div style="width:${sickPct}%;" class="bg-warning transition-all duration-1000" title="Sakit: ${sickPct}%"></div>
+                            <div style="width:${absentPct}%;" class="bg-danger transition-all duration-1000" title="Alpa: ${absentPct}%"></div>
+                        </div>
+                        <div class="flex flex-wrap gap-5 text-[13px] font-medium text-text-secondary">
+                            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-[3px] bg-success shadow-sm"></div> Hadir (${presentPct}%)</div>
+                            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-[3px] bg-info shadow-sm"></div> Izin (${permissionPct}%)</div>
+                            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-[3px] bg-warning shadow-sm"></div> Sakit (${sickPct}%)</div>
+                            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-[3px] bg-danger shadow-sm"></div> Alpa (${absentPct}%)</div>
+                        </div>
+                    </div>
+                `;
+                if (window.lucide) lucide.createIcons({root: content});
+            } catch (error) {
+                console.error(error);
+                content.innerHTML = `
+                    <div class="py-12 text-center text-danger">
+                        <i data-lucide="alert-triangle" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+                        <p class="text-[14px] font-medium">Gagal memuat analitik.</p>
+                        <p class="text-[12px] mt-1">${error.message}</p>
+                    </div>
+                `;
+                if (window.lucide) lucide.createIcons({root: content});
+            }
+        }
+    </script>
+</body>
+</html>

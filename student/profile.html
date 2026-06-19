@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Profil Saya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div id="sidebar-root"></div>
+    <div id="navbar-root"></div>
+
+    <main class="p-4 md:p-8 min-h-screen pb-20">
+        <div class="w-full max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-border-default pb-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-text-primary">Profil Saya</h1>
+                    <p class="text-[13px] text-text-muted mt-1">Informasi pribadi dan data akademik Anda.</p>
+                </div>
+                <button onclick="ui.showModal('editProfileModal')" class="w-full md:w-auto h-9 px-4 bg-accent text-white hover:bg-accent-hover rounded-md text-[13px] font-medium flex items-center justify-center gap-2 transition-colors">
+                    <i data-lucide="edit-2" class="w-4 h-4"></i> Edit Data Diri
+                </button>
+            </div>
+
+            <div class="bg-bg-surface border border-border-default rounded-lg max-w-4xl" id="profile-content">
+                <div class="p-12 flex justify-center">
+                    <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-accent"></i>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- EDIT PROFILE MODAL -->
+    <div id="editProfileModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm modal-backdrop" onclick="ui.hideModal('editProfileModal')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-bg-surface rounded-lg shadow-xl flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between p-5 border-b border-border-default">
+                <h3 class="text-lg font-semibold text-text-primary">Edit Data Diri</h3>
+                <button onclick="ui.hideModal('editProfileModal')" class="text-text-muted hover:text-text-primary transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="editProfileForm" class="flex flex-col overflow-hidden">
+                <div class="p-5 overflow-y-auto flex flex-col gap-4">
+                    <div>
+                        <label class="block text-[13px] font-medium text-text-secondary mb-1.5">Email</label>
+                        <input type="email" name="email" id="edit_email" class="w-full h-9 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle transition-colors" placeholder="Masukkan email aktif">
+                    </div>
+                    <div>
+                        <label class="block text-[13px] font-medium text-text-secondary mb-1.5">Nomor Telepon / WhatsApp</label>
+                        <input type="text" name="phone" id="edit_phone" class="w-full h-9 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle transition-colors" placeholder="08...">
+                    </div>
+                    <div>
+                        <label class="block text-[13px] font-medium text-text-secondary mb-1.5">Alamat Domisili</label>
+                        <textarea name="address" id="edit_address" rows="3" class="w-full px-3 py-2 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle transition-colors resize-none" placeholder="Masukkan alamat lengkap"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[13px] font-medium text-text-secondary mb-1.5">Kontak Orang Tua / Wali <span class="text-text-muted font-normal">(Opsional)</span></label>
+                        <input type="text" name="parent_contact" id="edit_parent_contact" class="w-full h-9 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle transition-colors" placeholder="08...">
+                    </div>
+                </div>
+                <div class="p-5 border-t border-border-default bg-bg-surface/50 flex justify-end gap-3 mt-auto">
+                    <button type="button" onclick="ui.hideModal('editProfileModal')" class="h-9 px-4 bg-bg-surface border border-border-default hover:bg-bg-hover text-text-primary rounded-md text-[13px] font-medium transition-colors">Batal</button>
+                    <button type="submit" form="editProfileForm" class="h-9 px-4 bg-accent text-white hover:bg-accent-hover rounded-md text-[13px] font-medium flex items-center justify-center transition-colors">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/utils.js?v=4"></script>
+    <script src="../js/api.js?v=5"></script>
+    <script src="../components/ui.js"></script>
+    <script src="../components/layout.js?v=6"></script>
+    <script>
+        let currentStudent = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = utils.checkAuth('student');
+            if (!user) return;
+            layout.init('student', ''); 
+            await initPage(user);
+            if (window.ui && ui.hideGlobalLoader) ui.hideGlobalLoader();
+
+            document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const data = Object.fromEntries(new FormData(e.target).entries());
+                const btn = document.querySelector('button[form="editProfileForm"]');
+                if (window.ui && ui.setButtonLoading) ui.setButtonLoading(btn, 'Menyimpan...');
+
+                try {
+                    await api.put('/students/me/profile', data);
+                    if(window.utils) utils.showToast('Profil berhasil diperbarui', 'success');
+                    ui.hideModal('editProfileModal');
+                    initPage(user); // Reload data
+                } catch (err) {
+                    if(window.utils) utils.showToast(err.message, 'error');
+                } finally {
+                    if (window.ui && ui.resetButton) ui.resetButton(btn);
+                }
+            });
+        });
+
+        async function initPage(user) {
+            try {
+                const res = await api.get(`/students/${user.id}`);
+                const student = res.data;
+                currentStudent = student;
+
+                // Pre-fill form
+                document.getElementById('edit_email').value = student.email || '';
+                document.getElementById('edit_phone').value = student.phone || '';
+                document.getElementById('edit_address').value = student.address || '';
+                document.getElementById('edit_parent_contact').value = student.parent_contact || '';
+
+                const currentClass = student.current_class;
+                let classInfoHtml = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-warning-subtle text-warning">Belum ada kelas aktif</span>';
+                
+                if (currentClass) {
+                    classInfoHtml = `
+                        <div class="grid grid-cols-[100px_1fr] gap-y-3 gap-x-4 items-center">
+                            <span class="text-[13px] text-text-muted">Kelas</span>
+                            <span class="text-[13px] font-semibold text-text-primary">${currentClass.class_name}</span>
+                            
+                            <span class="text-[13px] text-text-muted">Tingkat</span>
+                            <span class="text-[13px] font-semibold text-text-primary">Grade ${currentClass.grade_level}</span>
+
+                            <span class="text-[13px] text-text-muted">Jurusan</span>
+                            <span class="text-[13px] font-semibold text-text-primary">${currentClass.major_name || 'Umum'}</span>
+                            
+                            <span class="text-[13px] text-text-muted">T. Akademik</span>
+                            <span class="text-[13px] font-semibold text-text-primary">${currentClass.academic_year_name}</span>
+                        </div>
+                    `;
+                }
+
+                let avatarHtml = `<div class="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-accent/10 text-accent flex items-center justify-center text-4xl sm:text-5xl font-bold flex-shrink-0 border-4 border-bg-surface shadow-sm ring-1 ring-border-default">
+                    ${student.full_name.charAt(0).toUpperCase()}
+                </div>`;
+
+                if (student.profile_picture) {
+                    avatarHtml = `<img src="${student.profile_picture}" alt="Profile" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover flex-shrink-0 border-4 border-bg-surface shadow-sm ring-1 ring-border-default">`;
+                }
+
+                document.getElementById('profile-content').innerHTML = `
+                    <div class="p-6 sm:p-8">
+                        <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center sm:items-start mb-8 pb-8 border-b border-border-default">
+                            ${avatarHtml}
+                            <div class="flex-1 text-center sm:text-left">
+                                <h3 class="text-2xl font-bold text-text-primary mb-1">${student.full_name}</h3>
+                                <p class="text-[14px] text-text-muted flex items-center justify-center sm:justify-start gap-2 mb-4">
+                                    <i data-lucide="badge-check" class="w-4 h-4 text-accent"></i> NIS: ${student.nis}
+                                </p>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-success/10 text-success text-[12px] font-medium border border-success/20">
+                                    Siswa Aktif
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-bg-page border border-border-default rounded-lg p-5">
+                                <h4 class="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-4 flex items-center gap-2">
+                                    <i data-lucide="contact" class="w-4 h-4"></i> Data Kontak
+                                </h4>
+                                <div class="flex flex-col gap-3">
+                                    <div class="flex gap-3">
+                                        <i data-lucide="mail" class="w-4 h-4 text-text-muted shrink-0 mt-0.5"></i> 
+                                        <span class="text-[13px] text-text-primary">${student.email || '<i class="text-text-placeholder">Belum diisi</i>'}</span>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <i data-lucide="phone" class="w-4 h-4 text-text-muted shrink-0 mt-0.5"></i> 
+                                        <span class="text-[13px] text-text-primary">${student.phone || '<i class="text-text-placeholder">Belum diisi</i>'}</span>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <i data-lucide="map-pin" class="w-4 h-4 text-text-muted shrink-0 mt-0.5"></i> 
+                                        <span class="text-[13px] text-text-primary">${student.address || '<i class="text-text-placeholder">Belum diisi</i>'}</span>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <i data-lucide="users" class="w-4 h-4 text-text-muted shrink-0 mt-0.5"></i> 
+                                        <span class="text-[13px] text-text-primary" title="Kontak Orang Tua">${student.parent_contact || '<i class="text-text-placeholder">Belum diisi</i>'}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-bg-page border border-border-default rounded-lg p-5">
+                                <h4 class="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-4 flex items-center gap-2">
+                                    <i data-lucide="graduation-cap" class="w-4 h-4"></i> Informasi Akademik
+                                </h4>
+                                ${classInfoHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                if(window.lucide) lucide.createIcons();
+            } catch (err) {
+                console.error(err);
+                document.getElementById('profile-content').innerHTML = `
+                    <div class="p-12 flex flex-col items-center justify-center text-center">
+                        <i data-lucide="alert-circle" class="w-8 h-8 text-danger mb-3"></i>
+                        <p class="text-[14px] text-text-secondary">Gagal memuat profil.</p>
+                    </div>
+                `;
+                if(window.lucide) lucide.createIcons();
+            }
+        }
+    </script>
+</body>
+</html>

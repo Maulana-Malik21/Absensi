@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Penugasan Guru</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="max-w-7xl mx-auto pb-6">
+        <!-- Page Header & Actions -->
+        <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h2 class="text-[13px] font-semibold text-text-primary uppercase tracking-wide mb-1">Penugasan Mengajar</h2>
+                <p class="text-[13px] text-text-muted">Kelola penugasan guru pada mata pelajaran dan kelas tertentu.</p>
+            </div>
+            <button onclick="ui.showModal('addAssignmentModal')" class="w-full md:w-auto flex items-center justify-center gap-2 px-4 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors">
+                <i data-lucide="plus" class="w-4 h-4"></i> Tambah Penugasan
+            </button>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div class="bg-bg-surface border border-border-default rounded-lg p-3 mb-4 flex flex-col sm:flex-row gap-3">
+            <div class="relative flex-1">
+                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-placeholder"></i>
+                <input type="text" id="searchInput" placeholder="Cari guru atau mapel..." 
+                    class="w-full h-8 pl-9 pr-3 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle placeholder:text-text-placeholder transition-colors">
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <div class="relative w-full sm:w-48">
+                    <select id="yearFilter" class="w-full h-8 pl-3 pr-8 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-secondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle appearance-none cursor-pointer transition-colors">
+                        <option value="">Semua Tahun Ajaran</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none"></i>
+                </div>
+                <div class="relative w-full sm:w-48">
+                    <select id="classFilter" class="w-full h-8 pl-3 pr-8 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-secondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle appearance-none cursor-pointer transition-colors">
+                        <option value="">Semua Kelas</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="bg-bg-surface border border-border-default rounded-lg overflow-hidden">
+            <div id="table-container" class="min-h-[300px]">
+                <div class="p-6 space-y-3">
+                    <div class="h-8 bg-bg-hover rounded animate-pulse"></div>
+                    <div class="h-12 bg-bg-hover rounded animate-pulse opacity-70"></div>
+                    <div class="h-12 bg-bg-hover rounded animate-pulse opacity-50"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD ASSIGNMENT MODAL -->
+    <div id="addAssignmentModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div class="bg-bg-surface w-full max-w-md rounded-lg border border-border-default shadow-lg flex flex-col max-h-[90vh] animate-fade-in-up">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-border-default">
+                <h3 class="text-[14px] font-semibold text-text-primary">Tambah Penugasan Mengajar</h3>
+                <button onclick="ui.hideModal('addAssignmentModal')" class="p-1 text-text-placeholder hover:text-text-secondary hover:bg-bg-hover rounded-md transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <div class="overflow-y-auto p-5">
+                <form id="addAssignmentForm" class="flex flex-col gap-4">
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Guru <span class="text-danger">*</span></label>
+                        <select name="teacher_id" id="assign_teacher" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                            <option value="">-- Pilih Guru --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Kelas <span class="text-danger">*</span></label>
+                        <select name="class_id" id="assign_class" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                            <option value="">-- Pilih Kelas --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Mata Pelajaran <span class="text-danger">*</span></label>
+                        <select name="subject_id" id="assign_subject" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                            <option value="">-- Pilih Mata Pelajaran --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Tahun Ajaran</label>
+                        <select name="academic_year_id" id="assign_year" class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                            <option value="">-- Sesuai Tahun Ajaran Aktif --</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="px-5 py-3 border-t border-border-default flex justify-end gap-2 bg-bg-page rounded-b-lg">
+                <button onclick="ui.hideModal('addAssignmentModal')" class="px-4 h-8 bg-bg-surface border border-border-default rounded-md text-[13px] font-medium text-text-secondary hover:bg-bg-hover transition-colors">Batal</button>
+                <button type="submit" form="addAssignmentForm" class="px-4 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors">Simpan Penugasan</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/utils.js?v=3"></script>
+    <script src="../js/api.js?v=3"></script>
+    <script src="../components/ui.js?v=3"></script>
+    <script src="../components/layout.js?v=5"></script>
+    <script>
+        let currentPage = 1;
+        const limit = 15;
+        let searchTimeout;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            layout.init('admin', 'assignments');
+            await loadMasterData();
+            fetchData();
+
+            document.getElementById('searchInput').addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => { currentPage = 1; fetchData(); }, 500);
+            });
+            ['yearFilter','classFilter'].forEach(id => {
+                document.getElementById(id)?.addEventListener('change', () => { currentPage = 1; fetchData(); });
+            });
+
+            document.getElementById('addAssignmentForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const data = Object.fromEntries(new FormData(e.target).entries());
+                if (!data.academic_year_id) delete data.academic_year_id;
+                const btn = document.querySelector('button[form="addAssignmentForm"]');
+                try { 
+                    if (window.ui && ui.setButtonLoading) ui.setButtonLoading(btn, 'Menyimpan...');
+                    await api.post('/assignments', data);
+                    ui.hideModal('addAssignmentModal'); e.target.reset(); fetchData();
+                    if(window.utils) utils.showToast('Penugasan berhasil disimpan', 'success');
+                } catch(err) { if(window.utils) utils.showToast(err.message, 'error'); }
+                finally { if (window.ui && ui.resetButton) ui.resetButton(btn); }
+            });
+        });
+
+        async function loadMasterData() {
+            try {
+                const [teachRes, classRes, subjectRes, yearRes] = await Promise.all([
+                    api.get('/teachers?limit=500'), api.get('/school/classes'),
+                    api.get('/school/subjects'), api.get('/school/academic-years')
+                ]);
+                const teachers = teachRes.data.teachers || [];
+                const classes = classRes.data || [];
+                const subjects = subjectRes.data || [];
+                const years = yearRes.data || [];
+
+                const sel = (id, items) => {
+                    const s = document.getElementById(id);
+                    if(s) items.forEach(i => s.appendChild(new Option(i.name || i.full_name, i.id)));
+                };
+
+                const yearFilter = document.getElementById('yearFilter');
+                const classFilter = document.getElementById('classFilter');
+                years.forEach(y => { yearFilter?.appendChild(new Option(y.name, y.id)); document.getElementById('assign_year')?.appendChild(new Option(y.name, y.id)); });
+                ui.populateClassDropdown([classFilter, document.getElementById('assign_class')], classes);
+                sel('assign_teacher', teachers);
+                sel('assign_subject', subjects);
+            } catch(e) { console.error('loadMasterData', e); }
+        }
+
+        async function fetchData() {
+            const container = document.getElementById('table-container');
+            if (!container) return;
+            container.innerHTML = window.ui && ui.getTableSkeleton ? ui.getTableSkeleton(8, 5) : `<div class="p-6 space-y-3"><div class="h-8 bg-bg-hover rounded animate-pulse"></div></div>`;
+
+            try {
+                const search = document.getElementById('searchInput')?.value||'';
+                const yearId = document.getElementById('yearFilter')?.value||'';
+                const classId = document.getElementById('classFilter')?.value||'';
+                let query = `?page=${currentPage}&limit=${limit}`;
+                if(search) query += `&search=${encodeURIComponent(search)}`;
+                if(yearId) query += `&academic_year_id=${yearId}`;
+                if(classId) query += `&class_id=${classId}`;
+
+                const r = await api.get(`/assignments${query}`);
+                const { assignments, pagination } = r.data;
+
+                if(!assignments||assignments.length===0) {
+                    container.innerHTML = `<div class="flex flex-col items-center justify-center py-16 text-center">
+                        <div class="w-12 h-12 bg-bg-hover rounded-full flex items-center justify-center mb-3"><i data-lucide="clipboard-list" class="w-5 h-5 text-text-placeholder"></i></div>
+                        <h3 class="text-[14px] font-medium text-text-primary mb-1">Belum Ada Penugasan</h3>
+                        <p class="text-[13px] text-text-muted">Tambahkan penugasan guru pada kelas dan mata pelajaran.</p>
+                    </div>`;
+                    if(window.lucide) lucide.createIcons(); return;
+                }
+
+                let html = `<div class="overflow-x-auto"><table class="w-full text-left border-collapse">
+                    <thead><tr class="border-b border-border-default">
+                        <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">Guru</th>
+                        <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">Mata Pelajaran</th>
+                        <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">Kelas</th>
+                        <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted">Tahun Ajaran</th>
+                        <th scope="col" class="px-5 py-3 text-[12px] font-medium text-text-muted text-right">Aksi</th>
+                    </tr></thead><tbody class="divide-y divide-border-default">`;
+
+                assignments.forEach(a => {
+                    html += `<tr class="hover:bg-bg-hover transition-colors group">
+                        <td class="px-5 py-3.5 text-[13px] font-medium text-text-primary">${a.teacher_name||'-'}</td>
+                        <td class="px-5 py-3.5 text-[13px] text-text-secondary">${a.subject_name||'-'}</td>
+                        <td class="px-5 py-3.5"><span class="px-2 py-0.5 rounded border border-border-default bg-bg-page text-[12px] text-text-secondary">${a.class_name||'-'}</span></td>
+                        <td class="px-5 py-3.5 text-[13px] text-text-muted">${a.academic_year_name||'-'}</td>
+                        <td class="px-5 py-3.5 text-right">
+                            <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="deleteAssignment(${a.id})" class="p-1.5 text-text-muted hover:text-danger hover:bg-danger-subtle rounded-md transition-colors" title="Hapus"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
+                        </td>
+                    </tr>`;
+                });
+
+                html += `</tbody></table></div>`;
+                if(pagination&&pagination.totalPages>1) {
+                    html += `<div class="flex flex-col sm:flex-row items-center justify-between px-5 py-3 border-t border-border-default bg-bg-page gap-3">
+                        <span class="text-[12px] text-text-muted">Halaman <b class="text-text-primary">${pagination.page}</b> dari ${pagination.totalPages}</span>
+                        <div class="flex gap-2">
+                            <button onclick="changePage(${pagination.page-1})" ${pagination.page===1?'disabled':''} class="px-3 h-7 bg-bg-surface border border-border-default rounded text-[12px] font-medium text-text-secondary disabled:opacity-50 hover:bg-bg-hover transition-colors">Prev</button>
+                            <button onclick="changePage(${pagination.page+1})" ${pagination.page===pagination.totalPages?'disabled':''} class="px-3 h-7 bg-bg-surface border border-border-default rounded text-[12px] font-medium text-text-secondary disabled:opacity-50 hover:bg-bg-hover transition-colors">Next</button>
+                        </div>
+                    </div>`;
+                }
+
+                container.innerHTML = html;
+                if(window.lucide) lucide.createIcons();
+            } catch(err) {
+                container.innerHTML = `<div class="p-8 text-center text-danger text-[13px]">Gagal memuat data. <button onclick="fetchData()" class="underline font-medium">Coba lagi</button></div>`;
+            } finally {
+                if (window.ui && ui.hideGlobalLoader) ui.hideGlobalLoader();
+            }
+        }
+
+        function changePage(p) { currentPage = p; fetchData(); }
+
+        async function deleteAssignment(id) {
+            if (!(await ui.confirm('Hapus penugasan ini?'))) return;
+            try { await api.delete(`/assignments/${id}`); fetchData(); } catch(e) { if(window.utils) utils.showToast(e.message, 'error'); }
+        }
+    </script>
+</body>
+</html>

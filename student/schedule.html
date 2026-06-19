@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Jadwal Kelas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div id="sidebar-root"></div>
+    <div id="navbar-root"></div>
+
+    <main class="p-4 md:p-8 min-h-screen pb-20">
+        <div class="w-full max-w-7xl mx-auto">
+            
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-2xl font-bold text-text-primary">Jadwal Kelas Saya</h1>
+                    <p class="text-[13px] text-text-muted mt-1">Lihat jadwal mata pelajaran yang harus Anda ikuti.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="classes-list">
+                <div class="col-span-full flex justify-center py-12">
+                    <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-accent"></i>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="../js/utils.js?v=4"></script>
+    <script src="../js/api.js?v=5"></script>
+    <script src="../components/layout.js?v=6"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = utils.checkAuth('student');
+            if (!user) return;
+            layout.init('student', 'schedule');
+            await initPage(user);
+            if (window.ui && ui.hideGlobalLoader) ui.hideGlobalLoader();
+        });
+
+        async function initPage(user) {
+            try {
+                const schedRes = await api.get('/students/me/schedule');
+                const schedules = schedRes.data || [];
+                const classesList = document.getElementById('classes-list');
+                
+                if (schedules.length === 0) {
+                    classesList.innerHTML = `
+                        <div class="col-span-full bg-bg-surface border border-border-default rounded-lg p-8 flex flex-col items-center justify-center text-center">
+                            <div class="w-12 h-12 rounded-full bg-bg-hover flex items-center justify-center mb-3">
+                                <i data-lucide="calendar-x" class="w-6 h-6 text-text-muted"></i>
+                            </div>
+                            <h3 class="text-[14px] font-medium text-text-primary mb-1">Tidak ada jadwal</h3>
+                            <p class="text-[13px] text-text-muted">Anda tidak memiliki jadwal kelas untuk saat ini.</p>
+                        </div>
+                    `;
+                    if (window.lucide) lucide.createIcons();
+                    return;
+                }
+
+                const daysIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                const currentDayName = daysIndo[new Date().getDay()];
+
+                // Separate today's schedule and upcoming
+                const todaySchedules = schedules.filter(s => s.day_of_week === currentDayName);
+                const otherSchedules = schedules.filter(s => s.day_of_week !== currentDayName);
+                const sortedSchedules = [...todaySchedules, ...otherSchedules];
+
+                classesList.innerHTML = sortedSchedules.map((c, index) => {
+                    const isToday = c.day_of_week === currentDayName;
+                    const borderCls = isToday ? 'border-l-4 border-l-accent' : 'border border-border-default hover:border-accent/30';
+                    const badgeHtml = isToday 
+                        ? '<span class="inline-flex items-center px-2 py-0.5 rounded border border-accent/20 bg-accent-subtle text-accent text-[11px] font-medium leading-none">Hari Ini</span>'
+                        : `<span class="inline-flex items-center px-2 py-0.5 rounded border border-border-default bg-bg-hover text-text-muted text-[11px] font-medium leading-none">${c.day_of_week}</span>`;
+                    
+                    const startTime = c.start_time.substring(0, 5);
+                    const endTime = c.end_time.substring(0, 5);
+
+                    return `
+                        <div class="bg-bg-surface ${borderCls} rounded-lg flex flex-col transition-colors overflow-hidden group">
+                            <div class="p-5 flex-1">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="flex flex-col items-start gap-2">
+                                        ${badgeHtml}
+                                        <h4 class="text-[14px] font-bold text-text-primary leading-tight">${c.subject_name}</h4>
+                                    </div>
+                                    <div class="bg-bg-hover rounded-md px-3 py-2 text-center border border-border-default">
+                                        <p class="text-[13px] font-bold text-text-primary tabular-nums leading-none mb-1">${startTime}</p>
+                                        <p class="text-[10px] text-text-muted tabular-nums leading-none">s/d ${endTime}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 text-[12px] text-text-secondary bg-bg-page px-3 py-2 rounded border border-border-default/50">
+                                    <i data-lucide="user" class="w-3.5 h-3.5 text-text-muted"></i>
+                                    <span class="truncate">Guru: <span class="font-medium text-text-primary">${c.teacher_name}</span></span>
+                                </div>
+                            </div>
+                            <div class="border-t border-border-default p-4 bg-bg-surface/50 rounded-b-lg">
+                                <button onclick="window.location.href='scanner.html?assignment_id=${c.assignment_id}'" class="w-full h-9 bg-accent-subtle text-accent hover:bg-accent hover:text-white border border-transparent rounded-md text-[13px] font-medium flex items-center justify-center gap-2 transition-colors">
+                                    <i data-lucide="qr-code" class="w-4 h-4"></i> Scan QR Masuk
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                if (window.lucide) lucide.createIcons();
+
+            } catch (error) {
+                console.error(error);
+                if (window.utils && utils.showToast) utils.showToast('Gagal memuat jadwal', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

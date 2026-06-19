@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack - Kenaikan Kelas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="max-w-7xl mx-auto pb-6">
+        <!-- Page Header -->
+        <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h2 class="text-[13px] font-semibold text-text-primary uppercase tracking-wide mb-1">Kenaikan Kelas</h2>
+                <p class="text-[13px] text-text-muted">Proses pindah kelas siswa ke tahun ajaran berikutnya secara massal.</p>
+            </div>
+        </div>
+
+        <!-- Info Banner -->
+        <div class="bg-accent-subtle border border-accent-border rounded-lg p-4 mb-6 flex items-start gap-3">
+            <i data-lucide="info" class="w-5 h-5 text-accent shrink-0 mt-0.5"></i>
+            <div>
+                <p class="text-[13px] font-semibold text-text-primary mb-1">Prosedur Kenaikan Kelas</p>
+                <p class="text-[13px] text-text-secondary leading-relaxed">Pilih kelas asal dan kelas tujuan. Semua siswa yang aktif pada kelas asal akan otomatis dipindahkan ke kelas tujuan di tahun ajaran baru. Jika ini adalah kelulusan, centang opsi <i>Status Siswa Lulus</i>.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Promotion Form -->
+            <div class="bg-bg-surface border border-border-default rounded-lg p-6">
+                <h3 class="text-[14px] font-medium text-text-primary mb-5 border-b border-border-default pb-3">Form Proses Kenaikan</h3>
+                <form id="promotionForm" class="flex flex-col gap-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Tahun Ajaran Asal <span class="text-danger">*</span></label>
+                            <select name="from_year_id" id="from_year" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                                <option value="">Pilih Tahun Ajaran</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Kelas Asal <span class="text-danger">*</span></label>
+                            <select name="from_class_id" id="from_class" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                                <option value="">Pilih Kelas Asal</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="studentCountContainer" class="hidden rounded-md p-3">
+                        <p id="studentCountMessage" class="text-[12px] font-medium flex items-center gap-2"></p>
+                    </div>
+                    
+                    <div class="flex items-center justify-center -my-2 opacity-50">
+                        <i data-lucide="arrow-down" class="w-5 h-5 text-text-muted"></i>
+                    </div>
+
+                    <div id="destinationFields" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Tahun Ajaran Tujuan <span class="text-danger">*</span></label>
+                            <select name="to_year_id" id="to_year" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                                <option value="">Pilih Tahun Ajaran</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Kelas Tujuan <span class="text-danger">*</span></label>
+                            <select name="to_class_id" id="to_class" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                                <option value="">Pilih Kelas Tujuan</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="graduationMessage" class="hidden bg-info-subtle border border-info/20 rounded-md p-3">
+                        <p class="text-[12px] text-info font-medium flex items-center gap-2">
+                            <i data-lucide="graduation-cap" class="w-4 h-4"></i> Seluruh siswa pada kelas asal akan ditandai sebagai Lulus dan tidak dipindahkan ke kelas lain.
+                        </p>
+                    </div>
+
+                    <div class="bg-bg-hover rounded-md p-4 mt-2 border border-border-default">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" name="graduate_students" id="graduate_check" class="w-4 h-4 mt-0.5 rounded border-border-default text-accent focus:ring-accent-subtle transition-all">
+                            <div>
+                                <span class="block text-[13px] font-medium text-text-primary">Status Siswa Lulus</span>
+                                <span class="block text-[12px] text-text-muted mt-0.5">Tandai semua siswa di kelas asal sebagai "Lulus" (misalnya untuk kelas 12).</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" id="submitBtn" class="w-full flex items-center justify-center gap-2 h-9 bg-accent hover:bg-accent-hover text-white rounded-md text-[13px] font-medium transition-colors">
+                            <i data-lucide="trending-up" class="w-4 h-4" id="btnIcon"></i> <span id="btnText">Proses Kenaikan Kelas</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- History -->
+            <div class="bg-bg-surface border border-border-default rounded-lg overflow-hidden flex flex-col h-[500px]">
+                <div class="p-4 border-b border-border-default bg-bg-page">
+                    <h3 class="text-[14px] font-medium text-text-primary flex items-center gap-2">
+                        <i data-lucide="history" class="w-4 h-4 text-text-muted"></i> Riwayat Kenaikan Kelas
+                    </h3>
+                </div>
+                <div id="history-container" class="flex-1 overflow-y-auto">
+                    <div class="p-6 space-y-3"><div class="h-12 bg-bg-hover rounded animate-pulse"></div><div class="h-12 bg-bg-hover rounded animate-pulse opacity-70"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/utils.js?v=3"></script>
+    <script src="../js/api.js?v=3"></script>
+    <script src="../components/ui.js?v=3"></script>
+    <script src="../components/layout.js?v=5"></script>
+    <script>
+        // Global variables for caching
+        let allAcademicYears = [];
+        let allClasses = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            layout.init('admin', 'promotions');
+            await loadMasterData();
+            await loadHistory();
+            if (window.ui && ui.hideGlobalLoader) ui.hideGlobalLoader();
+
+            const graduateCheck = document.getElementById('graduate_check');
+            const destFields = document.getElementById('destinationFields');
+            const gradMsg = document.getElementById('graduationMessage');
+            const toYear = document.getElementById('to_year');
+            const toClass = document.getElementById('to_class');
+            const fromYear = document.getElementById('from_year');
+            const fromClass = document.getElementById('from_class');
+            const btnText = document.getElementById('btnText');
+            const btnIcon = document.getElementById('btnIcon');
+            const submitBtn = document.getElementById('submitBtn');
+            const countContainer = document.getElementById('studentCountContainer');
+            const countMessage = document.getElementById('studentCountMessage');
+
+            let currentStudentCount = -1;
+
+            const updateStudentCount = async () => {
+                const fYear = fromYear.value;
+                const fClass = fromClass.value;
+
+                if (!fYear || !fClass) {
+                    countContainer.classList.add('hidden');
+                    currentStudentCount = -1;
+                    submitBtn.disabled = false;
+                    return;
+                }
+
+                try {
+                    countContainer.classList.remove('hidden', 'bg-info-subtle', 'border-info/20', 'bg-danger-subtle', 'border-danger/20');
+                    countContainer.classList.add('bg-bg-hover', 'border', 'border-border-default');
+                    countMessage.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-text-muted"></i> <span class="text-text-muted">Menghitung jumlah siswa...</span>';
+                    if (window.lucide) lucide.createIcons();
+
+                    const res = await api.get(`/promotions/preview?from_class_id=${fClass}&from_year_id=${fYear}`);
+                    currentStudentCount = res.data?.count || 0;
+
+                    countContainer.classList.remove('bg-bg-hover', 'border-border-default');
+                    
+                    if (currentStudentCount === 0) {
+                        countContainer.classList.add('bg-danger-subtle', 'border', 'border-danger/20');
+                        countMessage.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 text-danger"></i> <span class="text-danger">Tidak ada siswa pada kelas yang dipilih.</span>`;
+                        submitBtn.disabled = true;
+                        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    } else {
+                        countContainer.classList.add('bg-info-subtle', 'border', 'border-info/20');
+                        countMessage.innerHTML = `<i data-lucide="users" class="w-4 h-4 text-info"></i> <span class="text-info">Terdapat ${currentStudentCount} siswa aktif yang akan diproses.</span>`;
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                    if (window.lucide) lucide.createIcons();
+                } catch (e) {
+                    currentStudentCount = -1;
+                    countContainer.classList.add('hidden');
+                    console.error(e);
+                }
+            };
+
+            const populateClasses = (yearId, selectElement) => {
+                if (!yearId) {
+                    while (selectElement.options.length > 1) selectElement.remove(1);
+                    return;
+                }
+                const filteredClasses = allClasses.filter(c => !c.academic_year_id || c.academic_year_id == yearId);
+                if (window.ui && ui.populateClassDropdown) {
+                    ui.populateClassDropdown(selectElement, filteredClasses);
+                } else {
+                    // Fallback just in case
+                    while (selectElement.options.length > 1) selectElement.remove(1);
+                    const seenIds = new Set();
+                    filteredClasses.forEach(c => {
+                        if (!seenIds.has(c.id)) {
+                            seenIds.add(c.id);
+                            selectElement.appendChild(new Option(c.name, c.id));
+                        }
+                    });
+                }
+            };
+
+            fromYear.addEventListener('change', (e) => {
+                populateClasses(e.target.value, fromClass);
+                updateStudentCount();
+            });
+            
+            toYear.addEventListener('change', (e) => {
+                populateClasses(e.target.value, toClass);
+            });
+            
+            fromClass.addEventListener('change', updateStudentCount);
+
+            graduateCheck.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    destFields.classList.add('hidden');
+                    gradMsg.classList.remove('hidden');
+                    toYear.removeAttribute('required');
+                    toClass.removeAttribute('required');
+                    btnText.innerText = 'Proses Kelulusan Siswa';
+                    btnIcon.setAttribute('data-lucide', 'graduation-cap');
+                } else {
+                    destFields.classList.remove('hidden');
+                    gradMsg.classList.add('hidden');
+                    toYear.setAttribute('required', 'required');
+                    toClass.setAttribute('required', 'required');
+                    btnText.innerText = 'Proses Kenaikan Kelas';
+                    btnIcon.setAttribute('data-lucide', 'trending-up');
+                }
+                if (window.lucide) lucide.createIcons();
+            });
+
+            document.getElementById('promotionForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                const isGraduate = document.getElementById('graduate_check').checked;
+
+                const btn = document.getElementById('submitBtn');
+                
+                if (currentStudentCount === 0) {
+                    if (window.utils && utils.showToast) utils.showToast('Tidak ada siswa yang bisa diproses.', 'error');
+                    return;
+                }
+
+                const confirmMsg = isGraduate 
+                    ? `Yakin memproses KELULUSAN ${currentStudentCount} siswa pada kelas ini? Status siswa akan menjadi Lulus dan tidak bisa diubah.` 
+                    : `Yakin memproses KENAIKAN ${currentStudentCount} siswa? Proses ini tidak bisa dibatalkan.`;
+                
+                if (!(await ui.confirm(confirmMsg))) return;
+
+                try {
+                    if (window.ui && ui.setButtonLoading) ui.setButtonLoading(btn, 'Memproses...');
+
+                    if (isGraduate) {
+                        await api.post('/promotions/graduate', {
+                            class_id: data.from_class_id,
+                            academic_year_id: data.from_year_id,
+                            notes: "Lulus dari kelas " + data.from_class_id
+                        });
+                        if (window.utils && utils.showToast) utils.showToast('Kelulusan berhasil diproses!', 'success');
+                    } else {
+                        await api.post('/promotions/promote-class', data);
+                        if (window.utils && utils.showToast) utils.showToast('Kenaikan kelas berhasil diproses!', 'success');
+                    }
+                    
+                    e.target.reset();
+                    // Reset UI to default state
+                    graduateCheck.checked = false;
+                    graduateCheck.dispatchEvent(new Event('change'));
+                    updateStudentCount();
+                    
+                    loadHistory();
+                } catch(err) { 
+                    if (window.utils && utils.showToast) utils.showToast(err.message || 'Gagal memproses transaksi', 'error');
+                }
+                finally { 
+                    if (window.ui && ui.resetButton) ui.resetButton(btn);
+                    if (isGraduate) {
+                        btn.innerHTML = '<i data-lucide="graduation-cap" class="w-4 h-4"></i> <span id="btnText">Proses Kelulusan Siswa</span>';
+                    } else {
+                        btn.innerHTML = '<i data-lucide="trending-up" class="w-4 h-4"></i> <span id="btnText">Proses Kenaikan Kelas</span>';
+                    }
+                    if(window.lucide)lucide.createIcons(); 
+                }
+            });
+        });
+
+        async function loadMasterData() {
+            try {
+                const [classRes, yearRes] = await Promise.all([api.get('/school/classes'), api.get('/school/academic-years')]);
+                allClasses = classRes.data || [];
+                allAcademicYears = yearRes.data || [];
+                
+                const fills = (id, items) => { 
+                    const s = document.getElementById(id); 
+                    if(s) {
+                        // Clear options except first
+                        while (s.options.length > 1) s.remove(1);
+                        items.forEach(i => s.appendChild(new Option(i.name, i.id))); 
+                    }
+                };
+                
+                fills('from_year', allAcademicYears); 
+                fills('to_year', allAcademicYears);
+                
+                // Do not pre-fill classes here. They will be populated when an academic year is selected.
+            } catch(e) { console.error(e); }
+        }
+
+        async function loadHistory() {
+            const c = document.getElementById('history-container');
+            if (window.ui && ui.getCardSkeleton) c.innerHTML = ui.getCardSkeleton();
+            try {
+                const r = await api.get('/promotions/logs?limit=20');
+                const history = r.data?.logs || r.data?.promotions || [];
+                if (!Array.isArray(history) || history.length === 0) {
+                    c.innerHTML = '<div class="p-8 text-center text-text-muted text-[13px]">Belum ada riwayat kenaikan kelas.</div>';
+                    return;
+                }
+                c.innerHTML = `<ul class="divide-y divide-border-default">
+                    ${history.map(h=>`
+                        <li class="p-4 hover:bg-bg-hover transition-colors">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[12px] text-text-muted">${h.created_at ? new Date(h.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}) : '-'}</span>
+                                <span class="px-2 py-0.5 bg-bg-surface border border-border-default rounded text-[11px] font-medium text-text-secondary tabular">${h.student_count||0} Siswa</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-[13px]">
+                                <span class="font-medium text-text-primary">${h.from_class_name||'-'}</span>
+                                <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-text-placeholder"></i>
+                                <span class="font-medium text-text-primary">${h.to_class_name||'-'}</span>
+                            </div>
+                        </li>
+                    `).join('')}
+                </ul>`;
+                if(window.lucide) lucide.createIcons();
+            } catch(e) { c.innerHTML = '<div class="p-8 text-center text-text-muted">Gagal memuat riwayat.</div>'; }
+        }
+    </script>
+</body>
+</html>

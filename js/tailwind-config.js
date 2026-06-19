@@ -1,0 +1,62 @@
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+      },
+      colors: {
+        'bg-page':    '#F9FAFB',
+        'bg-surface': '#FFFFFF',
+        'bg-hover':   '#F3F4F6',
+        'bg-active':  '#EFF6FF',
+        'border-default': '#E5E7EB',
+        'border-strong':  '#D1D5DB',
+        'text-primary':     '#111827',
+        'text-secondary':   '#374151',
+        'text-muted':       '#6B7280',
+        'text-placeholder': '#9CA3AF',
+        'accent':        '#1A56DB',
+        'accent-hover':  '#1D4ED8',
+        'accent-subtle': '#EFF6FF',
+        'accent-border': '#BFDBFE',
+        'success':         '#059669',
+        'success-subtle':  '#ECFDF5',
+        'success-border':  '#6EE7B7',
+        'warning':         '#D97706',
+        'warning-subtle':  '#FFFBEB',
+        'danger':          '#DC2626',
+        'danger-subtle':   '#FEF2F2',
+        'danger-border':   '#FECACA',
+        'brand-orange': '#FF6B2B',
+        'nav-accent':   '#2563EB',
+      },
+      spacing: {
+        '4.5': '18px',
+        '13':  '52px',
+        '15':  '60px',
+        '18':  '72px',
+        '55':  '220px',
+        '14':  '56px',
+      },
+      width: {
+        'sidebar':           '220px',
+        'sidebar-collapsed': '56px',
+      },
+      height: {
+        'header': '48px',
+      },
+      borderRadius: {
+        DEFAULT: '6px',
+        sm: '4px',
+        md: '6px',
+        lg: '8px',
+        xl: '12px',
+      },
+      boxShadow: {
+        sm: '0 1px 2px 0 rgba(0,0,0,0.05)',
+        md: '0 4px 6px -1px rgba(0,0,0,0.07)',
+        lg: '0 10px 15px -3px rgba(0,0,0,0.08)',
+      },
+    },
+  },
+}
