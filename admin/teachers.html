@@ -24,7 +24,7 @@
                 <button onclick="ui.showModal('importModal')" class="flex-1 md:flex-none flex justify-center items-center gap-1.5 h-8 rounded-md border border-border-default bg-bg-surface px-3 text-[13px] font-medium text-text-secondary hover:bg-bg-hover hover:border-border-strong transition-colors">
                     <i data-lucide="upload" class="w-4 h-4"></i> <span class="hidden sm:inline">Import Data</span>
                 </button>
-                <button onclick="ui.showModal('addTeacherModal')" class="flex-1 md:flex-none flex items-center justify-center gap-1.5 px-3 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors">
+                <button onclick="addTeacher()" class="flex-1 md:flex-none flex items-center justify-center gap-1.5 px-3 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors">
                     <i data-lucide="plus" class="w-4 h-4"></i> Tambah Guru
                 </button>
             </div>
@@ -350,6 +350,13 @@
         }
 
         function changePage(p) { currentPage = p; fetchTeachers(); }
+
+        window.addTeacher = function() {
+            document.getElementById('modalTitle').textContent = 'Tambah Guru Baru';
+            document.getElementById('teacherForm').reset();
+            document.getElementById('teacher_id').value = '';
+            ui.showModal('addTeacherModal');
+        }
 
         window.editTeacher = function(t) {
             document.getElementById('modalTitle').textContent = 'Edit Data Guru';

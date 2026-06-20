@@ -41,7 +41,7 @@
                     <i data-lucide="upload" class="w-[15px] h-[15px]" aria-hidden="true"></i>
                     <span class="hidden sm:inline">Import Data</span>
                 </button>
-                <button onclick="ui.showModal('addStudentModal')"
+                <button onclick="addStudent()"
                     class="flex-1 md:flex-none flex justify-center items-center gap-1.5 h-9 rounded-md bg-accent px-3 text-sm font-medium text-white hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
                     <i data-lucide="user-plus" class="w-[15px] h-[15px]" aria-hidden="true"></i>
                     Tambah Siswa
@@ -340,6 +340,7 @@
                     if (id) await api.put(`/students/${id}`, data);
                     else await api.post('/students', data);
                     ui.hideModal('addStudentModal');
+                    e.target.reset();
                     fetchStudents();
                     if (window.utils) utils.showToast('Data berhasil disimpan', 'success');
                 } catch (err) { if (window.utils) utils.showToast(err.message, 'error'); }
@@ -613,6 +614,13 @@
         }
 
         function changePage(p) { currentPage = p; fetchStudents(); }
+
+        window.addStudent = function() {
+            document.getElementById('modal-title').textContent = 'Tambah Siswa Baru';
+            document.getElementById('studentForm').reset();
+            document.getElementById('student_id').value = '';
+            ui.showModal('addStudentModal');
+        }
 
         window.editStudent = function (s) {
             document.getElementById('modal-title').textContent = 'Edit Data Siswa';

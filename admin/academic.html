@@ -25,7 +25,7 @@
                     <h3 class="text-[14px] font-medium text-text-primary flex items-center gap-2">
                         <i data-lucide="calendar" class="w-4 h-4 text-text-muted"></i> Tahun Ajaran
                     </h3>
-                    <button onclick="ui.showModal('yearModal')" class="text-accent hover:text-accent-hover p-1" title="Tambah">
+                    <button onclick="addYear()" class="text-accent hover:text-accent-hover p-1" title="Tambah">
                         <i data-lucide="plus" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -40,7 +40,7 @@
                     <h3 class="text-[14px] font-medium text-text-primary flex items-center gap-2">
                         <i data-lucide="layout" class="w-4 h-4 text-text-muted"></i> Daftar Kelas
                     </h3>
-                    <button onclick="ui.showModal('classModal')" class="text-accent hover:text-accent-hover p-1" title="Tambah">
+                    <button onclick="addClass()" class="text-accent hover:text-accent-hover p-1" title="Tambah">
                         <i data-lucide="plus" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -55,7 +55,7 @@
                     <h3 class="text-[14px] font-medium text-text-primary flex items-center gap-2">
                         <i data-lucide="book" class="w-4 h-4 text-text-muted"></i> Mata Pelajaran
                     </h3>
-                    <button onclick="ui.showModal('subjectModal')" class="text-accent hover:text-accent-hover p-1" title="Tambah">
+                    <button onclick="addSubject()" class="text-accent hover:text-accent-hover p-1" title="Tambah">
                         <i data-lucide="plus" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -236,6 +236,26 @@
             const c = document.getElementById('subjects-container');
             if(c && window.ui && ui.getCardSkeleton) c.innerHTML = ui.getCardSkeleton();
             try { const r = await api.get('/school/subjects'); renderList('subjects-container', r.data, 'editSubject', 'deleteSubject'); } catch(e) { c.innerHTML='<div class="p-6 text-center text-danger text-[13px]">Gagal</div>'; }
+        }
+
+        // Add triggers
+        window.addYear = function() {
+            document.getElementById('yearModalTitle').textContent = 'Tambah Tahun Ajaran';
+            document.getElementById('yearForm').reset();
+            document.getElementById('year_id').value = '';
+            ui.showModal('yearModal');
+        }
+        window.addClass = function() {
+            document.getElementById('classModalTitle').textContent = 'Tambah Kelas';
+            document.getElementById('classForm').reset();
+            document.getElementById('class_id').value = '';
+            ui.showModal('classModal');
+        }
+        window.addSubject = function() {
+            document.getElementById('subjectModalTitle').textContent = 'Tambah Mata Pelajaran';
+            document.getElementById('subjectForm').reset();
+            document.getElementById('subject_id').value = '';
+            ui.showModal('subjectModal');
         }
 
         // Edit triggers
