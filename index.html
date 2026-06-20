@@ -165,7 +165,7 @@
                     <label class="edu-label">Email, NIS, NIP, atau Username</label>
                     <div class="edu-input-icon">
                         <span class="material-symbols-outlined icon-left">person</span>
-                        <input type="text" id="login_identifier" placeholder="Masukkan ID Login Anda" required>
+                        <input type="text" id="login_identifier" placeholder="Masukkan ID Login Anda">
                     </div>
                 </div>
 
@@ -173,7 +173,7 @@
                     <label class="edu-label">Password</label>
                     <div class="edu-input-icon">
                         <span class="material-symbols-outlined icon-left">lock</span>
-                        <input type="password" id="login_password" placeholder="••••••••" required>
+                        <input type="password" id="login_password" placeholder="••••••••">
                         <span class="material-symbols-outlined icon-right" onclick="togglePassword()">visibility</span>
                     </div>
                 </div>
@@ -219,6 +219,16 @@
             e.preventDefault();
             const identifier = document.getElementById('login_identifier').value.trim();
             const password = document.getElementById('login_password').value;
+            
+            if (!identifier || !password) {
+                if (window.utils && utils.showToast) {
+                    utils.showToast('Harap isi ID Login dan Password', 'warning');
+                } else {
+                    alert('Harap isi ID Login dan Password');
+                }
+                return;
+            }
+
             const btn = document.getElementById('login_submit');
             const originalHtml = btn.innerHTML;
 
@@ -240,6 +250,8 @@
             } catch (err) {
                 if (window.utils && utils.showToast) {
                     utils.showToast(err.message || 'Kredensial tidak valid', 'error');
+                } else {
+                    alert(err.message || 'Kredensial tidak valid');
                 }
                 btn.disabled = false;
                 btn.innerHTML = originalHtml;
