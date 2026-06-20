@@ -98,12 +98,13 @@ const api = {
     async download(endpoint, filename) {
         const url = `${API_BASE_URL}${endpoint}`;
         const token = this.getToken();
-        const headers = {};
+        const headers = {
+            'Bypass-Tunnel-Reminder': 'true',
+            'ngrok-skip-browser-warning': 'true'
+        };
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
-        if (window.utils && window.utils.showToast) {
-            utils.showToast('Menyiapkan file untuk diunduh...', 'info');
-        }
+
         if (window.ui && ui.startProgress) ui.startProgress();
         if (window.ui && ui.showGlobalLoader) ui.showGlobalLoader('Mengunduh Laporan...');
 

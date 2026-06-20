@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +18,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="max-w-7xl mx-auto pb-6">
         <!-- Page Header -->
@@ -27,17 +29,20 @@
                     Manajemen data siswa, status, kelas, dan riwayat
                 </p>
             </div>
-            
+
             <div class="flex flex-wrap shrink-0 items-center gap-2 w-full md:w-auto">
-                <button onclick="downloadTemplate('students')" class="flex-1 md:flex-none flex justify-center items-center gap-1.5 h-9 rounded-md border border-border-default bg-bg-surface px-3 text-sm font-medium text-text-secondary hover:bg-bg-hover hover:border-border-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
+                <button onclick="downloadTemplate('students')"
+                    class="flex-1 md:flex-none flex justify-center items-center gap-1.5 h-9 rounded-md border border-border-default bg-bg-surface px-3 text-sm font-medium text-text-secondary hover:bg-bg-hover hover:border-border-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
                     <i data-lucide="file-down" class="w-[15px] h-[15px]" aria-hidden="true"></i>
                     Template
                 </button>
-                <button onclick="ui.showModal('importModal')" class="flex-1 md:flex-none flex justify-center items-center gap-1.5 h-9 rounded-md border border-border-default bg-bg-surface px-3 text-sm font-medium text-text-secondary hover:bg-bg-hover hover:border-border-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
+                <button onclick="ui.showModal('importModal')"
+                    class="flex-1 md:flex-none flex justify-center items-center gap-1.5 h-9 rounded-md border border-border-default bg-bg-surface px-3 text-sm font-medium text-text-secondary hover:bg-bg-hover hover:border-border-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
                     <i data-lucide="upload" class="w-[15px] h-[15px]" aria-hidden="true"></i>
                     <span class="hidden sm:inline">Import Data</span>
                 </button>
-                <button onclick="ui.showModal('addStudentModal')" class="flex-1 md:flex-none flex justify-center items-center gap-1.5 h-9 rounded-md bg-accent px-3 text-sm font-medium text-white hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
+                <button onclick="ui.showModal('addStudentModal')"
+                    class="flex-1 md:flex-none flex justify-center items-center gap-1.5 h-9 rounded-md bg-accent px-3 text-sm font-medium text-white hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
                     <i data-lucide="user-plus" class="w-[15px] h-[15px]" aria-hidden="true"></i>
                     Tambah Siswa
                 </button>
@@ -48,33 +53,44 @@
         <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <!-- Search -->
             <div class="relative w-full sm:max-w-xs">
-                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-[15px] h-[15px] text-text-placeholder" aria-hidden="true"></i>
-                <input type="search" id="searchInput" placeholder="Cari nama, NIS, email..." class="h-9 w-full rounded-md border border-border-default bg-bg-surface pl-9 pr-3 text-sm text-text-secondary placeholder:text-text-placeholder hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors duration-150" aria-label="Cari siswa berdasarkan nama, NIS, atau email">
+                <i data-lucide="search"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 w-[15px] h-[15px] text-text-placeholder"
+                    aria-hidden="true"></i>
+                <input type="search" id="searchInput" placeholder="Cari nama, NIS, email..."
+                    class="h-9 w-full rounded-md border border-border-default bg-bg-surface pl-9 pr-3 text-sm text-text-secondary placeholder:text-text-placeholder hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors duration-150"
+                    aria-label="Cari siswa berdasarkan nama, NIS, atau email">
             </div>
 
             <!-- Filter group -->
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-                <select id="filterStatusAkun" class="custom-select w-full sm:w-auto h-9 rounded-md border border-border-default bg-bg-surface px-3 pr-8 text-sm text-text-secondary font-sans hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 cursor-pointer transition-colors duration-150" aria-label="Filter berdasarkan status akun">
+                <select id="filterStatusAkun"
+                    class="custom-select w-full sm:w-auto h-9 rounded-md border border-border-default bg-bg-surface px-3 pr-8 text-sm text-text-secondary font-sans hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 cursor-pointer transition-colors duration-150"
+                    aria-label="Filter berdasarkan status akun">
                     <option value="">Semua Status Akun</option>
                     <option value="aktif">Aktif</option>
                     <option value="nonaktif">Nonaktif</option>
                 </select>
 
-                <select id="filterStatusSiswa" class="custom-select w-full sm:w-auto h-9 rounded-md border border-border-default bg-bg-surface px-3 pr-8 text-sm text-text-secondary font-sans hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 cursor-pointer transition-colors duration-150" aria-label="Filter berdasarkan status siswa">
+                <select id="filterStatusSiswa"
+                    class="custom-select w-full sm:w-auto h-9 rounded-md border border-border-default bg-bg-surface px-3 pr-8 text-sm text-text-secondary font-sans hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 cursor-pointer transition-colors duration-150"
+                    aria-label="Filter berdasarkan status siswa">
                     <option value="">Semua Status Siswa</option>
                     <option value="active">Aktif</option>
                     <option value="graduated">Alumni</option>
                     <option value="transferred">Mutasi</option>
                 </select>
 
-                <select id="classFilter" class="custom-select w-full sm:w-auto h-9 rounded-md border border-border-default bg-bg-surface px-3 pr-8 text-sm text-text-secondary font-sans hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 cursor-pointer transition-colors duration-150" aria-label="Filter berdasarkan kelas">
+                <select id="classFilter"
+                    class="custom-select w-full sm:w-auto h-9 rounded-md border border-border-default bg-bg-surface px-3 pr-8 text-sm text-text-secondary font-sans hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 cursor-pointer transition-colors duration-150"
+                    aria-label="Filter berdasarkan kelas">
                     <option value="">Semua Kelas</option>
                 </select>
             </div>
         </div>
 
         <!-- Table Card -->
-        <div id="table-container" class="rounded-lg border border-border-default bg-bg-surface overflow-hidden min-h-[300px]">
+        <div id="table-container"
+            class="rounded-lg border border-border-default bg-bg-surface overflow-hidden min-h-[300px]">
             <div class="p-6 space-y-3">
                 <div class="h-8 bg-bg-hover rounded animate-pulse"></div>
                 <div class="h-12 bg-bg-hover rounded animate-pulse opacity-70"></div>
@@ -84,61 +100,77 @@
     </div>
 
     <!-- ADD/EDIT MODAL -->
-    <div id="addStudentModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <div class="w-full max-w-lg rounded-xl border border-border-default bg-bg-surface shadow-lg flex flex-col max-h-[90vh]">
+    <div id="addStudentModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4"
+        role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div
+            class="w-full max-w-lg rounded-xl border border-border-default bg-bg-surface shadow-lg flex flex-col max-h-[90vh]">
             <div class="flex items-center justify-between border-b border-border-default px-6 py-4">
                 <h2 id="modal-title" class="text-base font-semibold text-text-primary">Tambah Siswa</h2>
-                <button onclick="ui.hideModal('addStudentModal')" class="flex h-8 w-8 items-center justify-center rounded-md text-text-muted hover:bg-bg-hover hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150" aria-label="Tutup modal">
+                <button onclick="ui.hideModal('addStudentModal')"
+                    class="flex h-8 w-8 items-center justify-center rounded-md text-text-muted hover:bg-bg-hover hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150"
+                    aria-label="Tutup modal">
                     <i data-lucide="x" class="w-[16px] h-[16px]" aria-hidden="true"></i>
                 </button>
             </div>
             <form id="studentForm">
                 <div class="overflow-y-auto px-6 py-5 space-y-4">
                     <input type="hidden" id="student_id" name="id">
-                    
+
                     <div>
-                        <label for="full_name" class="mb-1.5 block text-sm font-medium text-text-secondary">Nama Lengkap <span class="text-danger" aria-hidden="true">*</span></label>
-                        <input type="text" name="full_name" id="full_name" placeholder="Masukkan nama lengkap" required class="h-9 w-full rounded-md border border-border-default bg-bg-surface px-3 text-sm text-text-primary placeholder:text-text-placeholder hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors duration-150">
+                        <label for="full_name" class="mb-1.5 block text-sm font-medium text-text-secondary">Nama Lengkap
+                            <span class="text-danger" aria-hidden="true">*</span></label>
+                        <input type="text" name="full_name" id="full_name" placeholder="Masukkan nama lengkap" required
+                            class="h-9 w-full rounded-md border border-border-default bg-bg-surface px-3 text-sm text-text-primary placeholder:text-text-placeholder hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors duration-150">
                     </div>
-                    
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label for="nis" class="mb-1.5 block text-sm font-medium text-text-secondary">NIS</label>
-                            <input type="text" name="nis" id="nis" placeholder="Nomor Induk Siswa" required class="h-9 w-full rounded-md border border-border-default bg-bg-surface px-3 text-sm text-text-primary placeholder:text-text-placeholder hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors duration-150">
+                            <input type="text" name="nis" id="nis" placeholder="Nomor Induk Siswa" required
+                                class="h-9 w-full rounded-md border border-border-default bg-bg-surface px-3 text-sm text-text-primary placeholder:text-text-placeholder hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors duration-150">
                         </div>
                         <div>
-                            <label for="class_id" class="mb-1.5 block text-sm font-medium text-text-secondary">Kelas</label>
-                            <select name="class_id" id="class_id" required class="custom-select h-9 w-full rounded-md border border-border-default bg-bg-surface px-3 text-sm text-text-secondary font-sans hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 cursor-pointer transition-colors duration-150">
+                            <label for="class_id"
+                                class="mb-1.5 block text-sm font-medium text-text-secondary">Kelas</label>
+                            <select name="class_id" id="class_id" required
+                                class="custom-select h-9 w-full rounded-md border border-border-default bg-bg-surface px-3 text-sm text-text-secondary font-sans hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 cursor-pointer transition-colors duration-150">
                                 <option value="">Pilih kelas</option>
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label for="gender" class="mb-1.5 block text-sm font-medium text-text-secondary">Gender <span class="text-danger">*</span></label>
-                            <select name="gender" id="gender" required class="custom-select h-9 w-full rounded-md border border-border-default bg-bg-surface px-3 text-sm text-text-secondary font-sans hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 cursor-pointer transition-colors duration-150">
+                            <label for="gender" class="mb-1.5 block text-sm font-medium text-text-secondary">Gender
+                                <span class="text-danger">*</span></label>
+                            <select name="gender" id="gender" required
+                                class="custom-select h-9 w-full rounded-md border border-border-default bg-bg-surface px-3 text-sm text-text-secondary font-sans hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 cursor-pointer transition-colors duration-150">
                                 <option value="L">Laki-laki</option>
                                 <option value="P">Perempuan</option>
                             </select>
                         </div>
                         <div>
-                            <label for="birth_date" class="mb-1.5 block text-sm font-medium text-text-secondary">Tanggal Lahir</label>
-                            <input type="date" name="birth_date" id="birth_date" class="h-9 w-full rounded-md border border-border-default bg-bg-surface px-3 text-sm text-text-primary placeholder:text-text-placeholder hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors duration-150">
+                            <label for="birth_date" class="mb-1.5 block text-sm font-medium text-text-secondary">Tanggal
+                                Lahir</label>
+                            <input type="date" name="birth_date" id="birth_date"
+                                class="h-9 w-full rounded-md border border-border-default bg-bg-surface px-3 text-sm text-text-primary placeholder:text-text-placeholder hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors duration-150">
                         </div>
                     </div>
-                    
+
                     <div>
                         <label for="address" class="mb-1.5 block text-sm font-medium text-text-secondary">Alamat</label>
-                        <textarea name="address" id="address" rows="2" class="w-full rounded-md border border-border-default bg-bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-placeholder hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors duration-150 resize-none"></textarea>
+                        <textarea name="address" id="address" rows="2"
+                            class="w-full rounded-md border border-border-default bg-bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-placeholder hover:border-border-strong focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors duration-150 resize-none"></textarea>
                     </div>
                 </div>
-                
+
                 <div class="flex items-center justify-end gap-2 border-t border-border-default px-6 py-4">
-                    <button type="button" onclick="ui.hideModal('addStudentModal')" class="h-9 rounded-md border border-border-default bg-bg-surface px-4 text-sm font-medium text-text-secondary hover:bg-bg-hover hover:border-border-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
+                    <button type="button" onclick="ui.hideModal('addStudentModal')"
+                        class="h-9 rounded-md border border-border-default bg-bg-surface px-4 text-sm font-medium text-text-secondary hover:bg-bg-hover hover:border-border-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
                         Batal
                     </button>
-                    <button type="submit" id="submitBtn" class="h-9 rounded-md bg-accent px-4 text-sm font-medium text-white hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
+                    <button type="submit" id="submitBtn"
+                        class="h-9 rounded-md bg-accent px-4 text-sm font-medium text-white hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
                         Simpan
                     </button>
                 </div>
@@ -147,30 +179,37 @@
     </div>
 
     <!-- IMPORT MODAL -->
-    <div id="importModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true" aria-labelledby="import-modal-title">
+    <div id="importModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4" role="dialog"
+        aria-modal="true" aria-labelledby="import-modal-title">
         <div class="w-full max-w-md rounded-xl border border-border-default bg-bg-surface shadow-lg flex flex-col">
             <div class="flex items-center justify-between border-b border-border-default px-6 py-4">
                 <h2 id="import-modal-title" class="text-base font-semibold text-text-primary">Import Data Siswa</h2>
-                <button onclick="ui.hideModal('importModal')" class="flex h-8 w-8 items-center justify-center rounded-md text-text-muted hover:bg-bg-hover hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150" aria-label="Tutup modal">
+                <button onclick="ui.hideModal('importModal')"
+                    class="flex h-8 w-8 items-center justify-center rounded-md text-text-muted hover:bg-bg-hover hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150"
+                    aria-label="Tutup modal">
                     <i data-lucide="x" class="w-[16px] h-[16px]" aria-hidden="true"></i>
                 </button>
             </div>
-            
+
             <form id="importForm">
                 <div class="px-6 py-5">
                     <div class="bg-bg-hover p-4 rounded-lg border border-border-default border-dashed text-center">
                         <i data-lucide="upload-cloud" class="w-8 h-8 text-text-muted mx-auto mb-2"></i>
                         <p class="text-sm font-medium text-text-primary mb-1">Unggah file Excel (.xlsx)</p>
                         <p class="text-[13px] text-text-muted mb-4">Pastikan format sesuai dengan Template</p>
-                        <input type="file" id="importFile" name="file" accept=".xlsx, .xls" required class="block w-full text-sm text-text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-accent-subtle file:text-accent hover:file:bg-accent-border">
+                        <input type="file" id="importFile" name="file" accept=".xlsx, .xls" required
+                            class="block w-full text-sm text-text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-accent-subtle file:text-accent hover:file:bg-accent-border">
                     </div>
                 </div>
 
-                <div class="flex items-center justify-end gap-3 border-t border-border-default bg-bg-page px-6 py-4 rounded-b-xl">
-                    <button type="button" onclick="ui.hideModal('importModal')" class="h-9 rounded-md border border-border-default bg-bg-surface px-4 text-sm font-medium text-text-secondary hover:bg-bg-hover hover:border-border-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
+                <div
+                    class="flex items-center justify-end gap-3 border-t border-border-default bg-bg-page px-6 py-4 rounded-b-xl">
+                    <button type="button" onclick="ui.hideModal('importModal')"
+                        class="h-9 rounded-md border border-border-default bg-bg-surface px-4 text-sm font-medium text-text-secondary hover:bg-bg-hover hover:border-border-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
                         Batal
                     </button>
-                    <button type="submit" id="btnImport" class="h-9 rounded-md bg-accent px-4 text-sm font-medium text-white hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
+                    <button type="submit" id="btnImport"
+                        class="h-9 rounded-md bg-accent px-4 text-sm font-medium text-white hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
                         Mulai Import
                     </button>
                 </div>
@@ -179,48 +218,67 @@
     </div>
 
     <!-- HAPUS MODAL (CONFIRM) -->
-    <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-desc">
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4"
+        role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-desc">
         <div class="w-full max-w-sm rounded-xl border border-border-default bg-bg-surface shadow-lg p-6">
             <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-danger-subtle">
                 <i data-lucide="trash-2" class="w-[20px] h-[20px] text-danger" aria-hidden="true"></i>
             </div>
             <h2 id="confirm-title" class="text-base font-semibold text-text-primary mb-1">Hapus Siswa</h2>
             <p id="confirm-desc" class="text-sm text-text-muted mb-6">
-                Data <span id="delete-name" class="font-medium text-text-primary"></span> akan dihapus secara permanen dan tidak dapat dikembalikan.
+                Data <span id="delete-name" class="font-medium text-text-primary"></span> akan dihapus secara permanen
+                dan tidak dapat dikembalikan.
             </p>
             <div class="flex items-center gap-2 justify-end">
-                <button onclick="ui.hideModal('deleteModal')" class="h-9 rounded-md border border-border-default bg-bg-surface px-4 text-sm font-medium text-text-secondary hover:bg-bg-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
+                <button onclick="ui.hideModal('deleteModal')"
+                    class="h-9 rounded-md border border-border-default bg-bg-surface px-4 text-sm font-medium text-text-secondary hover:bg-bg-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150">
                     Batal
                 </button>
-                <button id="confirmDeleteBtn" class="h-9 rounded-md bg-danger px-4 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-danger focus-visible:outline-offset-2 transition-colors duration-150">
+                <button id="confirmDeleteBtn"
+                    class="h-9 rounded-md bg-danger px-4 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-danger focus-visible:outline-offset-2 transition-colors duration-150">
                     Ya, Hapus
                 </button>
             </div>
         </div>
     </div>
     <!-- UBAH PASSWORD MODAL -->
-    <div id="changePasswordModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true">
-        <div class="w-full max-w-sm rounded-xl border border-border-default bg-bg-surface shadow-lg flex flex-col animate-fade-in-up">
+    <div id="changePasswordModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4"
+        role="dialog" aria-modal="true">
+        <div
+            class="w-full max-w-sm rounded-xl border border-border-default bg-bg-surface shadow-lg flex flex-col animate-fade-in-up">
             <div class="flex items-center justify-between border-b border-border-default px-6 py-4">
-                <h3 class="text-[14px] font-semibold text-text-primary">Ubah Password <span id="cp-user-name" class="font-normal text-text-muted"></span></h3>
-                <button onclick="ui.hideModal('changePasswordModal')" class="p-1 text-text-placeholder hover:text-text-secondary hover:bg-bg-hover rounded-md transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+                <h3 class="text-[14px] font-semibold text-text-primary">Ubah Password <span id="cp-user-name"
+                        class="font-normal text-text-muted"></span></h3>
+                <button onclick="ui.hideModal('changePasswordModal')"
+                    class="p-1 text-text-placeholder hover:text-text-secondary hover:bg-bg-hover rounded-md transition-colors"><i
+                        data-lucide="x" class="w-4 h-4"></i></button>
             </div>
             <form id="changePasswordForm">
                 <input type="hidden" id="cp_user_id">
                 <div class="px-6 py-5 flex flex-col gap-4">
                     <div>
-                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Password Baru <span class="text-danger">*</span></label>
-                        <input type="password" id="cp_new_password" required minlength="8" placeholder="Masukkan password baru" class="w-full h-9 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Password Baru <span
+                                class="text-danger">*</span></label>
+                        <input type="password" id="cp_new_password" required minlength="8"
+                            placeholder="Masukkan password baru"
+                            class="w-full h-9 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
                         <p class="text-[11px] text-text-muted mt-1">Minimal 8 karakter.</p>
                     </div>
                     <div>
-                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Konfirmasi Password <span class="text-danger">*</span></label>
-                        <input type="password" id="cp_confirm_password" required minlength="8" placeholder="Ulangi password baru" class="w-full h-9 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Konfirmasi Password
+                            <span class="text-danger">*</span></label>
+                        <input type="password" id="cp_confirm_password" required minlength="8"
+                            placeholder="Ulangi password baru"
+                            class="w-full h-9 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
                     </div>
                 </div>
-                <div class="flex items-center justify-end gap-3 border-t border-border-default bg-bg-page px-6 py-4 rounded-b-xl">
-                    <button type="button" onclick="ui.hideModal('changePasswordModal')" class="px-4 h-8 bg-bg-surface border border-border-default rounded-md text-[13px] font-medium text-text-secondary hover:bg-bg-hover transition-colors">Batal</button>
-                    <button type="submit" id="btnSubmitChangePassword" class="px-4 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors">Ubah Password</button>
+                <div
+                    class="flex items-center justify-end gap-3 border-t border-border-default bg-bg-page px-6 py-4 rounded-b-xl">
+                    <button type="button" onclick="ui.hideModal('changePasswordModal')"
+                        class="px-4 h-8 bg-bg-surface border border-border-default rounded-md text-[13px] font-medium text-text-secondary hover:bg-bg-hover transition-colors">Batal</button>
+                    <button type="submit" id="btnSubmitChangePassword"
+                        class="px-4 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors">Ubah
+                        Password</button>
                 </div>
             </form>
         </div>
@@ -263,7 +321,7 @@
                 const formData = new FormData(e.target);
                 const data = Object.fromEntries(formData.entries());
                 const id = data.id; delete data.id;
-                
+
                 if (!data.birth_date) delete data.birth_date;
 
                 // If class_id is set but no academic_year_id, look up active academic year
@@ -273,7 +331,7 @@
                         const years = ayRes.data || [];
                         const activeYear = years.find(y => y.is_active);
                         if (activeYear) data.academic_year_id = activeYear.id;
-                    } catch(e) { /* ignore */ }
+                    } catch (e) { /* ignore */ }
                 }
 
                 const btn = document.getElementById('submitBtn');
@@ -283,24 +341,24 @@
                     else await api.post('/students', data);
                     ui.hideModal('addStudentModal');
                     fetchStudents();
-                    if(window.utils) utils.showToast('Data berhasil disimpan', 'success');
-                } catch(err) { if(window.utils) utils.showToast(err.message, 'error'); }
+                    if (window.utils) utils.showToast('Data berhasil disimpan', 'success');
+                } catch (err) { if (window.utils) utils.showToast(err.message, 'error'); }
                 finally { if (window.ui && ui.resetButton) ui.resetButton(btn); }
             });
 
             document.getElementById('confirmDeleteBtn').addEventListener('click', async (e) => {
-                if(!deleteIdToProcess) return;
+                if (!deleteIdToProcess) return;
                 const btn = e.currentTarget;
                 try {
                     if (window.ui && ui.setButtonLoading) ui.setButtonLoading(btn, 'Menghapus...');
                     await api.delete(`/students/${deleteIdToProcess}`);
                     ui.hideModal('deleteModal');
                     fetchStudents();
-                    if(window.utils) utils.showToast('Data berhasil dihapus', 'success');
-                } catch(err) { if(window.utils) utils.showToast(err.message, 'error'); }
+                    if (window.utils) utils.showToast('Data berhasil dihapus', 'success');
+                } catch (err) { if (window.utils) utils.showToast(err.message, 'error'); }
                 finally { if (window.ui && ui.resetButton) ui.resetButton(btn); }
             });
-            
+
             // Import Form Submit Handler
             document.getElementById('importForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -309,32 +367,32 @@
 
                 const formData = new FormData();
                 formData.append('file', fileInput.files[0]);
-                
+
                 const btn = document.getElementById('btnImport');
                 try {
                     if (window.ui && ui.setButtonLoading) ui.setButtonLoading(btn, 'Memproses...');
-                    
+
                     const res = await api.post('/imports/students', formData);
                     ui.hideModal('importModal');
-                    
+
                     // Show success message and refresh
                     if (window.utils && utils.showToast) {
                         utils.showToast(res.message || 'Import berhasil', 'success');
                     }
-                    
+
                     e.target.reset();
                     currentPage = 1;
                     fetchStudents();
-                } catch(err) {
+                } catch (err) {
                     if (err.data && err.data.errors && err.data.errors.length > 0) {
                         const errorList = err.data.errors.map(e => `<li class="mb-1">${e}</li>`).join('');
                         if (window.ui && ui.alert) {
                             ui.alert(`<div class="max-h-60 overflow-y-auto text-sm text-left text-danger bg-danger-subtle p-3 rounded border border-danger/30"><ul class="list-disc pl-4">${errorList}</ul></div>`, 'Gagal Import Data');
-                        } else if(window.utils && utils.showToast) {
+                        } else if (window.utils && utils.showToast) {
                             utils.showToast(err.message || 'Gagal import data', 'error');
                         }
                     } else {
-                        if(window.utils && utils.showToast) utils.showToast(err.message || 'Gagal import data', 'error');
+                        if (window.utils && utils.showToast) utils.showToast(err.message || 'Gagal import data', 'error');
                     }
                 } finally {
                     if (window.ui && ui.resetButton) ui.resetButton(btn);
@@ -347,13 +405,13 @@
                 const id = document.getElementById('cp_user_id').value;
                 const newPass = document.getElementById('cp_new_password').value;
                 const confirmPass = document.getElementById('cp_confirm_password').value;
-                
+
                 if (newPass.length < 8) {
-                    if(window.utils) utils.showToast('Password minimal 8 karakter', 'warning');
+                    if (window.utils) utils.showToast('Password minimal 8 karakter', 'warning');
                     return;
                 }
                 if (newPass !== confirmPass) {
-                    if(window.utils) utils.showToast('Konfirmasi password tidak cocok', 'warning');
+                    if (window.utils) utils.showToast('Konfirmasi password tidak cocok', 'warning');
                     return;
                 }
 
@@ -362,9 +420,9 @@
                     if (window.ui && ui.setButtonLoading) ui.setButtonLoading(btn, 'Menyimpan...');
                     await api.post(`/students/${id}/reset-password`, { password: newPass });
                     ui.hideModal('changePasswordModal');
-                    if(window.utils) utils.showToast('Password berhasil diubah', 'success');
-                } catch(err) {
-                    if(window.utils) utils.showToast(err.message || 'Gagal mengubah password', 'error');
+                    if (window.utils) utils.showToast('Password berhasil diubah', 'success');
+                } catch (err) {
+                    if (window.utils) utils.showToast(err.message || 'Gagal mengubah password', 'error');
                 } finally {
                     if (window.ui && ui.resetButton) ui.resetButton(btn);
                 }
@@ -384,26 +442,26 @@
                     document.getElementById('classFilter'),
                     document.getElementById('class_id')
                 ], classes);
-            } catch(e) { console.error('Failed to load classes', e); }
+            } catch (e) { console.error('Failed to load classes', e); }
         }
 
         async function fetchStudents() {
             const container = document.getElementById('table-container');
-            if(!container) return;
+            if (!container) return;
             container.innerHTML = window.ui && ui.getTableSkeleton ? ui.getTableSkeleton(10, 4) : `<div class="p-6">Loading...</div>`;
-            
+
             try {
                 const search = document.getElementById('searchInput').value;
                 const classId = document.getElementById('classFilter').value;
                 const statusAkun = document.getElementById('filterStatusAkun').value;
                 const statusSiswa = document.getElementById('filterStatusSiswa').value;
                 let url = `/students?page=${currentPage}&limit=${limit}`;
-                if(search) url += `&search=${encodeURIComponent(search)}`;
-                if(classId) url += `&class_id=${classId}`;
+                if (search) url += `&search=${encodeURIComponent(search)}`;
+                if (classId) url += `&class_id=${classId}`;
                 // Map UI values to API values
-                if(statusAkun === 'aktif') url += `&is_active=true`;
-                else if(statusAkun === 'nonaktif') url += `&is_active=false`;
-                if(statusSiswa) url += `&student_status=${statusSiswa}`;
+                if (statusAkun === 'aktif') url += `&is_active=true`;
+                else if (statusAkun === 'nonaktif') url += `&is_active=false`;
+                if (statusSiswa) url += `&student_status=${statusSiswa}`;
 
                 const r = await api.get(url);
                 const { students, pagination } = r.data;
@@ -413,7 +471,7 @@
                         <thead>
                             <tr class="border-b border-border-default bg-bg-page">
                                 <th scope="col" class="px-4 py-3 text-xs font-medium text-text-muted">SISWA</th>
-                                <th scope="col" class="px-4 py-3 text-xs font-medium text-text-muted">ADA DI SAAT INI</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-medium text-text-muted">KELAS SAAT INI</th>
                                 <th scope="col" class="px-4 py-3 text-xs font-medium text-text-muted">STATUS</th>
                                 <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-text-muted">AKSI</th>
                             </tr>
@@ -440,7 +498,7 @@
                 } else {
                     students.forEach(s => {
                         const initials = (s.name || '').split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase();
-                        
+
                         const statusVal = s.status ? s.status.toLowerCase() : 'aktif';
                         let badgeClass = 'bg-bg-hover text-text-muted border border-border-default';
                         let badgeLabel = s.status || '—';
@@ -458,7 +516,7 @@
                             badgeLabel = 'Mutasi';
                         }
                         const statusBadge = `<span class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium leading-none ${badgeClass}">${badgeLabel}</span>`;
-                        
+
                         html += `
                             <tr class="group hover:bg-bg-hover transition-colors duration-100">
                                 <td class="px-4 py-3">
@@ -513,22 +571,22 @@
                 if (students && students.length > 0 && pagination) {
                     const startItem = (pagination.page - 1) * limit + 1;
                     const endItem = Math.min(pagination.page * limit, pagination.totalItems);
-                    
+
                     html += `
                         <div class="flex items-center justify-between border-t border-border-default px-4 py-3">
                             <p class="text-xs text-text-muted">
                                 Menampilkan <span class="font-medium text-text-secondary">${startItem}–${endItem}</span> dari <span class="font-medium text-text-secondary">${pagination.totalItems}</span> siswa
                             </p>
                             <div class="flex items-center gap-1">
-                                <button onclick="changePage(${pagination.page-1})" ${pagination.page===1?'disabled':''} class="flex h-8 w-8 items-center justify-center rounded-md border border-border-default text-text-muted hover:bg-bg-hover hover:text-text-primary disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150" aria-label="Halaman sebelumnya">
+                                <button onclick="changePage(${pagination.page - 1})" ${pagination.page === 1 ? 'disabled' : ''} class="flex h-8 w-8 items-center justify-center rounded-md border border-border-default text-text-muted hover:bg-bg-hover hover:text-text-primary disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150" aria-label="Halaman sebelumnya">
                                     <i data-lucide="chevron-left" class="w-[15px] h-[15px]" aria-hidden="true"></i>
                                 </button>
-                                ${Array.from({length: pagination.totalPages}, (_, i) => i + 1).map(p => `
+                                ${Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(p => `
                                     <button onclick="changePage(${p})" ${p === pagination.page ? 'aria-current="page"' : ''} class="flex h-8 w-8 items-center justify-center rounded-md text-sm transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${p === pagination.page ? 'bg-accent text-white font-medium' : 'border border-border-default text-text-muted hover:bg-bg-hover hover:text-text-primary'}">
                                         ${p}
                                     </button>
                                 `).join('')}
-                                <button onclick="changePage(${pagination.page+1})" ${pagination.page===pagination.totalPages?'disabled':''} class="flex h-8 w-8 items-center justify-center rounded-md border border-border-default text-text-muted hover:bg-bg-hover hover:text-text-primary disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150" aria-label="Halaman berikutnya">
+                                <button onclick="changePage(${pagination.page + 1})" ${pagination.page === pagination.totalPages ? 'disabled' : ''} class="flex h-8 w-8 items-center justify-center rounded-md border border-border-default text-text-muted hover:bg-bg-hover hover:text-text-primary disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 transition-colors duration-150" aria-label="Halaman berikutnya">
                                     <i data-lucide="chevron-right" class="w-[15px] h-[15px]" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -537,15 +595,15 @@
                 }
 
                 container.innerHTML = html;
-                if(window.lucide) lucide.createIcons();
-            } catch(e) {
+                if (window.lucide) lucide.createIcons();
+            } catch (e) {
                 container.innerHTML = `<div class="p-8 text-center text-danger text-[13px]">Gagal memuat data. <button onclick="fetchStudents()" class="underline font-medium">Coba lagi</button></div>`;
             } finally {
                 if (window.ui && ui.hideGlobalLoader) ui.hideGlobalLoader();
             }
         }
 
-        window.resetFilters = function() {
+        window.resetFilters = function () {
             document.getElementById('searchInput').value = '';
             document.getElementById('classFilter').value = '';
             document.getElementById('filterStatusAkun').value = '';
@@ -556,26 +614,26 @@
 
         function changePage(p) { currentPage = p; fetchStudents(); }
 
-        window.editStudent = function(s) {
+        window.editStudent = function (s) {
             document.getElementById('modal-title').textContent = 'Edit Data Siswa';
             document.getElementById('studentForm').reset();
             document.getElementById('student_id').value = s.id;
-            document.getElementById('nis').value = s.nis||'';
-            document.getElementById('full_name').value = s.name||s.full_name||'';
-            document.getElementById('class_id').value = s.class_id||'';
-            document.getElementById('gender').value = s.gender||'';
-            if(s.birth_date) document.getElementById('birth_date').value = s.birth_date.split('T')[0];
-            document.getElementById('address').value = s.address||'';
+            document.getElementById('nis').value = s.nis || '';
+            document.getElementById('full_name').value = s.name || s.full_name || '';
+            document.getElementById('class_id').value = s.class_id || '';
+            document.getElementById('gender').value = s.gender || '';
+            if (s.birth_date) document.getElementById('birth_date').value = s.birth_date.split('T')[0];
+            document.getElementById('address').value = s.address || '';
             ui.showModal('addStudentModal');
         }
 
-        window.confirmDelete = function(id, name) {
+        window.confirmDelete = function (id, name) {
             deleteIdToProcess = id;
             document.getElementById('delete-name').textContent = name;
             ui.showModal('deleteModal');
         }
 
-        window.viewProfile = async function(id) {
+        window.viewProfile = async function (id) {
             try {
                 const r = await api.get(`/students/${id}`);
                 const s = r.data;
@@ -590,12 +648,12 @@
                     </div>
                 `;
                 ui.alert(info, 'Profil Siswa');
-            } catch(e) {
-                if(window.utils) utils.showToast('Gagal memuat profil', 'error');
+            } catch (e) {
+                if (window.utils) utils.showToast('Gagal memuat profil', 'error');
             }
         }
 
-        window.viewHistory = async function(id) {
+        window.viewHistory = async function (id) {
             try {
                 const r = await api.get(`/students/${id}/class-history`);
                 const history = r.data || [];
@@ -604,41 +662,42 @@
                 }
                 const list = history.map(h => `<li class="mb-1"><strong>${h.class_name}</strong> (${h.academic_year_name}) - <span class="text-xs text-text-muted uppercase">${h.status}</span></li>`).join('');
                 ui.alert(`<ul class="text-left list-disc pl-5 mt-4 text-sm">${list}</ul>`, 'Riwayat Kelas');
-            } catch(e) {
-                if(window.utils) utils.showToast('Gagal memuat riwayat', 'error');
+            } catch (e) {
+                if (window.utils) utils.showToast('Gagal memuat riwayat', 'error');
             }
         }
 
-        window.resetPassword = async function(id, name) {
+        window.resetPassword = async function (id, name) {
             const confirmed = await ui.confirm(`Apakah Anda yakin ingin mereset password untuk siswa <b>${name}</b> menjadi default sistem?`, 'Reset Password');
             if (!confirmed) return;
             try {
                 await api.post(`/students/${id}/reset-password`);
-                if(window.utils) utils.showToast('Password berhasil direset', 'success');
-            } catch(e) {
-                if(window.utils) utils.showToast(e.message || 'Gagal reset password', 'error');
+                if (window.utils) utils.showToast('Password berhasil direset', 'success');
+            } catch (e) {
+                if (window.utils) utils.showToast(e.message || 'Gagal reset password', 'error');
             }
         }
 
-        window.changePassword = function(id, name) {
+        window.changePassword = function (id, name) {
             document.getElementById('changePasswordForm').reset();
             document.getElementById('cp_user_id').value = id;
             document.getElementById('cp-user-name').textContent = `- ${name}`;
             ui.showModal('changePasswordModal');
         }
 
-        window.toggleActive = async function(id, name, isActive) {
+        window.toggleActive = async function (id, name, isActive) {
             const actionStr = isActive ? 'Mengaktifkan' : 'Menonaktifkan';
             const confirmed = await ui.confirm(`Apakah Anda yakin ingin <b>${actionStr.toLowerCase()}</b> akun siswa <b>${name}</b>?`, 'Ubah Status Akun');
             if (!confirmed) return;
             try {
                 await api.patch(`/students/${id}/toggle-active`, { is_active: isActive });
-                if(window.utils) utils.showToast(`Akun berhasil di${isActive ? 'aktifkan' : 'nonaktifkan'}`, 'success');
+                if (window.utils) utils.showToast(`Akun berhasil di${isActive ? 'aktifkan' : 'nonaktifkan'}`, 'success');
                 fetchStudents();
-            } catch(e) {
-                if(window.utils) utils.showToast(e.message || 'Gagal mengubah status', 'error');
+            } catch (e) {
+                if (window.utils) utils.showToast(e.message || 'Gagal mengubah status', 'error');
             }
         }
     </script>
 </body>
+
 </html>

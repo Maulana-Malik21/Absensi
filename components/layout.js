@@ -236,12 +236,10 @@ const layout = {
                 class="fixed left-0 top-0 z-30 flex h-full flex-col bg-bg-surface border-r border-border-default transition-all duration-200 overflow-hidden ${this.mobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0"
                 style="width: ${sidebarWidth}">
                 
-                <!-- App Switcher -->
                 <div class="flex h-12 shrink-0 items-center gap-2 border-b border-border-default px-4 cursor-pointer hover:bg-bg-hover transition-colors">
                     <div class="h-6 w-6 shrink-0 rounded bg-brand-orange flex items-center justify-center text-white font-bold text-[12px]" aria-hidden="true">E</div>
-                    <div class="sb-text flex-1 min-w-0 flex items-center justify-between ${this.collapsed ? 'hidden' : ''}">
+                    <div class="sb-text flex-1 min-w-0 flex items-center justify-start ${this.collapsed ? 'hidden' : ''}">
                         <p class="truncate text-[14px] font-medium text-text-primary">EduTrack App</p>
-                        <span class="shrink-0 rounded border border-border-default px-1.5 py-0.5 text-[11px] font-medium text-text-muted">Pro</span>
                     </div>
                 </div>
 
@@ -281,21 +279,7 @@ const layout = {
                         <h1 class="text-[18px] font-semibold text-text-primary tracking-tight">${pageTitle}</h1>
                     </div>
 
-                    <!-- Right: Actions -->
-                    <div class="flex items-center gap-2">
-                        <!-- Search -->
-                        <button class="flex items-center justify-center w-8 h-8 rounded-md text-text-muted hover:bg-bg-hover hover:text-text-primary transition-colors sm:w-auto sm:px-2 sm:gap-2">
-                            <i data-lucide="search" class="w-4 h-4"></i>
-                            <span class="hidden sm:inline text-[13px]">Search...</span>
-                            <kbd class="hidden sm:inline-flex items-center justify-center px-1.5 h-5 text-[11px] font-mono border border-border-default rounded bg-bg-hover text-text-muted">⌘K</kbd>
-                        </button>
-                        
-                        <!-- Notifications -->
-                        <button class="relative flex items-center justify-center w-8 h-8 rounded-md text-text-muted hover:bg-bg-hover hover:text-text-primary transition-colors">
-                            <i data-lucide="bell" class="w-5 h-5"></i>
-                            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-danger border-2 border-white"></span>
-                        </button>
-                    </div>
+                    <!-- Right: Actions (Removed) -->
                 </header>
 
                 <!-- PAGE CONTENT -->

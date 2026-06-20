@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,22 +11,26 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
     <div id="sidebar-root"></div>
     <div id="navbar-root"></div>
 
     <main class="p-4 md:p-8 min-h-screen pb-20">
         <div class="max-w-7xl mx-auto pb-8">
-            
+
             <!-- STATUS STRIP (Compact, 1 line) -->
-            <div class="bg-bg-surface border border-border-default rounded-lg p-3 px-5 mb-6 flex flex-wrap items-center gap-0 animate-fade-in-up">
+            <div
+                class="bg-bg-surface border border-border-default rounded-lg p-3 px-5 mb-6 flex flex-wrap items-center gap-0 animate-fade-in-up">
                 <div class="flex items-center gap-2 mr-6">
                     <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
                     <span class="text-[13px] text-text-secondary font-medium">Sistem Online</span>
                 </div>
                 <div class="w-px h-4 bg-border-default mx-2 hidden sm:block"></div>
                 <div class="flex items-center gap-2 mx-4">
-                    <span class="px-2 py-0.5 rounded border border-border-default text-[12px] font-medium text-text-primary bg-bg-hover">Tahun Ajaran Aktif</span>
+                    <span
+                        class="px-2 py-0.5 rounded border border-border-default text-[12px] font-medium text-text-primary bg-bg-hover">Tahun
+                        Ajaran Aktif</span>
                 </div>
                 <div class="w-px h-4 bg-border-default mx-2 hidden sm:block"></div>
                 <div class="flex items-center gap-2 mx-4">
@@ -38,12 +43,14 @@
             <div class="flex items-center justify-between mb-6 animate-fade-in-up">
                 <div>
                     <h2 class="text-2xl font-bold text-text-primary tracking-tight mb-1">
-                        Selamat Datang, <span id="teacher-name">Guru</span>! 👋
+                        Selamat Datang, <span id="teacher-name">Guru</span>!
                     </h2>
-                    <p class="text-[14px] text-text-secondary">Berikut ringkasan aktivitas dan jadwal mengajar Anda hari ini.</p>
+                    <p class="text-[14px] text-text-secondary">Berikut ringkasan aktivitas dan jadwal mengajar Anda hari
+                        ini.</p>
                 </div>
                 <div class="hidden sm:flex items-center gap-3">
-                    <button onclick="initPage()" class="h-9 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-secondary hover:bg-bg-hover hover:border-border-strong transition-colors flex items-center gap-2">
+                    <button onclick="initPage()"
+                        class="h-9 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] text-text-secondary hover:bg-bg-hover hover:border-border-strong transition-colors flex items-center gap-2">
                         <i data-lucide="refresh-cw" class="w-4 h-4 text-text-muted"></i> Segarkan Data
                     </button>
                 </div>
@@ -52,8 +59,10 @@
             <!-- KPI CARDS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 animate-fade-in-up stagger-1">
                 <!-- Card 1 -->
-                <dl class="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col hover:border-accent/30 transition-colors shadow-sm relative overflow-hidden group">
-                    <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-500">
+                <dl
+                    class="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col hover:border-accent/30 transition-colors shadow-sm relative overflow-hidden group">
+                    <div
+                        class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-500">
                         <i data-lucide="book-open" class="w-24 h-24 text-text-primary"></i>
                     </div>
                     <div class="flex items-center justify-between mb-2 relative z-10">
@@ -70,8 +79,10 @@
                 </dl>
 
                 <!-- Card 2 -->
-                <dl class="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col hover:border-accent/30 transition-colors shadow-sm relative overflow-hidden group">
-                    <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-500">
+                <dl
+                    class="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col hover:border-accent/30 transition-colors shadow-sm relative overflow-hidden group">
+                    <div
+                        class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-500">
                         <i data-lucide="users" class="w-24 h-24 text-text-primary"></i>
                     </div>
                     <div class="flex items-center justify-between mb-2 relative z-10">
@@ -88,8 +99,10 @@
                 </dl>
 
                 <!-- Card 3 -->
-                <dl class="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col hover:border-accent/30 transition-colors shadow-sm relative overflow-hidden group">
-                    <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-500">
+                <dl
+                    class="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col hover:border-accent/30 transition-colors shadow-sm relative overflow-hidden group">
+                    <div
+                        class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-500">
                         <i data-lucide="user-check" class="w-24 h-24 text-success"></i>
                     </div>
                     <div class="flex items-center justify-between mb-2 relative z-10">
@@ -106,18 +119,22 @@
                 </dl>
 
                 <!-- Card 4 -->
-                <dl class="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col hover:border-accent/30 transition-colors shadow-sm relative overflow-hidden group">
-                    <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-500">
+                <dl
+                    class="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col hover:border-accent/30 transition-colors shadow-sm relative overflow-hidden group">
+                    <div
+                        class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-500">
                         <i data-lucide="activity" class="w-24 h-24 text-warning"></i>
                     </div>
                     <div class="flex items-center justify-between mb-2 relative z-10">
-                        <dt class="text-[13px] font-medium text-text-muted uppercase tracking-wider">Rata-rata Kehadiran</dt>
+                        <dt class="text-[13px] font-medium text-text-muted uppercase tracking-wider">Rata-rata Kehadiran
+                        </dt>
                         <div class="w-8 h-8 rounded-md bg-warning/10 text-warning flex items-center justify-center">
                             <i data-lucide="pie-chart" class="w-4 h-4"></i>
                         </div>
                     </div>
                     <div class="flex items-end justify-between mt-auto relative z-10">
-                        <dd id="stat-percentage" class="text-[28px] font-semibold text-text-primary tabular leading-none">
+                        <dd id="stat-percentage"
+                            class="text-[28px] font-semibold text-text-primary tabular leading-none">
                             <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-text-muted"></i>
                         </dd>
                     </div>
@@ -126,48 +143,65 @@
 
             <!-- MAIN GRID -->
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 animate-fade-in-up stagger-2">
-                
+
                 <!-- LEFT COLUMN: Activities & Quick Actions (takes 2 cols on xl) -->
                 <div class="xl:col-span-2 space-y-6">
-                    
+
                     <!-- QUICK ACTIONS -->
                     <div class="bg-bg-surface border border-border-default rounded-lg p-5 shadow-sm">
                         <div class="flex items-center justify-between mb-4 border-b border-border-default pb-3">
-                            <h3 class="text-[14px] font-semibold text-text-primary uppercase tracking-wide">Akses Cepat</h3>
+                            <h3 class="text-[14px] font-semibold text-text-primary uppercase tracking-wide">Akses Cepat
+                            </h3>
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            <button onclick="window.location.href='reports.html'" class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg border border-border-default bg-bg-surface hover:bg-bg-hover hover:border-accent/50 hover:text-accent transition-all group">
-                                <div class="w-10 h-10 rounded-full bg-accent-subtle text-accent flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <button onclick="window.location.href='reports.html'"
+                                class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg border border-border-default bg-bg-surface hover:bg-bg-hover hover:border-accent/50 hover:text-accent transition-all group">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-accent-subtle text-accent flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <i data-lucide="file-bar-chart" class="w-5 h-5"></i>
                                 </div>
-                                <span class="text-[12px] font-medium text-text-secondary group-hover:text-accent">Laporan Kelas</span>
+                                <span
+                                    class="text-[12px] font-medium text-text-secondary group-hover:text-accent">Laporan
+                                    Kelas</span>
                             </button>
-                            <button onclick="window.location.href='manual-attendance.html'" class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg border border-border-default bg-bg-surface hover:bg-bg-hover hover:border-accent/50 hover:text-accent transition-all group">
-                                <div class="w-10 h-10 rounded-full bg-info/10 text-info flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <button onclick="window.location.href='manual-attendance.html'"
+                                class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg border border-border-default bg-bg-surface hover:bg-bg-hover hover:border-accent/50 hover:text-accent transition-all group">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-info/10 text-info flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <i data-lucide="list-checks" class="w-5 h-5"></i>
                                 </div>
-                                <span class="text-[12px] font-medium text-text-secondary group-hover:text-accent">Input Manual</span>
+                                <span class="text-[12px] font-medium text-text-secondary group-hover:text-accent">Input
+                                    Manual</span>
                             </button>
-                            <button onclick="window.location.href='schedule.html'" class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg border border-border-default bg-bg-surface hover:bg-bg-hover hover:border-accent/50 hover:text-accent transition-all group">
-                                <div class="w-10 h-10 rounded-full bg-warning/10 text-warning flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <button onclick="window.location.href='schedule.html'"
+                                class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg border border-border-default bg-bg-surface hover:bg-bg-hover hover:border-accent/50 hover:text-accent transition-all group">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-warning/10 text-warning flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <i data-lucide="calendar" class="w-5 h-5"></i>
                                 </div>
-                                <span class="text-[12px] font-medium text-text-secondary group-hover:text-accent">Jadwal Mengajar</span>
+                                <span class="text-[12px] font-medium text-text-secondary group-hover:text-accent">Jadwal
+                                    Mengajar</span>
                             </button>
-                            <button onclick="window.location.href='analytics.html'" class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg border border-border-default bg-bg-surface hover:bg-bg-hover hover:border-accent/50 hover:text-accent transition-all group">
-                                <div class="w-10 h-10 rounded-full bg-success/10 text-success flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <button onclick="window.location.href='analytics.html'"
+                                class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg border border-border-default bg-bg-surface hover:bg-bg-hover hover:border-accent/50 hover:text-accent transition-all group">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-success/10 text-success flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
                                 </div>
-                                <span class="text-[12px] font-medium text-text-secondary group-hover:text-accent">Lihat Analitik</span>
+                                <span class="text-[12px] font-medium text-text-secondary group-hover:text-accent">Lihat
+                                    Analitik</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- JADWAL HARI INI -->
-                    <div class="bg-bg-surface border border-border-default rounded-lg p-5 shadow-sm min-h-[300px] flex flex-col">
+                    <div
+                        class="bg-bg-surface border border-border-default rounded-lg p-5 shadow-sm min-h-[300px] flex flex-col">
                         <div class="flex items-center justify-between mb-4 border-b border-border-default pb-3">
-                            <h3 class="text-[14px] font-semibold text-text-primary uppercase tracking-wide">Jadwal Mengajar Hari Ini</h3>
-                            <button onclick="window.location.href='schedule.html'" class="text-[12px] font-medium text-accent hover:text-accent-hover flex items-center gap-1">
+                            <h3 class="text-[14px] font-semibold text-text-primary uppercase tracking-wide">Jadwal
+                                Mengajar Hari Ini</h3>
+                            <button onclick="window.location.href='schedule.html'"
+                                class="text-[12px] font-medium text-accent hover:text-accent-hover flex items-center gap-1">
                                 Semua Jadwal <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
@@ -182,21 +216,31 @@
                 </div>
 
                 <!-- RIGHT COLUMN: Analytics -->
-                <div class="bg-bg-surface border border-border-default rounded-lg p-5 shadow-sm min-h-[500px] flex flex-col">
+                <div
+                    class="bg-bg-surface border border-border-default rounded-lg p-5 shadow-sm min-h-[500px] flex flex-col">
                     <div class="flex items-center justify-between mb-4 border-b border-border-default pb-3">
-                        <h3 class="text-[14px] font-semibold text-text-primary uppercase tracking-wide">Statistik Kehadiran Hari Ini</h3>
+                        <h3 class="text-[14px] font-semibold text-text-primary uppercase tracking-wide">Statistik
+                            Kehadiran Hari Ini</h3>
                     </div>
-                    
+
                     <div class="flex-1 flex flex-col justify-center min-h-[250px] mb-6 relative">
                         <canvas id="attendanceChart" style="max-height: 250px;"></canvas>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3 mt-auto" id="attendance-distribution">
                         <!-- Populated by JS -->
-                        <div class="p-3 bg-bg-hover rounded border border-border-default text-center animate-pulse h-16"></div>
-                        <div class="p-3 bg-bg-hover rounded border border-border-default text-center animate-pulse h-16"></div>
-                        <div class="p-3 bg-bg-hover rounded border border-border-default text-center animate-pulse h-16"></div>
-                        <div class="p-3 bg-bg-hover rounded border border-border-default text-center animate-pulse h-16"></div>
+                        <div
+                            class="p-3 bg-bg-hover rounded border border-border-default text-center animate-pulse h-16">
+                        </div>
+                        <div
+                            class="p-3 bg-bg-hover rounded border border-border-default text-center animate-pulse h-16">
+                        </div>
+                        <div
+                            class="p-3 bg-bg-hover rounded border border-border-default text-center animate-pulse h-16">
+                        </div>
+                        <div
+                            class="p-3 bg-bg-hover rounded border border-border-default text-center animate-pulse h-16">
+                        </div>
                     </div>
                 </div>
 
@@ -221,13 +265,13 @@
                 // Pre-fill user data
                 const user = JSON.parse(localStorage.getItem('user'));
                 document.getElementById('teacher-name').textContent = user.full_name || 'Guru';
-                
+
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 document.getElementById('current-date').textContent = new Date().toLocaleDateString('id-ID', options);
 
                 // Fetch data in parallel
                 const [analyticsRes, statsRes, scheduleRes] = await Promise.all([
-                    api.get('/analytics/teacher').catch(() => ({ data: { percentage: '0%', stats: { present:0, sick:0, permission:0, absent:0 } } })),
+                    api.get('/analytics/teacher').catch(() => ({ data: { percentage: '0%', stats: { present: 0, sick: 0, permission: 0, absent: 0 } } })),
                     api.get('/attendance/teacher/stats').catch(() => ({ data: { active_classes: 0, total_students: 0, present_today: 0 } })),
                     api.get('/teachers/me/schedule').catch(() => ({ data: [] }))
                 ]);
@@ -259,7 +303,7 @@
         function buildTodaySchedule(schedules) {
             const container = document.getElementById('today-schedule-container');
             const todayName = new Date().toLocaleDateString('id-ID', { weekday: 'long' });
-            
+
             // Filter schedules for today
             const todaySchedules = schedules.filter(s => s.day_of_week.toLowerCase() === todayName.toLowerCase());
 
@@ -329,7 +373,7 @@
 
         function buildAttendanceChart(st) {
             const ctx = document.getElementById('attendanceChart').getContext('2d');
-            const total = (st.present||0) + (st.absent||0) + (st.sick||0) + (st.permission||0);
+            const total = (st.present || 0) + (st.absent || 0) + (st.sick || 0) + (st.permission || 0);
 
             // Populate distribution breakdown
             document.getElementById('attendance-distribution').innerHTML = `
@@ -400,11 +444,12 @@
                 const response = await api.post('/qr/generate', { class_id: classId, subject_id: subjectId });
                 sessionStorage.setItem('active_session_id', response.data.id);
                 window.location.replace('active-session.html');
-            } catch (error) { 
-                if(window.utils && utils.showToast) utils.showToast(error.message || 'Gagal memulai sesi absensi', 'error'); 
+            } catch (error) {
+                if (window.utils && utils.showToast) utils.showToast(error.message || 'Gagal memulai sesi absensi', 'error');
                 if (window.ui && ui.resetButton) ui.resetButton(btn);
             }
         }
     </script>
 </body>
+
 </html>
