@@ -106,6 +106,14 @@
                 <div class="p-5 flex flex-col gap-4">
                     <input type="hidden" id="class_id" name="id">
                     <div>
+                        <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Tingkat/Grade <span class="text-danger">*</span></label>
+                        <select name="grade_level" id="class_grade" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
+                            <option value="1">X (Sepuluh)</option>
+                            <option value="2">XI (Sebelas)</option>
+                            <option value="3">XII (Dua Belas)</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="block text-[12px] font-medium text-text-secondary mb-1.5">Nama Kelas <span class="text-danger">*</span></label>
                         <input type="text" name="name" id="class_name" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
                     </div>
@@ -244,6 +252,7 @@
             document.getElementById('classForm').reset();
             document.getElementById('class_id').value = c.id;
             document.getElementById('class_name').value = c.name;
+            document.getElementById('class_grade').value = c.grade_level || 1;
             ui.showModal('classModal');
         }
         window.editSubject = function(s) {

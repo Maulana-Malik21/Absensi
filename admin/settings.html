@@ -139,7 +139,7 @@
                         <div class="mt-2 border border-border-default rounded-lg overflow-hidden relative">
                             <div id="geofence_map" class="w-full h-[350px] z-10"></div>
                             <div class="absolute top-2 left-16 z-20 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-md shadow-sm border border-border-default pointer-events-none">
-                                <p class="text-[11px] font-medium text-text-secondary"><i data-lucide="info" class="w-3 h-3 inline mr-1"></i>Geser marker merah untuk mengubah titik pusat.</p>
+                                <p class="text-[11px] font-medium text-text-secondary"><i data-lucide="info" class="w-3 h-3 inline mr-1"></i>Klik pada peta atau geser marker untuk mengubah lokasi.</p>
                             </div>
                         </div>
                         
@@ -351,6 +351,16 @@
                 mapMarker.on('dragend', function (event) {
                     const position = mapMarker.getLatLng();
                     mapMarker.setLatLng(position, { draggable: 'true' });
+                    mapCircle.setLatLng(position);
+                    map.panTo(position);
+                    
+                    document.getElementById('geo_lat').value = position.lat.toFixed(6);
+                    document.getElementById('geo_lng').value = position.lng.toFixed(6);
+                });
+
+                map.on('click', function (e) {
+                    const position = e.latlng;
+                    mapMarker.setLatLng(position);
                     mapCircle.setLatLng(position);
                     map.panTo(position);
                     

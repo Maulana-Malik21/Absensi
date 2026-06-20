@@ -1,4 +1,4 @@
-const API_BASE_URL = ' https://aqua-doodle-illusion.ngrok-free.dev/api'
+const API_BASE_URL = 'http://localhost:3000/api';
 
 const api = {
     /**
@@ -20,7 +20,7 @@ const api = {
      */
     logout() {
         localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('refreshToken'); // Clean up any legacy token
         localStorage.removeItem('user');
         // Navigate to login page relative to the current hostname
         const loginPath = window.location.pathname.includes('/admin/') || window.location.pathname.includes('/teacher/')
@@ -54,6 +54,7 @@ const api = {
         const config = {
             ...options,
             headers,
+            credentials: 'include' // Always send cookies
         };
 
         const method = options.method || 'GET';
@@ -98,7 +99,10 @@ const api = {
     async download(endpoint, filename) {
         const url = `${API_BASE_URL}${endpoint}`;
         const token = this.getToken();
-        const headers = {};
+        const headers = {
+            'Bypass-Tunnel-Reminder': 'true',
+            'ngrok-skip-browser-warning': 'true'
+        };
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
         if (window.utils && window.utils.showToast) {

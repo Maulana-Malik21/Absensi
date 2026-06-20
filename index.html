@@ -162,7 +162,6 @@
             try {
                 const response = await api.post('/auth/login', { identifier, password });
                 api.setToken(response.data.token);
-                localStorage.setItem('refreshToken', response.data.refreshToken || '');
                 localStorage.setItem('user', JSON.stringify(response.data.user));
 
                 if(window.utils && utils.showToast) {

@@ -132,7 +132,7 @@ const ui = {
         
         // Ensure classes only contain valid class names (e.g., starting with Roman numerals, numbers, or standard prefixes)
         // This filters out mistaken subject entries like "Biologi"
-        const validClasses = classes.filter(c => /^(X|Y|Z|V|I|1|2|3|4|5|6|7|8|9|10|11|12|Kelas)\b/i.test(c.name));
+        const validClasses = classes.filter(c => /^(X|XI|XII|IX|VIII|VII|VI|V|IV|III|II|I|1|2|3|4|5|6|7|8|9|10|11|12|Kelas)\b/i.test(c.name));
 
         selectElements.forEach(select => {
             if (!select) return;

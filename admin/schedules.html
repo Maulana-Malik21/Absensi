@@ -17,9 +17,18 @@
                 <h2 class="text-[13px] font-semibold text-text-primary uppercase tracking-wide mb-1">Jadwal Pelajaran</h2>
                 <p class="text-[13px] text-text-muted">Atur jadwal mata pelajaran per kelas dan hari.</p>
             </div>
-            <button onclick="ui.showModal('addScheduleModal')" class="w-full md:w-auto flex items-center justify-center gap-2 px-4 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors">
-                <i data-lucide="plus" class="w-4 h-4"></i> Tambah Jadwal
-            </button>
+            <div class="flex flex-col md:flex-row gap-2">
+                <button onclick="api.download('/imports/template/schedules', 'template_jadwal.xlsx')" class="flex items-center justify-center gap-2 px-3 h-8 bg-bg-surface border border-border-default text-text-secondary rounded-md text-[13px] font-medium hover:bg-bg-hover hover:text-text-primary transition-colors">
+                    <i data-lucide="download" class="w-4 h-4"></i> Template
+                </button>
+                <button onclick="document.getElementById('importFile').click()" class="flex items-center justify-center gap-2 px-3 h-8 bg-bg-surface border border-border-default text-text-secondary rounded-md text-[13px] font-medium hover:bg-bg-hover hover:text-text-primary transition-colors">
+                    <i data-lucide="upload" class="w-4 h-4"></i> Import
+                </button>
+                <button onclick="ui.showModal('addScheduleModal')" class="w-full md:w-auto flex items-center justify-center gap-2 px-4 h-8 bg-accent text-white rounded-md text-[13px] font-medium hover:bg-accent-hover transition-colors">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Tambah Jadwal
+                </button>
+                <input type="file" id="importFile" accept=".xlsx, .csv" class="hidden" onchange="handleImport(event)">
+            </div>
         </div>
 
         <!-- Filter Bar -->
@@ -282,6 +291,32 @@
         async function deleteSchedule(id) {
             if (!(await ui.confirm('Hapus jadwal ini?'))) return;
             try { await api.delete(`/schedules/${id}`); fetchData(); } catch(e) { if(window.utils) utils.showToast(e.message, 'error'); }
+        }
+
+        async function handleImport(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const res = await api.post('/imports/schedules', formData, { showLoader: true, loadingText: 'Mengimpor Jadwal...' });
+                if (window.utils) utils.showToast(res.message || 'Import berhasil', 'success');
+                fetchData();
+            } catch (err) {
+                console.error(err);
+                if (window.utils) {
+                    utils.showToast(err.message || 'Import gagal', 'error');
+                    if (err.data && err.data.errors && err.data.errors.length > 0) {
+                        setTimeout(() => {
+                            utils.showToast('Error: ' + err.data.errors.slice(0, 2).join(', '), 'error');
+                        }, 1000);
+                    }
+                }
+            } finally {
+                e.target.value = ''; // Reset input
+            }
         }
     </script>
 </body>
