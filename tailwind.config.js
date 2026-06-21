@@ -38,6 +38,9 @@ module.exports = {
         'danger-border':   '#FECACA',
         'brand-orange': '#FF6B2B',
         'nav-accent':   '#2563EB',
+        'info':         '#3B82F6',
+        'info-subtle':  '#EFF6FF',
+        'info-border':  '#BFDBFE',
       },
       spacing: {
         '4.5': '18px',

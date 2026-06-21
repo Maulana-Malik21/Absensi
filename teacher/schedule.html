@@ -150,7 +150,20 @@
                     `;
                 });
 
-                container.innerHTML = html;
+                if (html === '') {
+                    container.innerHTML = `
+                        <div class="bg-bg-surface border border-border-default rounded-lg p-12 flex flex-col items-center justify-center text-center">
+                            <div class="w-16 h-16 bg-bg-hover rounded-full flex items-center justify-center mb-4 text-text-placeholder">
+                                <i data-lucide="calendar-x" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-[15px] font-semibold text-text-primary mb-2">Tidak Ada Jadwal</h3>
+                            <p class="text-[13px] text-text-muted max-w-sm">Anda belum memiliki jadwal mengajar di hari aktif (Senin-Jumat).</p>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = html;
+                }
+                
                 if (window.lucide) lucide.createIcons();
 
             } catch (error) {
