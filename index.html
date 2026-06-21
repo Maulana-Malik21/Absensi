@@ -140,6 +140,33 @@
             border-color: var(--primary);
             box-shadow: 0 0 0 3px var(--primary-light);
         }
+
+        .edu-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .edu-btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+        }
+
+        .edu-btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 8px -1px rgba(79, 70, 229, 0.3);
+        }
+
+        .edu-btn-primary:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 
@@ -219,7 +246,7 @@
             e.preventDefault();
             const identifier = document.getElementById('login_identifier').value.trim();
             const password = document.getElementById('login_password').value;
-            
+
             if (!identifier || !password) {
                 if (window.utils && utils.showToast) {
                     utils.showToast('Harap isi ID Login dan Password', 'warning');
@@ -241,7 +268,7 @@
                 localStorage.setItem('user', JSON.stringify(response.data.user));
 
                 if (window.utils && utils.showToast) {
-                    utils.showToast('Login berhasil! Mengalihkan...', 'success');
+                    utils.showToast('Login berhasil!', 'success');
                 }
 
                 setTimeout(() => {
