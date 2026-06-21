@@ -47,8 +47,6 @@
                     <option value="Rabu">Rabu</option>
                     <option value="Kamis">Kamis</option>
                     <option value="Jumat">Jumat</option>
-                    <option value="Sabtu">Sabtu</option>
-                    <option value="Minggu">Minggu</option>
                 </select>
                 <i data-lucide="chevron-down" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none"></i>
             </div>
@@ -95,7 +93,7 @@
                             <select name="day" required class="w-full h-8 px-3 bg-bg-surface border border-border-default rounded-md text-[13px] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle">
                                 <option value="">Hari</option>
                                 <option>Senin</option><option>Selasa</option><option>Rabu</option>
-                                <option>Kamis</option><option>Jumat</option><option>Sabtu</option><option>Minggu</option>
+                                <option>Kamis</option><option>Jumat</option>
                             </select>
                         </div>
                         <div>
@@ -199,9 +197,8 @@
             Senin:'text-accent border-accent-border bg-accent-subtle', 
             Selasa:'text-[#7C3AED] border-[#DDD6FE] bg-[#F5F3FF]', 
             Rabu:'text-success border-[#A7F3D0] bg-success-subtle', 
-            Kamis:'text-warning border-[#FDE68A] bg-warning-subtle', 
-            Jumat:'text-danger border-[#FECACA] bg-danger-subtle', 
-            Sabtu:'text-text-muted border-border-default bg-bg-hover' 
+            Kamis:'text-warning border-warning-border bg-warning-subtle',
+            Jumat:'text-danger border-danger-border bg-danger-subtle'
         };
 
         async function fetchData() {
