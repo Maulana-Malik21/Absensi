@@ -23,7 +23,7 @@ const api = {
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
         // Navigate to login page relative to the current hostname
-        const loginPath = window.location.pathname.includes('/admin/') || window.location.pathname.includes('/teacher/')
+        const loginPath = window.location.pathname.includes('/admin/') || window.location.pathname.includes('/teacher/') || window.location.pathname.includes('/student/')
             ? '../index.html'
             : 'index.html';
         window.location.href = loginPath;

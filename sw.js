@@ -1,4 +1,4 @@
-const CACHE_NAME = 'eduattend-v3';
+const CACHE_NAME = 'eduattend-v4';
 const ASSETS_TO_CACHE = [
   '/',
   '/login.html',
