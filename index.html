@@ -118,7 +118,7 @@
             position: relative;
         }
 
-        .edu-input-icon span.icon-left {
+        .edu-input-icon .icon-left {
             position: absolute;
             left: 12px;
             top: 50%;
@@ -126,7 +126,7 @@
             color: var(--text-muted);
         }
 
-        .edu-input-icon span.icon-right {
+        .edu-input-icon .icon-right {
             position: absolute;
             right: 12px;
             top: 50%;
@@ -207,7 +207,7 @@
                 <div class="edu-form-group">
                     <label class="edu-label">Username</label>
                     <div class="edu-input-icon">
-                        <span class="material-symbols-outlined icon-left">person</span>
+                        <i data-lucide="user" class="icon-left w-5 h-5"></i>
                         <input type="text" id="login_identifier" placeholder="Masukkan ID Login Anda">
                     </div>
                 </div>
@@ -215,16 +215,15 @@
                 <div class="edu-form-group">
                     <label class="edu-label">Password</label>
                     <div class="edu-input-icon">
-                        <span class="material-symbols-outlined icon-left">lock</span>
+                        <i data-lucide="lock" class="icon-left w-5 h-5"></i>
                         <input type="password" id="login_password" placeholder="••••••••">
-                        <span class="material-symbols-outlined icon-right" onclick="togglePassword()">visibility</span>
+                        <i data-lucide="eye" class="icon-right w-5 h-5" id="togglePasswordIcon" onclick="togglePassword()"></i>
                     </div>
                 </div>
 
                 <button type="submit" id="login_submit" class="edu-btn edu-btn-primary"
-                    style="width: 100%; justify-content: center; padding: 12px; margin-top: 8px; font-size: 1rem;">
-                    Masuk ke Sistem <span class="material-symbols-outlined"
-                        style="font-size: 18px;">arrow_forward</span>
+                    style="width: 100%; padding: 12px; margin-top: 8px; font-size: 1rem;">
+                    Masuk ke Sistem <i data-lucide="arrow-right" class="w-5 h-5" id="submitIcon"></i>
                 </button>
             </form>
 
@@ -235,11 +234,13 @@
     </div>
 
     <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/utils.js?v=1781115035990"></script>
     <script src="js/api.js?v=1781115035990"></script>
     <script>
         // Hide loader and show content once everything (including fonts/css) is fully loaded
         window.addEventListener('load', () => {
+            lucide.createIcons();
             const loader = document.getElementById('initial-loader');
             const content = document.getElementById('main-content');
             if (loader) loader.style.display = 'none';
@@ -248,14 +249,15 @@
 
         function togglePassword() {
             const input = document.getElementById('login_password');
-            const icon = document.querySelector('.icon-right');
+            const icon = document.getElementById('togglePasswordIcon');
             if (input.type === 'password') {
                 input.type = 'text';
-                icon.textContent = 'visibility_off';
+                icon.setAttribute('data-lucide', 'eye-off');
             } else {
                 input.type = 'password';
-                icon.textContent = 'visibility';
+                icon.setAttribute('data-lucide', 'eye');
             }
+            lucide.createIcons();
         }
 
         document.getElementById('unifiedLoginForm').addEventListener('submit', async (e) => {
@@ -276,7 +278,8 @@
             const originalHtml = btn.innerHTML;
 
             btn.disabled = true;
-            btn.innerHTML = '<span class="material-symbols-outlined" style="animation:spin 1s linear infinite;">progress_activity</span> Mengautentikasi...';
+            btn.innerHTML = '<i data-lucide="loader-2" class="animate-spin w-5 h-5 mr-2"></i> Mengautentikasi...';
+            lucide.createIcons();
 
             try {
                 const response = await api.post('/auth/login', { identifier, password });
