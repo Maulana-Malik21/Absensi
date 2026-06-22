@@ -212,11 +212,18 @@
                 
                 await api.post('/attendance/scan', { token: tokenStr, latitude: locationCache.latitude, longitude: locationCache.longitude });
                 
-                setOverlay('check-circle', 'text-success', 'Absensi Berhasil!');
+                document.getElementById('scanner-overlay').classList.add('hidden');
+                if (window.ui && ui.success) {
+                    await ui.success('Absensi Anda telah berhasil dicatat oleh sistem.', 'Absensi Berhasil!');
+                    window.location.href = 'history.html';
+                } else {
+                    setOverlay('check-circle', 'text-success', 'Absensi Berhasil!');
+                    setTimeout(() => { window.location.href = 'history.html'; }, 2000);
+                }
             } catch (err) {
                 setOverlay('x-circle', 'text-danger', err.message || 'QR tidak valid atau di luar radius.');
+                setTimeout(() => { document.getElementById('scanner-overlay').classList.add('hidden'); }, 4000);
             }
-            setTimeout(() => { document.getElementById('scanner-overlay').classList.add('hidden'); }, 4000);
         }
     </script>
 </body>

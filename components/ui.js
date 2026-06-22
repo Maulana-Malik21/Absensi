@@ -87,6 +87,37 @@ const ui = {
         });
     },
 
+    success(message, title = 'Berhasil') {
+        return new Promise((resolve) => {
+            const existing = document.getElementById('edu-success-modal');
+            if (existing) existing.remove();
+
+            const modalHtml = `
+                <div id="edu-success-modal" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/40">
+                    <div class="bg-bg-surface w-full max-w-sm rounded-lg border border-border-default shadow-lg p-6 text-center transform transition-all">
+                        <div class="w-12 h-12 rounded-full bg-success-subtle text-success flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="check-circle" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-text-primary mb-2">${title}</h3>
+                        <p class="text-sm text-text-secondary mb-6">${message}</p>
+                        <button id="edu-success-ok" class="w-full bg-success hover:bg-[#047857] text-white text-[13px] font-medium h-8 rounded-md transition-colors">OK</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            if (window.lucide) lucide.createIcons();
+            
+            const modal = document.getElementById('edu-success-modal');
+            const btnOk = document.getElementById('edu-success-ok');
+
+            const cleanup = () => {
+                modal.remove();
+            };
+
+            btnOk.onclick = () => { cleanup(); resolve(); };
+        });
+    },
+
     confirm(message, title = 'Konfirmasi') {
         return new Promise((resolve) => {
             const existing = document.getElementById('edu-confirm-modal');
