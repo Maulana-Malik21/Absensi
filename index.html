@@ -4,13 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduTrack - Login</title>
-    <meta name="description" content="EduTrack QR Attendance System - Login portal">
+    <title>Titik Siswa - Login</title>
+    <meta name="description" content="Titik Siswa QR Attendance System - Login portal">
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         rel="stylesheet" />
     <link rel="stylesheet" href="css/output.css">
     <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #e0e7ff;
+            --border-color: #e5e7eb;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -144,28 +153,38 @@
         .edu-btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: inherit;
+            font-weight: 600;
         }
 
         .edu-btn-primary {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
             color: #ffffff;
-            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.39);
         }
 
         .edu-btn-primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 8px -1px rgba(79, 70, 229, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
         }
 
         .edu-btn-primary:active {
-            transform: translateY(0);
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(79, 70, 229, 0.3);
+        }
+
+        .edu-btn-primary .material-symbols-outlined {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .edu-btn-primary:hover .material-symbols-outlined {
+            transform: translateX(4px);
         }
     </style>
 </head>
@@ -174,22 +193,19 @@
     <!-- Initial Loading Screen (Pure CSS/Inline) -->
     <div id="initial-loader">
         <div class="spinner"></div>
-        <div style="color: #4f46e5; font-weight: 600; font-size: 14px;">Memuat EduTrack...</div>
+        <div style="color: #4f46e5; font-weight: 600; font-size: 14px;">Memuat Titik Siswa...</div>
     </div>
 
     <div class="edu-login-bg" id="main-content">
         <div class="edu-login-card">
-            <div class="edu-login-logo">
-                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
-            </div>
             <div class="edu-login-title">
-                <h1>EduTrack</h1>
+                <h1>Titik Siswa</h1>
                 <p>Sistem Absensi QR</p>
             </div>
 
             <form id="unifiedLoginForm">
                 <div class="edu-form-group">
-                    <label class="edu-label">Email, NIS, NIP, atau Username</label>
+                    <label class="edu-label">Username</label>
                     <div class="edu-input-icon">
                         <span class="material-symbols-outlined icon-left">person</span>
                         <input type="text" id="login_identifier" placeholder="Masukkan ID Login Anda">
@@ -213,7 +229,7 @@
             </form>
 
             <div style="text-align: center; margin-top: 24px;">
-                <p style="font-size: 0.75rem; color: var(--text-muted);">Portal Absensi QR EduTrack</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Portal Absensi QR Titik Siswa</p>
             </div>
         </div>
     </div>

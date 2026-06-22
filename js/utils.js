@@ -1,5 +1,5 @@
 /**
- * Utilities — EduTrack Design System v2.0
+ * Utilities — Titik Siswa Design System v2.0
  */
 const utils = {
     /**

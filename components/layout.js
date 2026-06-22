@@ -1,5 +1,5 @@
 /**
- * Layout Component — EduTrack Admin Shell v5 (Premium SaaS Design)
+ * Layout Component — Titik Siswa Admin Shell v5 (Premium SaaS Design)
  */
 
 const layout = {
@@ -209,7 +209,7 @@ const layout = {
         });
 
         const groups = this.getMenuGroups();
-        let pageTitle = 'EduTrack';
+        let pageTitle = 'Titik Siswa';
         groups.forEach(g => g.items.forEach(i => { if (i.id === this.activeMenu) pageTitle = i.label; }));
 
         const userName = this.user.full_name || this.user.email || 'Admin';
@@ -239,7 +239,7 @@ const layout = {
                 <div class="flex h-12 shrink-0 items-center gap-2 border-b border-border-default px-4 cursor-pointer hover:bg-bg-hover transition-colors">
                     <div class="h-6 w-6 shrink-0 rounded bg-brand-orange flex items-center justify-center text-white font-bold text-[12px]" aria-hidden="true">E</div>
                     <div class="sb-text flex-1 min-w-0 flex items-center justify-start ${this.collapsed ? 'hidden' : ''}">
-                        <p class="truncate text-[14px] font-medium text-text-primary">EduTrack App</p>
+                        <p class="truncate text-[14px] font-medium text-text-primary">Titik Siswa App</p>
                     </div>
                 </div>
 

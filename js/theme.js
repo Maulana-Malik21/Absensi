@@ -1,4 +1,4 @@
-// theme.js - EduTrack Design System v2.0 — Tailwind Config + PWA
+// theme.js - Titik Siswa Design System v2.0 — Tailwind Config + PWA
 
 // PWA Registration
 (function registerPWA() {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduTrack - QR Attendance Scanner</title>
+    <title>Titik Siswa - QR Attendance Scanner</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link rel="stylesheet" href="../css/output.css">
@@ -200,8 +200,13 @@
             setOverlay('loader-2', 'text-accent', 'Memvalidasi lokasi...', true);
 
             if (!locationCache) {
-                setOverlay('alert-triangle', 'text-danger', 'GPS harus aktif!');
-                setTimeout(() => document.getElementById('scanner-overlay').classList.add('hidden'), 3000); 
+                document.getElementById('scanner-overlay').classList.add('hidden');
+                if (window.ui && ui.alert) {
+                    await ui.alert('Tidak dapat mendeteksi lokasi GPS Anda. Pastikan GPS aktif dan Anda telah memberikan izin akses lokasi.', 'GPS Tidak Aktif');
+                } else {
+                    setOverlay('alert-triangle', 'text-danger', 'GPS harus aktif!');
+                    setTimeout(() => document.getElementById('scanner-overlay').classList.add('hidden'), 3000);
+                }
                 return;
             }
 
@@ -221,8 +226,13 @@
                     setTimeout(() => { window.location.href = 'history.html'; }, 2000);
                 }
             } catch (err) {
-                setOverlay('x-circle', 'text-danger', err.message || 'QR tidak valid atau di luar radius.');
-                setTimeout(() => { document.getElementById('scanner-overlay').classList.add('hidden'); }, 4000);
+                document.getElementById('scanner-overlay').classList.add('hidden');
+                if (window.ui && ui.alert) {
+                    await ui.alert(err.message || 'QR Code tidak valid, kedaluwarsa, atau Anda berada di luar radius sekolah.', 'Absensi Gagal');
+                } else {
+                    setOverlay('x-circle', 'text-danger', err.message || 'QR tidak valid atau di luar radius.');
+                    setTimeout(() => document.getElementById('scanner-overlay').classList.add('hidden'), 4000);
+                }
             }
         }
     </script>
