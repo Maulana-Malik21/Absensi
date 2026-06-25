@@ -27,13 +27,23 @@ const utils = {
         const toast = document.createElement('div');
         toast.className = `edu-toast ${type} toast-enter`;
         
-        toast.innerHTML = `
-            <div class="edu-toast-icon">
-                <i data-lucide="${icons[type] || 'info'}" class="w-5 h-5"></i>
-            </div>
-            <span class="edu-toast-message">${message}</span>
-            <div class="edu-toast-progress"></div>
-        `;
+        // Build toast safely using DOM API to prevent XSS
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'edu-toast-icon';
+        const iconEl = document.createElement('i');
+        iconEl.setAttribute('data-lucide', icons[type] || 'info');
+        iconEl.className = 'w-5 h-5';
+        iconDiv.appendChild(iconEl);
+        toast.appendChild(iconDiv);
+
+        const msgSpan = document.createElement('span');
+        msgSpan.className = 'edu-toast-message';
+        msgSpan.textContent = message; // textContent prevents XSS
+        toast.appendChild(msgSpan);
+
+        const progressDiv = document.createElement('div');
+        progressDiv.className = 'edu-toast-progress';
+        toast.appendChild(progressDiv);
 
         container.appendChild(toast);
         if (window.lucide) window.lucide.createIcons({ root: toast });

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Titik Siswa - Kenaikan Kelas</title>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@1.21.0/dist/umd/lucide.min.js"></script>
     <link rel="stylesheet" href="../css/output.css">
 </head>
 <body>
@@ -322,7 +322,7 @@
                         <li class="p-4 hover:bg-bg-hover transition-colors">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-[12px] text-text-muted">${h.created_at ? new Date(h.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}) : '-'}</span>
-                                <span class="px-2 py-0.5 bg-bg-surface border border-border-default rounded text-[11px] font-medium text-text-secondary tabular">${h.student_count||0} Siswa</span>
+                                <span class="px-2 py-0.5 bg-bg-surface border border-border-default rounded text-[11px] font-medium text-text-secondary tabular">${h.affected_count||0} Siswa</span>
                             </div>
                             <div class="flex items-center gap-2 text-[13px]">
                                 <span class="font-medium text-text-primary">${h.from_class_name||'-'}</span>

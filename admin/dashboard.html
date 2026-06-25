@@ -1,37 +1,50 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Titik Siswa - Overview</title>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@1.21.0/dist/umd/lucide.min.js"></script>
     <link rel="stylesheet" href="../css/output.css">
 </head>
+
 <body>
     <div class="max-w-7xl mx-auto pb-8">
-        
+
         <!-- STATUS STRIP (Compact, 1 line) -->
-        <div class="bg-bg-surface border border-border-default rounded-lg p-2.5 sm:p-3 px-3 sm:px-5 mb-4 sm:mb-6 flex flex-wrap items-center gap-2 sm:gap-0">
-            <div class="flex items-center gap-1.5 sm:gap-2 mr-0 sm:mr-6 bg-success/10 sm:bg-transparent px-2 py-1 sm:p-0 rounded-md border border-success/20 sm:border-transparent">
+        <div
+            class="bg-bg-surface border border-border-default rounded-lg p-2.5 sm:p-3 px-3 sm:px-5 mb-4 sm:mb-6 flex flex-wrap items-center gap-2 sm:gap-0">
+            <div
+                class="flex items-center gap-1.5 sm:gap-2 mr-0 sm:mr-6 bg-success/10 sm:bg-transparent px-2 py-1 sm:p-0 rounded-md border border-success/20 sm:border-transparent">
                 <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-success"></span>
-                <span class="text-[11px] sm:text-[13px] text-success sm:text-text-secondary font-medium sm:font-normal">Sistem Online</span>
+                <span
+                    class="text-[11px] sm:text-[13px] text-success sm:text-text-secondary font-medium sm:font-normal">Sistem
+                    Online</span>
             </div>
             <div class="w-px h-4 bg-border-default mx-2 hidden sm:block"></div>
             <div class="flex items-center gap-2 mx-0 sm:mx-4">
-                <span id="stat-academic-year" class="px-2 py-1 sm:py-0.5 rounded border border-border-default text-[11px] sm:text-[12px] font-medium text-text-primary bg-bg-hover">T.A 2026/2027</span>
+                <span id="stat-academic-year"
+                    class="px-2 py-1 sm:py-0.5 rounded border border-border-default text-[11px] sm:text-[12px] font-medium text-text-primary bg-bg-hover">T.A
+                    2026/2027</span>
             </div>
             <div class="w-px h-4 bg-border-default mx-2 hidden sm:block"></div>
-            <div class="flex items-center gap-1.5 sm:gap-2 mx-0 sm:mx-4 bg-bg-page sm:bg-transparent px-2 py-1 sm:p-0 rounded-md border border-border-default sm:border-transparent">
+            <div
+                class="flex items-center gap-1.5 sm:gap-2 mx-0 sm:mx-4 bg-bg-page sm:bg-transparent px-2 py-1 sm:p-0 rounded-md border border-border-default sm:border-transparent">
                 <i data-lucide="users" class="w-3.5 h-3.5 text-text-muted"></i>
-                <span id="stat-capacity" class="text-[11px] sm:text-[13px] text-text-secondary">Kapasitas --% terisi</span>
+                <span id="stat-capacity" class="text-[11px] sm:text-[13px] text-text-secondary">Kapasitas --%
+                    terisi</span>
             </div>
             <div class="w-px h-4 bg-border-default mx-2 hidden sm:block"></div>
-            <div class="flex items-center gap-2 mx-0 sm:mx-4 w-full sm:w-auto mt-1 sm:mt-0 justify-between border-t border-border-default sm:border-transparent pt-2 sm:pt-0">
+            <div
+                class="flex items-center gap-2 mx-0 sm:mx-4 w-full sm:w-auto mt-1 sm:mt-0 justify-between border-t border-border-default sm:border-transparent pt-2 sm:pt-0">
                 <div class="flex items-center gap-1.5 sm:gap-2">
                     <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-success"></span>
-                    <span id="stat-server-health" class="text-[11px] sm:text-[13px] text-text-secondary">Kesehatan Server: Normal</span>
+                    <span id="stat-server-health" class="text-[11px] sm:text-[13px] text-text-secondary">Kesehatan
+                        Server: Normal</span>
                 </div>
-                <a href="#" class="text-[11px] sm:text-[13px] text-accent font-medium hover:text-accent-hover flex items-center gap-1 bg-accent/10 sm:bg-transparent px-2 py-1 sm:p-0 rounded-md">
+                <a href="#"
+                    class="text-[11px] sm:text-[13px] text-accent font-medium hover:text-accent-hover flex items-center gap-1 bg-accent/10 sm:bg-transparent px-2 py-1 sm:p-0 rounded-md">
                     Cek Detail <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
                 </a>
             </div>
@@ -39,19 +52,23 @@
 
         <!-- INSIGHTS HEADER -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 sm:mb-4 gap-2.5 sm:gap-3">
-            <h2 class="text-[12px] sm:text-[13px] font-semibold text-text-primary tracking-wide uppercase">Statistik Utama</h2>
+            <h2 class="text-[12px] sm:text-[13px] font-semibold text-text-primary tracking-wide uppercase">Statistik
+                Utama</h2>
             <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <div class="relative flex-1 sm:flex-none">
-                    <select id="filter-class" onchange="loadStats()" class="w-full h-8 pl-3 pr-8 bg-bg-surface border border-border-default rounded-md text-[12px] sm:text-[13px] text-text-secondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle appearance-none cursor-pointer">
+                    <select id="filter-class" onchange="loadStats()"
+                        class="w-full h-8 pl-3 pr-8 bg-bg-surface border border-border-default rounded-md text-[12px] sm:text-[13px] text-text-secondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle appearance-none cursor-pointer">
                         <option value="all">Semua Kelas</option>
-                        <option value="10">Kelas 10</option>
-                        <option value="11">Kelas 11</option>
-                        <option value="12">Kelas 12</option>
+                        <option value="1">Kelas 10</option>
+                        <option value="2">Kelas 11</option>
+                        <option value="3">Kelas 12</option>
                     </select>
-                    <i data-lucide="chevron-down" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none"></i>
+                    <i data-lucide="chevron-down"
+                        class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none"></i>
                 </div>
                 <div class="relative">
-                    <input type="month" id="filter-month" onchange="loadStats()" class="h-8 pl-3 pr-3 bg-bg-surface border border-border-default rounded-md text-[12px] sm:text-[13px] text-text-secondary hover:bg-bg-hover focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle cursor-pointer transition-colors w-full sm:w-auto">
+                    <input type="month" id="filter-month" onchange="loadStats()"
+                        class="h-8 pl-3 pr-3 bg-bg-surface border border-border-default rounded-md text-[12px] sm:text-[13px] text-text-secondary hover:bg-bg-hover focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent-subtle cursor-pointer transition-colors w-full sm:w-auto">
                 </div>
             </div>
         </div>
@@ -61,18 +78,26 @@
             <!-- Card 1 -->
             <dl class="bg-bg-surface border border-border-default rounded-lg p-3 sm:p-5 flex flex-col hover-lift">
                 <div class="flex items-center justify-between mb-2 sm:mb-3">
-                    <dt class="text-[11px] sm:text-[13px] font-medium text-text-muted flex items-center cursor-pointer group leading-tight" title="Ubah Metrik">
-                        Total Siswa <i data-lucide="chevron-down" class="w-3 h-3 sm:w-3.5 sm:h-3.5 ml-1 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline-block"></i>
+                    <dt class="text-[11px] sm:text-[13px] font-medium text-text-muted flex items-center cursor-pointer group leading-tight"
+                        title="Ubah Metrik">
+                        Total Siswa <i data-lucide="chevron-down"
+                            class="w-3 h-3 sm:w-3.5 sm:h-3.5 ml-1 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline-block"></i>
                     </dt>
-                    <button aria-label="Info" onclick="if(window.ui) ui.showToast('Total Siswa terdaftar. Tren membandingkan akun baru bulan ini dengan jumlah bulan sebelumnya.', 'info')" class="text-text-placeholder hover:text-text-secondary"><i data-lucide="info" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i></button>
+                    <button aria-label="Info"
+                        onclick="if(window.ui) ui.showToast('Total Siswa terdaftar. Tren membandingkan akun baru bulan ini dengan jumlah bulan sebelumnya.', 'info')"
+                        class="text-text-placeholder hover:text-text-secondary"><i data-lucide="info"
+                            class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i></button>
                 </div>
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between mt-auto gap-2 sm:gap-0">
-                    <dd id="stat-students" class="text-[24px] sm:text-[28px] font-semibold text-text-primary tabular leading-none">0</dd>
+                    <dd id="stat-students"
+                        class="text-[24px] sm:text-[28px] font-semibold text-text-primary tabular leading-none">0</dd>
                     <div class="flex items-center sm:flex-col sm:items-end gap-1.5 sm:gap-0">
-                        <div id="trend-students" class="flex items-center gap-1 text-[11px] sm:text-[12px] font-medium px-1.5 py-0.5 sm:p-0 rounded">
+                        <div id="trend-students"
+                            class="flex items-center gap-1 text-[11px] sm:text-[12px] font-medium px-1.5 py-0.5 sm:p-0 rounded">
                             <!-- Injected by JS -->
                         </div>
-                        <span class="text-[10px] sm:text-[11px] text-text-muted mt-0 sm:mt-1 hidden sm:inline-block">vs. bulan lalu</span>
+                        <span class="text-[10px] sm:text-[11px] text-text-muted mt-0 sm:mt-1 hidden sm:inline-block">vs.
+                            bulan lalu</span>
                     </div>
                 </div>
             </dl>
@@ -80,37 +105,54 @@
             <!-- Card 2 -->
             <dl class="bg-bg-surface border border-border-default rounded-lg p-3 sm:p-5 flex flex-col hover-lift">
                 <div class="flex items-center justify-between mb-2 sm:mb-3">
-                    <dt class="text-[11px] sm:text-[13px] font-medium text-text-muted flex items-center cursor-pointer group leading-tight" title="Ubah Metrik">
-                        Total Guru <i data-lucide="chevron-down" class="w-3 h-3 sm:w-3.5 sm:h-3.5 ml-1 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline-block"></i>
+                    <dt class="text-[11px] sm:text-[13px] font-medium text-text-muted flex items-center cursor-pointer group leading-tight"
+                        title="Ubah Metrik">
+                        Total Guru <i data-lucide="chevron-down"
+                            class="w-3 h-3 sm:w-3.5 sm:h-3.5 ml-1 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline-block"></i>
                     </dt>
-                    <button aria-label="Info" onclick="if(window.ui) ui.showToast('Total Guru terdaftar. Tren membandingkan akun guru baru bulan ini dengan jumlah bulan sebelumnya.', 'info')" class="text-text-placeholder hover:text-text-secondary"><i data-lucide="info" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i></button>
+                    <button aria-label="Info"
+                        onclick="if(window.ui) ui.showToast('Total Guru terdaftar. Tren membandingkan akun guru baru bulan ini dengan jumlah bulan sebelumnya.', 'info')"
+                        class="text-text-placeholder hover:text-text-secondary"><i data-lucide="info"
+                            class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i></button>
                 </div>
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between mt-auto gap-2 sm:gap-0">
-                    <dd id="stat-teachers" class="text-[24px] sm:text-[28px] font-semibold text-text-primary tabular leading-none">0</dd>
+                    <dd id="stat-teachers"
+                        class="text-[24px] sm:text-[28px] font-semibold text-text-primary tabular leading-none">0</dd>
                     <div class="flex items-center sm:flex-col sm:items-end gap-1.5 sm:gap-0">
-                        <div id="trend-teachers" class="flex items-center gap-1 text-[11px] sm:text-[12px] font-medium px-1.5 py-0.5 sm:p-0 rounded">
+                        <div id="trend-teachers"
+                            class="flex items-center gap-1 text-[11px] sm:text-[12px] font-medium px-1.5 py-0.5 sm:p-0 rounded">
                             <!-- Injected by JS -->
                         </div>
-                        <span class="text-[10px] sm:text-[11px] text-text-muted mt-0 sm:mt-1 hidden sm:inline-block">vs. bulan lalu</span>
+                        <span class="text-[10px] sm:text-[11px] text-text-muted mt-0 sm:mt-1 hidden sm:inline-block">vs.
+                            bulan lalu</span>
                     </div>
                 </div>
             </dl>
 
             <!-- Card 3 -->
-            <dl class="col-span-2 md:col-span-1 bg-bg-surface border border-border-default rounded-lg p-3 sm:p-5 flex flex-col hover-lift">
+            <dl
+                class="col-span-2 md:col-span-1 bg-bg-surface border border-border-default rounded-lg p-3 sm:p-5 flex flex-col hover-lift">
                 <div class="flex items-center justify-between mb-2 sm:mb-3">
-                    <dt class="text-[11px] sm:text-[13px] font-medium text-text-muted flex items-center cursor-pointer group leading-tight" title="Ubah Metrik">
-                        Rata-rata Kehadiran <i data-lucide="chevron-down" class="w-3 h-3 sm:w-3.5 sm:h-3.5 ml-1 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline-block"></i>
+                    <dt class="text-[11px] sm:text-[13px] font-medium text-text-muted flex items-center cursor-pointer group leading-tight"
+                        title="Ubah Metrik">
+                        Rata-rata Kehadiran <i data-lucide="chevron-down"
+                            class="w-3 h-3 sm:w-3.5 sm:h-3.5 ml-1 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline-block"></i>
                     </dt>
-                    <button aria-label="Info" onclick="if(window.ui) ui.showToast('Rata-rata tingkat kehadiran siswa pada bulan yang dipilih. Tren membandingkan dengan bulan sebelumnya.', 'info')" class="text-text-placeholder hover:text-text-secondary"><i data-lucide="info" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i></button>
+                    <button aria-label="Info"
+                        onclick="if(window.ui) ui.showToast('Rata-rata tingkat kehadiran siswa pada bulan yang dipilih. Tren membandingkan dengan bulan sebelumnya.', 'info')"
+                        class="text-text-placeholder hover:text-text-secondary"><i data-lucide="info"
+                            class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i></button>
                 </div>
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between mt-auto gap-2 sm:gap-0">
-                    <dd id="stat-attendance-avg" class="text-[24px] sm:text-[28px] font-semibold text-text-primary tabular leading-none">0%</dd>
+                    <dd id="stat-attendance-avg"
+                        class="text-[24px] sm:text-[28px] font-semibold text-text-primary tabular leading-none">0%</dd>
                     <div class="flex items-center sm:flex-col sm:items-end gap-1.5 sm:gap-0">
-                        <div id="trend-attendance" class="flex items-center gap-1 text-[11px] sm:text-[12px] font-medium px-1.5 py-0.5 sm:p-0 rounded">
+                        <div id="trend-attendance"
+                            class="flex items-center gap-1 text-[11px] sm:text-[12px] font-medium px-1.5 py-0.5 sm:p-0 rounded">
                             <!-- Injected by JS -->
                         </div>
-                        <span class="text-[10px] sm:text-[11px] text-text-muted mt-0 sm:mt-1 hidden sm:inline-block">vs. bulan lalu</span>
+                        <span class="text-[10px] sm:text-[11px] text-text-muted mt-0 sm:mt-1 hidden sm:inline-block">vs.
+                            bulan lalu</span>
                     </div>
                 </div>
             </dl>
@@ -122,23 +164,26 @@
             <div class="bg-bg-surface border border-border-default rounded-lg p-5">
                 <div class="flex items-center justify-between mb-4 border-b border-border-default pb-3">
                     <h3 class="text-[14px] font-medium text-text-primary">Kelas Terbaik (Kehadiran)</h3>
-                    <button class="text-text-placeholder hover:text-text-secondary"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+                    <button class="text-text-placeholder hover:text-text-secondary"><i data-lucide="more-horizontal"
+                            class="w-4 h-4"></i></button>
                 </div>
                 <div class="overflow-x-auto scrollbar-hide">
                     <table class="w-full text-left border-collapse min-w-[300px]">
                         <thead>
-                        <tr>
-                            <th scope="col" class="pb-2 text-[12px] font-medium text-text-muted w-1/2">Kelas</th>
-                            <th scope="col" class="pb-2 text-[12px] font-medium text-text-muted text-right">Persentase</th>
-                        </tr>
-                    </thead>
-                    <tbody id="top-classes-tbody" class="divide-y divide-border-default">
-                        <!-- Injected by JS -->
-                    </tbody>
-                </table>
+                            <tr>
+                                <th scope="col" class="pb-2 text-[12px] font-medium text-text-muted w-1/2">Kelas</th>
+                                <th scope="col" class="pb-2 text-[12px] font-medium text-text-muted text-right">
+                                    Persentase</th>
+                            </tr>
+                        </thead>
+                        <tbody id="top-classes-tbody" class="divide-y divide-border-default">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
                 </div>
                 <div class="pt-3 mt-1 border-t border-border-default text-right">
-                    <a href="reports.html" class="text-[13px] font-medium text-accent hover:text-accent-hover">Lihat semua laporan →</a>
+                    <a href="reports.html" class="text-[13px] font-medium text-accent hover:text-accent-hover">Lihat
+                        semua laporan →</a>
                 </div>
             </div>
 
@@ -148,26 +193,32 @@
                     <h3 class="text-[14px] font-medium text-text-primary">Aksi Cepat</h3>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <a href="students.html" class="flex flex-col p-4 rounded-lg border border-border-default bg-bg-page hover:border-accent hover:bg-accent-subtle transition-colors group">
+                    <a href="students.html"
+                        class="flex flex-col p-4 rounded-lg border border-border-default bg-bg-page hover:border-accent hover:bg-accent-subtle transition-colors group">
                         <i data-lucide="user-plus" class="w-5 h-5 text-text-muted group-hover:text-accent mb-3"></i>
                         <span class="text-[13px] font-medium text-text-primary mb-1">Tambah Siswa</span>
                         <span class="text-[11px] text-text-muted">Daftarkan siswa baru ke sistem.</span>
                     </a>
-                    <a href="schedules.html" class="flex flex-col p-4 rounded-lg border border-border-default bg-bg-page hover:border-accent hover:bg-accent-subtle transition-colors group">
+                    <a href="schedules.html"
+                        class="flex flex-col p-4 rounded-lg border border-border-default bg-bg-page hover:border-accent hover:bg-accent-subtle transition-colors group">
                         <i data-lucide="calendar-plus" class="w-5 h-5 text-text-muted group-hover:text-accent mb-3"></i>
                         <span class="text-[13px] font-medium text-text-primary mb-1">Buat Jadwal</span>
                         <span class="text-[11px] text-text-muted">Atur jadwal pelajaran mingguan.</span>
                     </a>
-                    <a href="reports.html" class="flex flex-col p-4 rounded-lg border border-border-default bg-bg-page hover:border-accent hover:bg-accent-subtle transition-colors group">
+                    <a href="reports.html"
+                        class="flex flex-col p-4 rounded-lg border border-border-default bg-bg-page hover:border-accent hover:bg-accent-subtle transition-colors group">
                         <i data-lucide="file-text" class="w-5 h-5 text-text-muted group-hover:text-accent mb-3"></i>
                         <span class="text-[13px] font-medium text-text-primary mb-1">Unduh Laporan</span>
                         <span class="text-[11px] text-text-muted">Ekspor absensi ke file excel.</span>
                     </a>
-                    <a href="settings.html" class="flex flex-col p-4 rounded-lg border border-border-default bg-bg-page hover:border-accent hover:bg-accent-subtle transition-colors group">
+                    <!--
+                    <a href="settings.html"
+                        class="flex flex-col p-4 rounded-lg border border-border-default bg-bg-page hover:border-accent hover:bg-accent-subtle transition-colors group">
                         <i data-lucide="settings" class="w-5 h-5 text-text-muted group-hover:text-accent mb-3"></i>
                         <span class="text-[13px] font-medium text-text-primary mb-1">Pengaturan</span>
                         <span class="text-[11px] text-text-muted">Ubah profil sekolah & akun.</span>
                     </a>
+                -->
                 </div>
             </div>
         </div>
@@ -179,12 +230,12 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             layout.init('admin', 'dashboard');
-            
+
             // Default to current month
             const now = new Date();
             const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
             document.getElementById('filter-month').value = currentMonth;
-            
+
             loadStats();
         });
 
@@ -208,45 +259,45 @@
             try {
                 // UI feedback
                 if (window.ui && ui.showGlobalLoader) ui.showGlobalLoader('Memuat Statistik...');
-                
+
                 // Construct URL with filter if needed
                 const filterClass = document.getElementById('filter-class')?.value || 'all';
                 const filterMonth = document.getElementById('filter-month')?.value;
-                
+
                 let url = '/analytics/admin?';
                 if (filterClass !== 'all') url += `grade=${filterClass}&`;
                 if (filterMonth) url += `month=${filterMonth}&`;
 
                 const analyticsRes = await api.get(url);
                 const stats = analyticsRes.data || {};
-                
+
                 // 1. Status Strip
-                if(stats.academic_year) document.getElementById('stat-academic-year').textContent = stats.academic_year;
-                if(stats.capacity_percentage !== undefined) document.getElementById('stat-capacity').textContent = `Kapasitas ${stats.capacity_percentage}% terisi`;
-                if(stats.server_health) document.getElementById('stat-server-health').textContent = `Kesehatan Server: ${stats.server_health}`;
+                if (stats.academic_year) document.getElementById('stat-academic-year').textContent = stats.academic_year;
+                if (stats.capacity_percentage !== undefined) document.getElementById('stat-capacity').textContent = `Kapasitas ${stats.capacity_percentage}% terisi`;
+                if (stats.server_health) document.getElementById('stat-server-health').textContent = `Kesehatan Server: ${stats.server_health}`;
 
                 // 2. KPI Cards
-                if(stats.total_students !== undefined) document.getElementById('stat-students').textContent = Number(stats.total_students).toLocaleString('id-ID');
-                if(stats.total_teachers !== undefined) document.getElementById('stat-teachers').textContent = Number(stats.total_teachers).toLocaleString('id-ID');
-                if(stats.this_month_avg_attendance !== undefined) document.getElementById('stat-attendance-avg').textContent = `${stats.this_month_avg_attendance}%`;
+                if (stats.total_students !== undefined) document.getElementById('stat-students').textContent = Number(stats.total_students).toLocaleString('id-ID');
+                if (stats.total_teachers !== undefined) document.getElementById('stat-teachers').textContent = Number(stats.total_teachers).toLocaleString('id-ID');
+                if (stats.this_month_avg_attendance !== undefined) document.getElementById('stat-attendance-avg').textContent = `${stats.this_month_avg_attendance}%`;
 
                 // 3. Trends
-                if(stats.student_trend !== undefined) updateTrendUI('trend-students', stats.student_trend);
-                if(stats.teacher_trend !== undefined) updateTrendUI('trend-teachers', stats.teacher_trend);
-                if(stats.attendance_trend !== undefined) updateTrendUI('trend-attendance', stats.attendance_trend);
+                if (stats.student_trend !== undefined) updateTrendUI('trend-students', stats.student_trend);
+                if (stats.teacher_trend !== undefined) updateTrendUI('trend-teachers', stats.teacher_trend);
+                if (stats.attendance_trend !== undefined) updateTrendUI('trend-attendance', stats.attendance_trend);
 
                 // Re-init icons for newly injected trend HTML
                 if (window.lucide) lucide.createIcons();
 
                 // 4. Top Classes Table
                 const tbody = document.getElementById('top-classes-tbody');
-                if(tbody && stats.top_classes) {
+                if (tbody && stats.top_classes) {
                     if (stats.top_classes.length === 0) {
                         tbody.innerHTML = `<tr><td colspan="2" class="py-4 text-center text-[13px] text-text-muted">Belum ada data kehadiran bulan ini</td></tr>`;
                     } else {
                         tbody.innerHTML = stats.top_classes.map((c, index) => {
-                            const indicatorHtml = index === 0 
-                                ? `<div class="absolute left-0 top-0 bottom-0 w-[3px] bg-success rounded-r"></div>` 
+                            const indicatorHtml = index === 0
+                                ? `<div class="absolute left-0 top-0 bottom-0 w-[3px] bg-success rounded-r"></div>`
                                 : ``;
                             return `
                                 <tr class="hover:bg-bg-hover transition-colors">
@@ -269,4 +320,5 @@
 
     </script>
 </body>
+
 </html>
