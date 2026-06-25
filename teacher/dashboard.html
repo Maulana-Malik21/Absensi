@@ -270,7 +270,7 @@
                 // Fetch data in parallel
                 const [analyticsRes, statsRes, scheduleRes] = await Promise.all([
                     api.get('/analytics/teacher').catch(() => ({ data: { percentage: '0%', stats: { present: 0, sick: 0, permission: 0, absent: 0 } } })),
-                    api.get('/attendance/teacher/stats').catch(() => ({ data: { active_classes: 0, total_students: 0, present_today: 0 } })),
+                    api.get('/attendance/teacher-stats').catch(() => ({ data: { active_classes: 0, total_students: 0, present_today: 0 } })),
                     api.get('/teachers/me/schedule').catch(() => ({ data: [] }))
                 ]);
 
