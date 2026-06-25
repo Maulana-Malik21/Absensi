@@ -239,8 +239,20 @@
     <script src="js/api.js?v=1781115035990"></script>
     <script>
         // Hide loader and show content once everything (including fonts/css) is fully loaded
-        window.addEventListener('load', () => {
+        window.addEventListener('load', async () => {
             lucide.createIcons();
+            
+            try {
+                // Check setup status using api wrapper
+                const setupData = await api.get('/setup/status');
+                if (setupData && setupData.data && !setupData.data.isSetupComplete) {
+                    window.location.href = 'setup.html';
+                    return;
+                }
+            } catch(e) {
+                console.error('Failed to check setup status:', e);
+            }
+
             const loader = document.getElementById('initial-loader');
             const content = document.getElementById('main-content');
             if (loader) loader.style.display = 'none';

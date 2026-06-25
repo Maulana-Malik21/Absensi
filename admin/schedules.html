@@ -175,19 +175,54 @@
             });
         });
 
+        let globalClasses = [];
+        let globalSubjects = [];
+
         async function loadMasterData() {
             try {
                 const [teachRes, classRes, subjectRes] = await Promise.all([
                     api.get('/teachers?limit=500'), api.get('/school/classes'), api.get('/school/subjects')
                 ]);
                 const teachers = teachRes.data.teachers||[];
-                const classes = classRes.data||[];
-                const subjects = subjectRes.data||[];
+                globalClasses = classRes.data||[];
+                globalSubjects = subjectRes.data||[];
 
                 const cf = document.getElementById('classFilter');
-                ui.populateClassDropdown([cf, document.getElementById('sched_class')], classes);
-                subjects.forEach(s => document.getElementById('sched_subject')?.appendChild(new Option(s.name, s.id)));
+                ui.populateClassDropdown([cf, document.getElementById('sched_class')], globalClasses);
+                
+                const subjectSelect = document.getElementById('sched_subject');
+                if (subjectSelect) {
+                    globalSubjects.forEach(s => subjectSelect.appendChild(new Option(s.name, s.id)));
+                }
+
                 teachers.forEach(t => document.getElementById('sched_teacher')?.appendChild(new Option(t.full_name, t.id)));
+                
+                const classSelect = document.getElementById('sched_class');
+                if (classSelect && subjectSelect) {
+                    classSelect.addEventListener('change', function(e) {
+                        const classId = e.target.value;
+                        
+                        // Clear current subjects except the placeholder
+                        while (subjectSelect.options.length > 1) {
+                            subjectSelect.remove(1);
+                        }
+                        
+                        if (!classId) {
+                            globalSubjects.forEach(s => subjectSelect.appendChild(new Option(s.name, s.id)));
+                            return;
+                        }
+                        
+                        const selectedClass = globalClasses.find(c => c.id == classId);
+                        if (selectedClass) {
+                            const filteredSubjects = globalSubjects.filter(s => {
+                                const matchGrade = s.grade_level == selectedClass.grade_level;
+                                const matchMajor = !s.major_id || s.major_id == selectedClass.major_id;
+                                return matchGrade && matchMajor;
+                            });
+                            filteredSubjects.forEach(s => subjectSelect.appendChild(new Option(s.name, s.id)));
+                        }
+                    });
+                }
             } catch(e) { console.error(e); }
         }
 

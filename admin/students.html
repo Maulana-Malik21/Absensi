@@ -500,21 +500,26 @@
 
                         const statusVal = s.status ? s.status.toLowerCase() : 'aktif';
                         let badgeClass = 'bg-bg-hover text-text-muted border border-border-default';
-                        let badgeLabel = s.status || '—';
-                        if (statusVal === 'aktif') {
+                        let badgeLabel = s.status || '-';
+                        if (statusVal === 'aktif' || statusVal === 'active') {
                             badgeClass = 'bg-success-subtle text-success border border-success-border';
                             badgeLabel = 'Aktif';
-                        } else if (statusVal === 'nonaktif') {
+                        } else if (statusVal === 'nonaktif' || statusVal === 'dropped_out') {
                             badgeClass = 'bg-bg-hover text-text-muted border border-border-default';
-                            badgeLabel = 'Nonaktif';
-                        } else if (statusVal === 'alumni') {
+                            badgeLabel = 'Nonaktif / DO';
+                        } else if (statusVal === 'alumni' || statusVal === 'graduated') {
                             badgeClass = 'bg-accent-subtle text-accent border border-accent-border';
                             badgeLabel = 'Alumni';
-                        } else if (statusVal === 'mutasi') {
+                        } else if (statusVal === 'mutasi' || statusVal === 'transferred') {
                             badgeClass = 'bg-warning-subtle text-warning border border-warning/30';
                             badgeLabel = 'Mutasi';
                         }
-                        const statusBadge = `<span class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium leading-none ${badgeClass}">${badgeLabel}</span>`;
+                        
+                        let accountBadge = '';
+                        if (!s.is_active) {
+                            accountBadge = `<span class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium leading-none bg-danger-subtle text-danger border border-danger/30 ml-2">Akun Nonaktif</span>`;
+                        }
+                        const statusBadge = `<span class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium leading-none ${badgeClass}">${badgeLabel}</span>${accountBadge}`;
 
                         html += `
                             <tr class="group hover:bg-bg-hover transition-colors duration-100">
